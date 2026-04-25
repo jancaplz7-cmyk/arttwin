@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Codex 小练习：点点游戏</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: #172033;
+      background: #eef2f7;
+      display: grid;
+      place-items: center;
+    }
+
+    .app {
+      width: min(920px, calc(100vw - 32px));
+      background: #ffffff;
+      border: 1px solid #d7dde8;
+      border-radius: 8px;
+      box-shadow: 0 18px 50px rgba(28, 39, 60, 0.14);
+      overflow: hidden;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 18px 20px;
+      border-bottom: 1px solid #e4e8f0;
+      background: #f8fafc;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 22px;
+      line-height: 1.2;
+    }
+
+    .stats {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .stat {
+      min-width: 86px;
+      padding: 8px 10px;
+      border: 1px solid #dbe2ed;
+      border-radius: 6px;
+      background: #ffffff;
+      text-align: center;
+    }
+
+    .label {
+      display: block;
+      font-size: 12px;
+      color: #657086;
+      margin-bottom: 2px;
+    }
+
+    .value {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    main {
+      padding: 20px;
+    }
+
+    .board {
+      position: relative;
+      height: min(58vh, 460px);
+      min-height: 320px;
+      border: 2px solid #bfccdc;
+      border-radius: 8px;
+      background:
+        linear-gradient(90deg, rgba(20, 98, 170, 0.05) 1px, transparent 1px),
+        linear-gradient(rgba(20, 98, 170, 0.05) 1px, transparent 1px),
+        #f9fbfd;
+      background-size: 28px 28px;
+      overflow: hidden;
+    }
+
+    .target {
+      position: absolute;
+      width: 70px;
+      height: 70px;
+      border: 0;
+      border-radius: 50%;
+      background: #ffcf3f;
+      color: #172033;
+      font-size: 26px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 9px 0 #d99412, 0 18px 28px rgba(217, 148, 18, 0.26);
+      transform: translate(-50%, -50%);
+      transition: transform 110ms ease, box-shadow 110ms ease;
+    }
+
+    .target:active {
+      transform: translate(-50%, -50%) scale(0.94);
+      box-shadow: 0 5px 0 #d99412, 0 10px 20px rgba(217, 148, 18, 0.22);
+    }
+
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      min-height: 42px;
+      border: 0;
+      border-radius: 6px;
+      padding: 0 16px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      background: #1668dc;
+      color: #ffffff;
+    }
+
+    button.secondary {
+      background: #e7edf5;
+      color: #172033;
+    }
+
+    .message {
+      min-height: 24px;
+      font-weight: 700;
+      color: #0f7b5f;
+    }
+
+    @media (max-width: 640px) {
+      header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .stats {
+        justify-content: flex-start;
+      }
+
+      .stat {
+        min-width: 78px;
+      }
+
+      .target {
+        width: 62px;
+        height: 62px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <section class="app" aria-label="点点游戏">
+    <header>
+      <h1>点点游戏</h1>
+      <div class="stats">
+        <div class="stat">
+          <span class="label">分数</span>
+          <span class="value" id="score">0</span>
+        </div>
+        <div class="stat">
+          <span class="label">剩余秒数</span>
+          <span class="value" id="time">20</span>
+        </div>
+        <div class="stat">
+          <span class="label">最佳</span>
+          <span class="value" id="best">0</span>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="board" id="board">
+        <button class="target" id="target" type="button" aria-label="点击得分">+1</button>
+      </div>
+      <div class="controls">
+        <div class="message" id="message">点击黄色圆点开始计分。</div>
+        <div>
+          <button id="start" type="button">开始</button>
+          <button class="secondary" id="reset" type="button">重置</button>
+        </div>
+      </div>
+    </main>
+  </section>
+
+  <script>
+    const board = document.querySelector("#board");
+    const target = document.querySelector("#target");
+    const scoreText = document.querySelector("#score");
+    const timeText = document.querySelector("#time");
+    const bestText = document.querySelector("#best");
+    const message = document.querySelector("#message");
+    const startButton = document.querySelector("#start");
+    const resetButton = document.querySelector("#reset");
+
+    let score = 0;
+    let timeLeft = 20;
+    let timer = null;
+    let playing = false;
+    let best = Number(localStorage.getItem("codexClickBest") || 0);
+
+    bestText.textContent = best;
+
+    function moveTarget() {
+      const boardRect = board.getBoundingClientRect();
+      const padding = 45;
+      const x = padding + Math.random() * (boardRect.width - padding * 2);
+      const y = padding + Math.random() * (boardRect.height - padding * 2);
+      target.style.left = `${x}px`;
+      target.style.top = `${y}px`;
+    }
+
+    function updateScreen() {
+      scoreText.textContent = score;
+      timeText.textContent = timeLeft;
+      bestText.textContent = best;
+    }
+
+    function startGame() {
+      if (timer) {
+        clearInterval(timer);
+      }
+
+      score = 0;
+      timeLeft = 20;
+      playing = true;
+      message.textContent = "加油，尽量多点几次。";
+      updateScreen();
+      moveTarget();
+
+      timer = setInterval(() => {
+        timeLeft -= 1;
+        updateScreen();
+
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          timer = null;
+          playing = false;
+          if (score > best) {
+            best = score;
+            localStorage.setItem("codexClickBest", String(best));
+            message.textContent = `新纪录：${score} 分！`;
+          } else {
+            message.textContent = `时间到：${score} 分。`;
+          }
+          updateScreen();
+        }
+      }, 1000);
+    }
+
+    target.addEventListener("click", () => {
+      if (!playing) {
+        startGame();
+        return;
+      }
+
+      score += 1;
+      updateScreen();
+      moveTarget();
+    });
+
+    startButton.addEventListener("click", startGame);
+
+    resetButton.addEventListener("click", () => {
+      clearInterval(timer);
+      timer = null;
+      score = 0;
+      timeLeft = 20;
+      playing = false;
+      message.textContent = "已重置，点击开始或黄色圆点。";
+      updateScreen();
+      moveTarget();
+    });
+
+    window.addEventListener("resize", moveTarget);
+    moveTarget();
+  </script>
+</body>
+</html>

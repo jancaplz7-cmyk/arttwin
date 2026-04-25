@@ -1,0 +1,5363 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ArtTwin</title>
+  <style>
+    :root {
+      --bg: #060711;
+      --bg-2: #0b1021;
+      --panel: rgba(17, 24, 45, 0.68);
+      --panel-strong: rgba(17, 24, 45, 0.9);
+      --glass: rgba(255, 255, 255, 0.08);
+      --line: rgba(255, 255, 255, 0.16);
+      --text: #f6f2e8;
+      --muted: #b9c0d4;
+      --gold: #f6c96a;
+      --gold-2: #fff0a8;
+      --cyan: #78e7ff;
+      --violet: #9d7cff;
+      --pink: #ff77b7;
+      --danger: #ff6d8b;
+      --ok: #79ffc9;
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.42);
+      color-scheme: dark;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-height: 100%;
+      background: var(--bg);
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at 18% 10%, rgba(120, 231, 255, 0.16), transparent 27rem),
+        radial-gradient(circle at 80% 2%, rgba(246, 201, 106, 0.12), transparent 25rem),
+        radial-gradient(circle at 50% 70%, rgba(157, 124, 255, 0.16), transparent 34rem),
+        linear-gradient(135deg, #050510 0%, #0a1021 42%, #090713 100%);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: 0;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      color: inherit;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.42;
+      filter: grayscale(0.3);
+    }
+
+    .ambient-particles {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .particle {
+      position: absolute;
+      width: var(--size);
+      height: var(--size);
+      left: var(--left);
+      top: var(--top);
+      border-radius: 999px;
+      background: var(--color);
+      box-shadow: 0 0 18px var(--color);
+      opacity: 0.42;
+      animation: floatParticle var(--duration) ease-in-out infinite alternate;
+      animation-delay: var(--delay);
+    }
+
+    @keyframes floatParticle {
+      from { transform: translate3d(0, 0, 0) scale(0.92); }
+      to { transform: translate3d(var(--drift-x), var(--drift-y), 0) scale(1.18); }
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      width: min(1460px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 32px 0 54px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 24px;
+      align-items: end;
+      padding: 18px 0 26px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      width: fit-content;
+      padding: 8px 12px;
+      border: 1px solid rgba(246, 201, 106, 0.28);
+      border-radius: 999px;
+      background: rgba(246, 201, 106, 0.08);
+      color: #ffe5a4;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      box-shadow: 0 0 32px rgba(246, 201, 106, 0.12);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--ok);
+      box-shadow: 0 0 14px var(--ok);
+      animation: pulseDot 1.2s ease-in-out infinite;
+    }
+
+    @keyframes pulseDot {
+      0%, 100% { transform: scale(0.8); opacity: 0.55; }
+      50% { transform: scale(1.24); opacity: 1; }
+    }
+
+    h1 {
+      max-width: 980px;
+      margin: 18px 0 0;
+      font-family: ui-serif, "Times New Roman", "Songti SC", serif;
+      font-size: clamp(42px, 7vw, 92px);
+      line-height: 0.95;
+      font-weight: 800;
+      letter-spacing: 0;
+      text-shadow:
+        0 0 28px rgba(120, 231, 255, 0.18),
+        0 0 42px rgba(246, 201, 106, 0.12);
+    }
+
+    h1 span {
+      display: block;
+      margin-top: 9px;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(246, 242, 232, 0.72);
+      font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+      font-size: clamp(22px, 3vw, 42px);
+      line-height: 1.08;
+      font-weight: 800;
+    }
+
+    .subtitle {
+      max-width: 780px;
+      margin: 18px 0 0;
+      color: var(--muted);
+      font-size: clamp(16px, 2.2vw, 21px);
+      line-height: 1.72;
+    }
+
+    .hero-panel {
+      width: min(360px, 100%);
+      padding: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      border-radius: 18px;
+      background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0.035));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .hero-panel strong {
+      display: block;
+      color: #ffe4a0;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .hero-panel p {
+      margin: 0;
+      color: #d9def0;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .studio-shell {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 370px;
+      gap: 22px;
+      align-items: start;
+    }
+
+    .canvas-stage,
+    .control-panel,
+    .result-card,
+    .mini-gallery {
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0.035)),
+        rgba(9, 12, 28, 0.72);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(22px);
+    }
+
+    .canvas-stage {
+      position: relative;
+      min-width: 0;
+      padding: clamp(14px, 2.4vw, 26px);
+      border-radius: 24px;
+      overflow: hidden;
+    }
+
+    .canvas-stage::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(90deg, transparent, rgba(120,231,255,0.08), transparent),
+        radial-gradient(circle at 50% 0, rgba(246,201,106,0.18), transparent 36%);
+      opacity: 0.74;
+      mix-blend-mode: screen;
+    }
+
+    .curator-note {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 16px;
+      color: #dfe6fa;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .curator-note span {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 8px 10px;
+      border: 1px solid rgba(120, 231, 255, 0.18);
+      border-radius: 999px;
+      background: rgba(120, 231, 255, 0.07);
+      color: #bff4ff;
+      white-space: nowrap;
+    }
+
+    .canvas-frame {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      min-height: 360px;
+      border: 1px solid rgba(246, 201, 106, 0.48);
+      border-radius: 18px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 28% 24%, rgba(120, 231, 255, 0.13), transparent 34%),
+        radial-gradient(circle at 78% 78%, rgba(246, 201, 106, 0.1), transparent 35%),
+        linear-gradient(135deg, #10172e 0%, #0a0f1e 55%, #080814 100%);
+      box-shadow:
+        0 0 0 8px rgba(246, 201, 106, 0.04),
+        inset 0 0 45px rgba(120, 231, 255, 0.08),
+        0 0 48px rgba(120, 231, 255, 0.18),
+        0 34px 90px rgba(0, 0, 0, 0.46);
+      touch-action: none;
+      user-select: none;
+      isolation: isolate;
+    }
+
+    .canvas-frame::before,
+    .canvas-frame::after {
+      content: "";
+      position: absolute;
+      inset: 16px;
+      z-index: 0;
+      border: 1px solid rgba(246, 201, 106, 0.16);
+      border-radius: 12px;
+      pointer-events: none;
+    }
+
+    .canvas-frame::after {
+      inset: auto 15% 0;
+      height: 130px;
+      border: 0;
+      background: radial-gradient(ellipse at center, rgba(246, 201, 106, 0.16), transparent 65%);
+      filter: blur(18px);
+      transform: translateY(40%);
+    }
+
+    .canvas-frame.analyzing {
+      animation: canvasShake 0.42s linear 4;
+      box-shadow:
+        0 0 0 8px rgba(246, 201, 106, 0.08),
+        inset 0 0 90px rgba(157, 124, 255, 0.22),
+        0 0 70px rgba(120, 231, 255, 0.34),
+        0 0 120px rgba(246, 201, 106, 0.16);
+    }
+
+    @keyframes canvasShake {
+      0%, 100% { transform: translate3d(0, 0, 0); }
+      25% { transform: translate3d(1.5px, -1px, 0); }
+      50% { transform: translate3d(-1px, 1.5px, 0); }
+      75% { transform: translate3d(1px, 1px, 0); }
+    }
+
+    #artCanvas {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      cursor: crosshair;
+      touch-action: none;
+    }
+
+    .canvas-hint {
+      position: absolute;
+      z-index: 2;
+      left: 50%;
+      top: 50%;
+      width: min(450px, calc(100% - 48px));
+      padding: 18px 20px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 18px;
+      background: rgba(7, 9, 18, 0.52);
+      color: #e6ecff;
+      text-align: center;
+      line-height: 1.6;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      backdrop-filter: blur(14px);
+      transition: opacity 0.28s ease, transform 0.28s ease;
+    }
+
+    .canvas-hint.hidden {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.96);
+    }
+
+    .scan-beam {
+      position: absolute;
+      inset: 0;
+      z-index: 5;
+      pointer-events: none;
+      opacity: 0;
+      background:
+        linear-gradient(90deg, transparent, rgba(120,231,255,0.34), rgba(246,201,106,0.28), transparent);
+      transform: translateX(-115%);
+    }
+
+    .canvas-frame.analyzing .scan-beam {
+      opacity: 1;
+      animation: scanBeam 1.05s ease-in-out 3;
+    }
+
+    @keyframes scanBeam {
+      0% { transform: translateX(-115%); }
+      100% { transform: translateX(115%); }
+    }
+
+    .portal-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 8;
+      display: grid;
+      place-items: center;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.28s ease;
+    }
+
+    .portal-layer.active {
+      opacity: 1;
+    }
+
+    .portal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(3, 4, 13, 0.28), rgba(1, 1, 8, 0.86));
+    }
+
+    .portal-vortex {
+      position: relative;
+      width: min(42vw, 330px);
+      height: min(42vw, 330px);
+      border-radius: 999px;
+      background:
+        conic-gradient(from 0deg, rgba(120,231,255,0.1), rgba(157,124,255,0.8), rgba(246,201,106,0.9), rgba(120,231,255,0.18), rgba(157,124,255,0.8)),
+        radial-gradient(circle, transparent 0 34%, rgba(4, 5, 18, 0.98) 35% 45%, rgba(120,231,255,0.35) 46% 48%, transparent 49%);
+      box-shadow:
+        0 0 38px rgba(120, 231, 255, 0.44),
+        0 0 88px rgba(157, 124, 255, 0.3),
+        0 0 130px rgba(246, 201, 106, 0.2),
+        inset 0 0 40px rgba(255, 255, 255, 0.16);
+      animation: spinPortal 1.1s linear infinite, portalPulse 1.5s ease-in-out infinite alternate;
+      mix-blend-mode: screen;
+    }
+
+    .portal-vortex::before,
+    .portal-vortex::after {
+      content: "";
+      position: absolute;
+      inset: 11%;
+      border-radius: inherit;
+      border: 1px dashed rgba(255, 232, 158, 0.78);
+      animation: spinPortal 1.8s linear infinite reverse;
+      filter: drop-shadow(0 0 12px rgba(246, 201, 106, 0.7));
+    }
+
+    .portal-vortex::after {
+      inset: 25%;
+      border-color: rgba(120, 231, 255, 0.78);
+      animation-duration: 0.8s;
+    }
+
+    .portal-layer.burst .portal-vortex {
+      animation: portalBurst 0.72s ease-out forwards;
+    }
+
+    @keyframes spinPortal {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes portalPulse {
+      from { filter: brightness(0.92) saturate(1); transform: scale(0.96); }
+      to { filter: brightness(1.4) saturate(1.4); transform: scale(1.04); }
+    }
+
+    @keyframes portalBurst {
+      0% { transform: scale(1) rotate(0deg); opacity: 1; filter: brightness(1); }
+      70% { transform: scale(1.52) rotate(220deg); opacity: 1; filter: brightness(2.2); }
+      100% { transform: scale(2.6) rotate(320deg); opacity: 0; filter: brightness(3); }
+    }
+
+    .portal-fragment {
+      position: absolute;
+      z-index: 9;
+      left: var(--x);
+      top: var(--y);
+      width: var(--w);
+      height: var(--h);
+      border-radius: var(--radius);
+      background: var(--bgc);
+      color: #fff;
+      font-size: var(--font);
+      text-shadow: 0 0 14px rgba(255, 255, 255, 0.76);
+      box-shadow: 0 0 20px var(--bgc);
+      transform: translate(-50%, -50%) rotate(var(--angle));
+      animation: fragmentPull var(--time) cubic-bezier(.12,.86,.26,1) forwards;
+      animation-delay: var(--delay);
+      opacity: 0.9;
+    }
+
+    @keyframes fragmentPull {
+      0% { transform: translate(-50%, -50%) scale(1) rotate(var(--angle)); opacity: 0.95; }
+      70% { opacity: 1; }
+      100% { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0.05) rotate(calc(var(--angle) + 860deg)); opacity: 0; }
+    }
+
+    .studio-actions {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      margin-top: 18px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      min-height: 44px;
+      padding: 12px 16px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      color: #f8fbff;
+      font-weight: 800;
+      transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
+      backdrop-filter: blur(14px);
+    }
+
+    .btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      border-color: rgba(120, 231, 255, 0.44);
+      box-shadow: 0 0 28px rgba(120, 231, 255, 0.18);
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .btn.primary {
+      border-color: rgba(246, 201, 106, 0.58);
+      background:
+        linear-gradient(135deg, rgba(246, 201, 106, 0.26), rgba(157, 124, 255, 0.18)),
+        rgba(255, 255, 255, 0.1);
+      box-shadow: 0 0 36px rgba(246, 201, 106, 0.18);
+    }
+
+    .btn.portal {
+      min-height: 52px;
+      padding-inline: 22px;
+      border-color: rgba(120, 231, 255, 0.5);
+      background:
+        linear-gradient(135deg, rgba(120, 231, 255, 0.22), rgba(157, 124, 255, 0.28), rgba(246, 201, 106, 0.12)),
+        rgba(255, 255, 255, 0.08);
+      box-shadow:
+        inset 0 0 20px rgba(255, 255, 255, 0.05),
+        0 0 42px rgba(120, 231, 255, 0.22);
+    }
+
+    .btn.small {
+      min-height: 38px;
+      padding: 9px 12px;
+      font-size: 13px;
+    }
+
+    .btn.ghost {
+      background: rgba(255, 255, 255, 0.045);
+    }
+
+    .control-panel {
+      position: sticky;
+      top: 20px;
+      padding: 20px;
+      border-radius: 22px;
+    }
+
+    .panel-section + .panel-section {
+      margin-top: 22px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.11);
+    }
+
+    .panel-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin: 0 0 12px;
+      color: #fff6dc;
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .palette {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+    }
+
+    .color-swatch {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1;
+      min-width: 0;
+      border-radius: 999px;
+      border: 2px solid rgba(255, 255, 255, 0.16);
+      background: var(--swatch);
+      box-shadow: 0 0 16px color-mix(in srgb, var(--swatch), transparent 48%);
+      transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .color-swatch::after {
+      content: "";
+      position: absolute;
+      inset: 18%;
+      border-radius: inherit;
+      background: radial-gradient(circle at 30% 24%, rgba(255,255,255,0.72), transparent 34%);
+      opacity: 0.46;
+      pointer-events: none;
+    }
+
+    .color-swatch:hover,
+    .color-swatch.active {
+      transform: scale(1.12);
+      border-color: #fff2be;
+      box-shadow: 0 0 0 4px rgba(246, 201, 106, 0.16), 0 0 24px var(--swatch);
+      z-index: 2;
+    }
+
+    .brush-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--gold);
+    }
+
+    .brush-preview {
+      width: 64px;
+      height: 42px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .brush-dot {
+      width: var(--brush);
+      height: var(--brush);
+      max-width: 34px;
+      max-height: 34px;
+      min-width: 4px;
+      min-height: 4px;
+      border-radius: 999px;
+      background: var(--current-color, #78e7ff);
+      box-shadow: 0 0 18px var(--current-color, #78e7ff);
+    }
+
+    .brush-value {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .action-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .hint-text {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.65;
+      margin: 12px 0 0;
+    }
+
+    .analysis-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background:
+        radial-gradient(circle at 50% 45%, rgba(120, 231, 255, 0.13), transparent 30%),
+        rgba(0, 0, 0, 0.72);
+      backdrop-filter: blur(8px);
+      pointer-events: none;
+    }
+
+    .analysis-overlay.active {
+      display: flex;
+      animation: overlayFade 0.25s ease;
+    }
+
+    @keyframes overlayFade {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .analysis-console {
+      width: min(560px, 100%);
+      padding: 22px;
+      border: 1px solid rgba(120, 231, 255, 0.32);
+      border-radius: 22px;
+      background: rgba(7, 10, 23, 0.72);
+      box-shadow: 0 0 60px rgba(120, 231, 255, 0.16);
+      text-align: center;
+    }
+
+    .analysis-orbit {
+      width: 86px;
+      height: 86px;
+      margin: 0 auto 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(246, 201, 106, 0.72);
+      background:
+        radial-gradient(circle, rgba(246,201,106,0.28), transparent 42%),
+        conic-gradient(from 0deg, transparent, rgba(120,231,255,0.9), transparent, rgba(246,201,106,0.9), transparent);
+      box-shadow: 0 0 34px rgba(246, 201, 106, 0.32);
+      animation: spinPortal 0.86s linear infinite;
+    }
+
+    .analysis-text {
+      color: #fff5d7;
+      font-size: clamp(18px, 4vw, 28px);
+      font-family: ui-serif, "Times New Roman", "Songti SC", serif;
+      font-weight: 800;
+      line-height: 1.35;
+    }
+
+    .analysis-subtext {
+      min-height: 22px;
+      margin-top: 10px;
+      color: #b9f4ff;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .result-section {
+      margin-top: 28px;
+    }
+
+    .result-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 28px;
+      padding: clamp(18px, 2.8vw, 30px);
+      opacity: 0;
+      transform: perspective(1400px) rotateX(10deg) scale(0.92) translateY(34px);
+      transform-origin: center top;
+    }
+
+    .result-card.revealed {
+      animation: cardReveal 0.9s cubic-bezier(.2, 1.1, .22, 1) forwards;
+    }
+
+    @keyframes cardReveal {
+      0% { opacity: 0; transform: perspective(1400px) rotateX(16deg) rotateY(-8deg) scale(0.86) translateY(60px); filter: brightness(0.8); }
+      62% { opacity: 1; transform: perspective(1400px) rotateX(-2deg) rotateY(2deg) scale(1.025) translateY(-4px); filter: brightness(1.24); }
+      100% { opacity: 1; transform: perspective(1400px) rotateX(0deg) rotateY(0deg) scale(1) translateY(0); filter: brightness(1); }
+    }
+
+    .result-card::before {
+      content: "";
+      position: absolute;
+      inset: -2px;
+      z-index: -1;
+      background:
+        conic-gradient(from var(--spin, 0deg), rgba(246,201,106,0.9), rgba(120,231,255,0.55), rgba(157,124,255,0.74), rgba(246,201,106,0.9));
+      filter: blur(18px);
+      opacity: 0.58;
+      animation: borderFlow 5s linear infinite;
+    }
+
+    .result-card::after {
+      content: "";
+      position: absolute;
+      inset: 1px;
+      z-index: -1;
+      border-radius: 27px;
+      background:
+        radial-gradient(circle at 20% 15%, rgba(246, 201, 106, 0.14), transparent 30%),
+        radial-gradient(circle at 82% 28%, rgba(120, 231, 255, 0.13), transparent 34%),
+        rgba(9, 12, 28, 0.93);
+    }
+
+    @property --spin {
+      syntax: "<angle>";
+      inherits: false;
+      initial-value: 0deg;
+    }
+
+    @keyframes borderFlow {
+      to { --spin: 360deg; }
+    }
+
+    .result-top {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(320px, 1.1fr);
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    .score-panel {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .score-badge {
+      width: fit-content;
+      padding: 8px 12px;
+      border: 1px solid rgba(246, 201, 106, 0.42);
+      border-radius: 999px;
+      background: rgba(246, 201, 106, 0.11);
+      color: #ffe39d;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .score-number {
+      font-family: ui-serif, "Times New Roman", serif;
+      font-size: clamp(76px, 13vw, 154px);
+      line-height: 0.82;
+      font-weight: 900;
+      color: transparent;
+      background: linear-gradient(135deg, #fff8d7, #f6c96a 45%, #78e7ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      text-shadow: 0 0 36px rgba(246, 201, 106, 0.16);
+    }
+
+    .score-caption {
+      margin: 10px 0 0;
+      color: #dbe2f5;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .persona-card {
+      align-self: end;
+      padding: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .persona-card b {
+      display: block;
+      color: #fff0b9;
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+
+    .persona-card p {
+      margin: 0;
+      color: #d5dbef;
+      line-height: 1.68;
+      font-size: 14px;
+    }
+
+    .artwork-showcase {
+      display: grid;
+      grid-template-columns: 0.42fr 0.58fr;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .image-tile {
+      position: relative;
+      min-height: 330px;
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      border-radius: 18px;
+      overflow: hidden;
+      background: #0b0d18;
+      box-shadow: inset 0 0 40px rgba(255, 255, 255, 0.05);
+    }
+
+    .image-tile.small {
+      min-height: 260px;
+    }
+
+    .image-tile > img,
+    .compare-pane > img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .masterpiece-tile {
+      border-color: rgba(246, 201, 106, 0.26);
+      box-shadow:
+        inset 0 0 40px rgba(255, 255, 255, 0.05),
+        0 0 34px rgba(246, 201, 106, 0.08);
+    }
+
+    .image-label {
+      position: absolute;
+      left: 12px;
+      bottom: 12px;
+      z-index: 2;
+      max-width: calc(100% - 24px);
+      padding: 7px 9px;
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.52);
+      color: #fff7e1;
+      font-size: 12px;
+      font-weight: 800;
+      backdrop-filter: blur(10px);
+    }
+
+    .art-fallback {
+      position: absolute;
+      inset: 0;
+      display: none;
+      place-items: center;
+      padding: 20px;
+      text-align: center;
+      background:
+        radial-gradient(circle at 28% 28%, rgba(246,201,106,0.28), transparent 30%),
+        radial-gradient(circle at 70% 70%, rgba(120,231,255,0.24), transparent 30%),
+        linear-gradient(135deg, #13182a, #090b16);
+    }
+
+    .art-fallback strong {
+      display: block;
+      margin-bottom: 8px;
+      color: #fff0ad;
+      font-family: ui-serif, "Times New Roman", serif;
+      font-size: 24px;
+      line-height: 1.15;
+    }
+
+    .art-fallback span {
+      display: block;
+      color: #d6def0;
+      line-height: 1.5;
+    }
+
+    .art-fallback .fallback-museum {
+      margin-top: 10px;
+      color: #c5d0ea;
+      font-size: 12px;
+    }
+
+    .art-fallback .fallback-license {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: fit-content;
+      margin: 12px auto 0;
+      padding: 6px 9px;
+      border: 1px solid rgba(121, 255, 201, 0.26);
+      border-radius: 999px;
+      background: rgba(121, 255, 201, 0.08);
+      color: #a7ffd9;
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .artwork-meta h2 {
+      margin: 18px 0 6px;
+      font-family: ui-serif, "Times New Roman", "Songti SC", serif;
+      font-size: clamp(30px, 5vw, 58px);
+      line-height: 1.04;
+      letter-spacing: 0;
+    }
+
+    .artwork-meta p {
+      margin: 0;
+      color: #cbd3ea;
+      line-height: 1.72;
+    }
+
+    .open-access {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 14px;
+      padding: 8px 10px;
+      border: 1px solid rgba(121, 255, 201, 0.24);
+      border-radius: 999px;
+      background: rgba(121, 255, 201, 0.08);
+      color: #a7ffd9;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .source-link {
+      color: #bff4ff;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(120, 231, 255, 0.32);
+    }
+
+    .source-link:hover {
+      color: #fff0ad;
+      border-bottom-color: rgba(246, 201, 106, 0.62);
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 6px 9px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      color: #dce4f8;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(330px, 0.95fr);
+      gap: 18px;
+      margin-top: 22px;
+    }
+
+    .info-panel {
+      padding: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.055);
+    }
+
+    .info-panel h3 {
+      margin: 0 0 12px;
+      color: #fff0bc;
+      font-size: 15px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .info-panel p,
+    .info-panel li {
+      color: #d7def1;
+      font-size: 14px;
+      line-height: 1.72;
+    }
+
+    .info-panel p {
+      margin: 0;
+    }
+
+    .reason-list {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .reason-list li + li {
+      margin-top: 8px;
+    }
+
+    .comparison-card {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .comparison-wrap,
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .compare-pane {
+      position: relative;
+      min-height: 230px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 16px;
+      overflow: hidden;
+      background: rgba(0, 0, 0, 0.25);
+    }
+
+    .user-art-panel {
+      border-color: rgba(120, 231, 255, 0.2);
+    }
+
+    .masterpiece-panel {
+      border-color: rgba(246, 201, 106, 0.3);
+      box-shadow:
+        inset 0 0 36px rgba(246, 201, 106, 0.06),
+        0 0 28px rgba(120, 231, 255, 0.08);
+    }
+
+    .morph-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.42s ease;
+      mix-blend-mode: screen;
+    }
+
+    .user-outline {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      filter: saturate(1.7) contrast(1.25) drop-shadow(0 0 12px rgba(120, 231, 255, 0.82));
+      mix-blend-mode: screen;
+      transform: scale(1.08) rotate(-2deg);
+      transition: opacity 0.45s ease, transform 0.9s ease;
+    }
+
+    .glow-line {
+      position: absolute;
+      height: 2px;
+      width: 46%;
+      left: var(--left);
+      top: var(--top);
+      background: linear-gradient(90deg, transparent, rgba(120,231,255,0.95), rgba(246,201,106,0.9), transparent);
+      box-shadow: 0 0 14px rgba(120, 231, 255, 0.86);
+      transform: rotate(var(--rot)) scaleX(0);
+      transform-origin: left center;
+      opacity: 0;
+    }
+
+    .callout {
+      position: absolute;
+      left: var(--left);
+      top: var(--top);
+      max-width: 190px;
+      padding: 7px 9px;
+      border: 1px solid rgba(246, 201, 106, 0.4);
+      border-radius: 12px;
+      background: rgba(4, 6, 16, 0.78);
+      color: #fff2c2;
+      font-size: 12px;
+      line-height: 1.42;
+      opacity: 0;
+      transform: translateY(8px);
+      box-shadow: 0 0 18px rgba(246, 201, 106, 0.16);
+      backdrop-filter: blur(12px);
+    }
+
+    .comparison-card.overlay-active .morph-overlay {
+      opacity: 1;
+    }
+
+    .comparison-card.overlay-active .morph-overlay .user-outline {
+      opacity: 0.64;
+      transform: scale(1) rotate(0deg);
+      animation: outlinePulse 1.7s ease-in-out infinite alternate;
+    }
+
+    .comparison-card.overlay-active .morph-overlay .glow-line {
+      animation: lineTrace 0.8s ease forwards;
+      animation-delay: var(--delay);
+    }
+
+    .comparison-card.overlay-active .morph-overlay .callout {
+      animation: calloutIn 0.58s ease forwards;
+      animation-delay: var(--delay);
+    }
+
+    @keyframes outlinePulse {
+      from { filter: saturate(1.3) contrast(1.1) drop-shadow(0 0 8px rgba(120, 231, 255, 0.58)); }
+      to { filter: saturate(1.9) contrast(1.32) drop-shadow(0 0 18px rgba(246, 201, 106, 0.62)); }
+    }
+
+    @keyframes lineTrace {
+      to { transform: rotate(var(--rot)) scaleX(1); opacity: 1; }
+    }
+
+    @keyframes calloutIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .top3-section {
+      margin-top: 18px;
+      padding: 18px;
+      border: 1px solid rgba(255, 47, 86, 0.12);
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.78);
+      box-shadow: 0 16px 44px rgba(32, 25, 31, 0.08);
+    }
+
+    .top3-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .top3-head h3 {
+      margin: 0;
+      color: #1f1720;
+      font-size: clamp(22px, 3vw, 34px);
+      font-weight: 900;
+      letter-spacing: 0;
+    }
+
+    .top3-head p {
+      margin: 6px 0 0;
+      color: #71636d;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    .top3-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .top-match-card {
+      position: relative;
+      overflow: hidden;
+      min-width: 0;
+      border: 1px solid rgba(255, 47, 86, 0.12);
+      border-radius: 18px;
+      background: #fff;
+      box-shadow: 0 12px 30px rgba(32, 25, 31, 0.08);
+      animation: topMatchIn 0.62s cubic-bezier(.2, 1, .25, 1) both;
+      animation-delay: calc(var(--rank) * 0.08s);
+    }
+
+    @keyframes topMatchIn {
+      from { opacity: 0; transform: translateY(16px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .top-match-card .rank-ribbon {
+      position: absolute;
+      z-index: 4;
+      top: 10px;
+      left: 10px;
+      padding: 6px 9px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #ff2f56, #ff7aa2);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 900;
+      box-shadow: 0 10px 22px rgba(255, 47, 86, 0.24);
+    }
+
+    .top-match-card .top-match-image {
+      position: relative;
+      height: 210px;
+      overflow: hidden;
+      background: #fff5f7;
+    }
+
+    .top-match-card .top-match-image > img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .top-match-body {
+      padding: 14px;
+    }
+
+    .top-match-score {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 28px;
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: #fff0f3;
+      color: #ff2f56;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .top-match-body h4 {
+      margin: 10px 0 5px;
+      color: #1f1720;
+      font-size: 18px;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+
+    .top-match-body .meta {
+      margin: 0 0 10px;
+      color: #766974;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .similar-parts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin: 10px 0;
+    }
+
+    .similar-pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      padding: 5px 8px;
+      border-radius: 999px;
+      background: #fff7f8;
+      border: 1px solid rgba(255, 47, 86, 0.12);
+      color: #6a5964;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .top-match-body p {
+      margin: 8px 0 0;
+      color: #5f535c;
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .deep-dive-card {
+      margin-top: 18px;
+      background:
+        radial-gradient(circle at 12% 0, rgba(255, 47, 86, 0.08), transparent 36%),
+        #fff;
+      border-color: rgba(255, 47, 86, 0.12);
+    }
+
+    .deep-dive-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .deep-dive-block {
+      padding: 14px;
+      border-radius: 16px;
+      background: #fff8fa;
+      border: 1px solid rgba(255, 47, 86, 0.1);
+    }
+
+    .deep-dive-block b {
+      display: block;
+      margin-bottom: 8px;
+      color: #ff2f56;
+      font-size: 13px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    /* Light social-card redesign: keeps the existing interaction system, but makes the demo lighter and clearer. */
+    :root {
+      --bg: #fff7f8;
+      --bg-2: #fff0f4;
+      --panel: rgba(255, 255, 255, 0.88);
+      --panel-strong: rgba(255, 255, 255, 0.96);
+      --glass: rgba(255, 255, 255, 0.72);
+      --line: rgba(31, 23, 32, 0.1);
+      --text: #1f1720;
+      --muted: #756a73;
+      --gold: #ffb23f;
+      --gold-2: #ffe2a3;
+      --cyan: #56c7ff;
+      --violet: #8b6cff;
+      --pink: #ff2f56;
+      --danger: #ff3d67;
+      --ok: #16c784;
+      --shadow: 0 18px 50px rgba(31, 23, 32, 0.1);
+      color-scheme: light;
+    }
+
+    html {
+      background: #fff7f8;
+    }
+
+    body {
+      background:
+        radial-gradient(circle at 8% 6%, rgba(255, 47, 86, 0.12), transparent 26rem),
+        radial-gradient(circle at 92% 10%, rgba(255, 178, 63, 0.14), transparent 24rem),
+        linear-gradient(180deg, #fff8fa 0%, #fff3f5 48%, #ffffff 100%);
+      color: var(--text);
+    }
+
+    .particle {
+      opacity: 0.18;
+      filter: blur(0.2px);
+    }
+
+    .eyebrow {
+      border-color: rgba(255, 47, 86, 0.16);
+      background: #fff;
+      color: #ff2f56;
+      box-shadow: 0 10px 28px rgba(255, 47, 86, 0.1);
+      text-transform: none;
+      letter-spacing: 0;
+    }
+
+    .status-dot {
+      background: #ff2f56;
+      box-shadow: 0 0 12px rgba(255, 47, 86, 0.42);
+    }
+
+    h1 {
+      color: #1f1720;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: clamp(40px, 6vw, 76px);
+      line-height: 1.02;
+      text-shadow: none;
+    }
+
+    h1 span {
+      color: #ff2f56;
+      -webkit-text-stroke: 0;
+      font-size: clamp(20px, 2.5vw, 34px);
+      font-weight: 900;
+    }
+
+    .subtitle,
+    .hero-panel p,
+    .hint-text,
+    .score-caption,
+    .info-panel p,
+    .info-panel li,
+    .curator-text,
+    .gallery-head p {
+      color: #6f646d;
+    }
+
+    .hero-panel,
+    .canvas-stage,
+    .control-panel,
+    .mini-gallery {
+      border-color: rgba(255, 47, 86, 0.1);
+      background: rgba(255, 255, 255, 0.84);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .hero-panel strong,
+    .panel-title,
+    .info-panel h3,
+    .gallery-head h2 {
+      color: #1f1720;
+    }
+
+    .canvas-stage::before {
+      background:
+        linear-gradient(90deg, transparent, rgba(255, 47, 86, 0.06), transparent),
+        radial-gradient(circle at 50% 0, rgba(255, 178, 63, 0.12), transparent 34%);
+      mix-blend-mode: multiply;
+    }
+
+    .curator-note {
+      color: #5f535c;
+    }
+
+    .curator-note span {
+      border-color: rgba(255, 47, 86, 0.13);
+      background: #fff5f7;
+      color: #ff2f56;
+    }
+
+    .canvas-frame {
+      background:
+        linear-gradient(45deg, rgba(255, 47, 86, 0.035) 25%, transparent 25% 75%, rgba(255, 47, 86, 0.035) 75%),
+        linear-gradient(45deg, rgba(255, 47, 86, 0.035) 25%, transparent 25% 75%, rgba(255, 47, 86, 0.035) 75%),
+        #ffffff;
+      background-position: 0 0, 12px 12px, 0 0;
+      background-size: 24px 24px, 24px 24px, auto;
+      border-color: rgba(255, 47, 86, 0.18);
+      box-shadow:
+        0 0 0 8px rgba(255, 47, 86, 0.035),
+        inset 0 0 0 1px rgba(31, 23, 32, 0.04),
+        0 24px 60px rgba(31, 23, 32, 0.12);
+    }
+
+    .canvas-frame::before {
+      border-color: rgba(31, 23, 32, 0.06);
+    }
+
+    .canvas-frame::after {
+      background: radial-gradient(ellipse at center, rgba(255, 47, 86, 0.08), transparent 65%);
+    }
+
+    .canvas-hint {
+      border-color: rgba(255, 47, 86, 0.12);
+      background: rgba(255, 255, 255, 0.84);
+      color: #6a5964;
+      box-shadow: 0 12px 34px rgba(31, 23, 32, 0.08);
+    }
+
+    .btn {
+      border-color: rgba(255, 47, 86, 0.12);
+      background: #fff;
+      color: #2a2028;
+      box-shadow: 0 10px 24px rgba(31, 23, 32, 0.08);
+    }
+
+    .btn:hover:not(:disabled) {
+      border-color: rgba(255, 47, 86, 0.32);
+      box-shadow: 0 14px 30px rgba(255, 47, 86, 0.12);
+      background: #fff8fa;
+    }
+
+    .btn.primary,
+    .btn.portal {
+      border-color: rgba(255, 47, 86, 0.18);
+      background: linear-gradient(135deg, #ff2f56, #ff7aa2);
+      color: #fff;
+      box-shadow: 0 14px 32px rgba(255, 47, 86, 0.24);
+    }
+
+    .btn.ghost {
+      background: #fff7f8;
+      color: #3a3038;
+    }
+
+    .color-swatch {
+      border-color: #fff;
+      box-shadow: 0 8px 18px rgba(31, 23, 32, 0.12);
+    }
+
+    .color-swatch:hover,
+    .color-swatch.active {
+      border-color: #ff2f56;
+      box-shadow: 0 0 0 4px rgba(255, 47, 86, 0.12), 0 10px 24px rgba(31, 23, 32, 0.14);
+    }
+
+    .brush-preview,
+    .info-panel {
+      border-color: rgba(255, 47, 86, 0.1);
+      background: #fff;
+      color: #2a2028;
+    }
+
+    .analysis-overlay {
+      background:
+        radial-gradient(circle at 50% 45%, rgba(255, 47, 86, 0.12), transparent 30%),
+        rgba(255, 247, 248, 0.76);
+    }
+
+    .analysis-console,
+    .result-card {
+      border-color: rgba(255, 47, 86, 0.12);
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: 0 24px 70px rgba(31, 23, 32, 0.14);
+    }
+
+    .analysis-text,
+    .analysis-subtext,
+    .score-badge,
+    .persona-card b,
+    .artwork-meta h2,
+    .share-card,
+    .curator-copy b {
+      color: #1f1720;
+    }
+
+    .analysis-orbit {
+      border-color: rgba(255, 47, 86, 0.7);
+      box-shadow: 0 0 24px rgba(255, 47, 86, 0.18);
+    }
+
+    .result-card::before {
+      background: conic-gradient(from var(--spin, 0deg), rgba(255,47,86,0.72), rgba(255,178,63,0.42), rgba(255,122,162,0.56), rgba(255,47,86,0.72));
+      opacity: 0.25;
+    }
+
+    .result-card::after {
+      background:
+        radial-gradient(circle at 14% 10%, rgba(255, 47, 86, 0.08), transparent 30%),
+        radial-gradient(circle at 84% 22%, rgba(255, 178, 63, 0.08), transparent 34%),
+        rgba(255, 255, 255, 0.96);
+    }
+
+    .score-number {
+      background: linear-gradient(135deg, #ff2f56, #ff7aa2 48%, #ffb23f);
+      -webkit-background-clip: text;
+      background-clip: text;
+      text-shadow: none;
+    }
+
+    .score-badge,
+    .open-access,
+    .tag,
+    .share-card {
+      border-color: rgba(255, 47, 86, 0.12);
+      background: #fff5f7;
+      color: #ff2f56;
+    }
+
+    .persona-card,
+    .curator-panel {
+      border-color: rgba(255, 47, 86, 0.1);
+      background: #fff8fa;
+    }
+
+    .persona-card p,
+    .artwork-meta p {
+      color: #6f646d;
+    }
+
+    .image-tile,
+    .compare-pane {
+      background: #fff5f7;
+      border-color: rgba(31, 23, 32, 0.08);
+      box-shadow: 0 12px 30px rgba(31, 23, 32, 0.08);
+    }
+
+    .image-label {
+      border-color: rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.86);
+      color: #ff2f56;
+      box-shadow: 0 8px 20px rgba(31, 23, 32, 0.1);
+    }
+
+    .art-fallback {
+      background:
+        radial-gradient(circle at 18% 22%, rgba(255,47,86,0.2), transparent 32%),
+        radial-gradient(circle at 82% 70%, rgba(255,178,63,0.22), transparent 34%),
+        linear-gradient(135deg, #fff7f8, #fff0f4);
+    }
+
+    .art-fallback strong,
+    .art-fallback span {
+      color: #1f1720;
+    }
+
+    .source-link {
+      color: #ff2f56;
+      border-bottom-color: rgba(255, 47, 86, 0.22);
+    }
+
+    .callout {
+      border-color: rgba(255, 47, 86, 0.2);
+      background: rgba(255, 255, 255, 0.86);
+      color: #1f1720;
+      box-shadow: 0 10px 22px rgba(255, 47, 86, 0.12);
+    }
+
+    .glow-line {
+      background: linear-gradient(90deg, transparent, rgba(255,47,86,0.95), rgba(255,178,63,0.9), transparent);
+      box-shadow: 0 0 14px rgba(255, 47, 86, 0.5);
+    }
+
+    .curator-avatar {
+      background: linear-gradient(135deg, #ff2f56, #ffb23f);
+      color: #fff;
+      box-shadow: 0 12px 24px rgba(255, 47, 86, 0.18);
+    }
+
+    .toast {
+      border-color: rgba(255, 47, 86, 0.18);
+      background: rgba(255, 255, 255, 0.92);
+      color: #ff2f56;
+      box-shadow: 0 18px 44px rgba(31, 23, 32, 0.12);
+    }
+
+    .curator-panel {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 14px;
+      align-items: start;
+      padding: 18px;
+      border: 1px solid rgba(120, 231, 255, 0.22);
+      border-radius: 20px;
+      background:
+        radial-gradient(circle at 0 0, rgba(120, 231, 255, 0.12), transparent 34%),
+        rgba(255, 255, 255, 0.055);
+    }
+
+    .curator-avatar {
+      position: relative;
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      background:
+        conic-gradient(from 0deg, rgba(120,231,255,0.26), rgba(246,201,106,0.38), rgba(157,124,255,0.34), rgba(120,231,255,0.26)),
+        rgba(255, 255, 255, 0.08);
+      box-shadow: 0 0 22px rgba(120, 231, 255, 0.18);
+      font-weight: 900;
+    }
+
+    .curator-avatar::after {
+      content: "";
+      position: absolute;
+      right: -2px;
+      bottom: -2px;
+      width: 12px;
+      height: 12px;
+      border: 2px solid #11162a;
+      border-radius: 999px;
+      background: var(--ok);
+      box-shadow: 0 0 10px var(--ok);
+    }
+
+    .curator-copy {
+      min-width: 0;
+    }
+
+    .curator-copy header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .curator-copy b {
+      color: #dff9ff;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .curator-text {
+      min-height: 124px;
+      color: #e3e9fb;
+      font-size: 14px;
+      line-height: 1.78;
+      white-space: pre-line;
+    }
+
+    .typing-cursor {
+      display: inline-block;
+      width: 8px;
+      height: 1em;
+      margin-left: 2px;
+      transform: translateY(2px);
+      background: #fff2a8;
+      animation: blink 0.82s steps(2, start) infinite;
+    }
+
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
+    .share-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .share-card {
+      margin-top: 16px;
+      padding: 14px;
+      border: 1px solid rgba(246, 201, 106, 0.22);
+      border-radius: 16px;
+      background: rgba(246, 201, 106, 0.07);
+      color: #fff2bf;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .mini-gallery {
+      margin-top: 28px;
+      border-radius: 24px;
+      padding: 22px;
+    }
+
+    .gallery-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .gallery-head h2 {
+      margin: 0;
+      font-family: ui-serif, "Times New Roman", "Songti SC", serif;
+      font-size: clamp(26px, 4vw, 44px);
+    }
+
+    .gallery-head p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 14px;
+    }
+
+    .gallery-empty {
+      padding: 18px;
+      border: 1px dashed rgba(255, 255, 255, 0.16);
+      border-radius: 16px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .gallery-item {
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 16px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.055);
+    }
+
+    .gallery-item img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      display: block;
+      background: #090d18;
+    }
+
+    .gallery-item div {
+      padding: 12px;
+    }
+
+    .gallery-item b {
+      display: block;
+      color: #fff2bd;
+      line-height: 1.3;
+      margin-bottom: 6px;
+    }
+
+    .gallery-item p {
+      margin: 0;
+      color: #d1d8eb;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 24px;
+      z-index: 80;
+      max-width: min(520px, calc(100% - 28px));
+      padding: 12px 16px;
+      border: 1px solid rgba(246, 201, 106, 0.34);
+      border-radius: 999px;
+      background: rgba(5, 7, 16, 0.86);
+      color: #fff4c6;
+      box-shadow: 0 0 34px rgba(246, 201, 106, 0.18);
+      backdrop-filter: blur(14px);
+      transform: translate(-50%, 18px);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.25s ease, opacity 0.25s ease;
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    .toast.show {
+      transform: translate(-50%, 0);
+      opacity: 1;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* Stage 1 museum refactor: modern gallery, paper texture, curator report structure. */
+    :root {
+      --museum-bg: #f6f1e9;
+      --museum-wall: #fbf8f2;
+      --museum-paper: #fffdf8;
+      --museum-ink: #2b2118;
+      --museum-muted: #7c7166;
+      --museum-line: rgba(83, 67, 49, 0.16);
+      --museum-gold: #b99252;
+      --museum-blue: #8c99c7;
+      --museum-lilac: #b9acd7;
+      --shadow: 0 18px 55px rgba(84, 67, 49, 0.12);
+      --text: var(--museum-ink);
+      --muted: var(--museum-muted);
+      --pink: var(--museum-gold);
+    }
+
+    body {
+      background:
+        radial-gradient(circle at 10% 0%, rgba(185, 146, 82, 0.12), transparent 28rem),
+        radial-gradient(circle at 88% 9%, rgba(140, 153, 199, 0.12), transparent 24rem),
+        linear-gradient(180deg, #fbf8f2 0%, #f4eee4 60%, #fbf8f2 100%);
+      color: var(--museum-ink);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.42;
+      background-image:
+        linear-gradient(rgba(83, 67, 49, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(83, 67, 49, 0.018) 1px, transparent 1px);
+      background-size: 26px 26px, 26px 26px;
+      mask-image: linear-gradient(180deg, rgba(0,0,0,0.7), transparent 82%);
+    }
+
+    .ambient-particles {
+      display: none;
+    }
+
+    .page {
+      width: min(1320px, calc(100% - 32px));
+      padding-top: 28px;
+    }
+
+    .hero {
+      grid-template-columns: 1fr minmax(280px, 360px);
+      align-items: center;
+      padding: 24px 0 20px;
+    }
+
+    .eyebrow,
+    .mode-kicker {
+      border-color: rgba(185, 146, 82, 0.22);
+      background: rgba(255, 253, 248, 0.72);
+      color: var(--museum-gold);
+      box-shadow: none;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .status-dot {
+      background: var(--museum-gold);
+      box-shadow: 0 0 12px rgba(185, 146, 82, 0.35);
+    }
+
+    h1 {
+      max-width: 900px;
+      color: var(--museum-ink);
+      font-family: "Times New Roman", "Songti SC", ui-serif, serif;
+      font-size: clamp(44px, 6vw, 88px);
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    h1 span {
+      margin-top: 12px;
+      color: var(--museum-muted);
+      font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+      font-size: clamp(15px, 1.5vw, 22px);
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .subtitle {
+      max-width: 720px;
+      color: var(--museum-muted);
+      font-size: 17px;
+      line-height: 1.9;
+    }
+
+    .hero-panel,
+    .canvas-stage,
+    .control-panel,
+    .result-card,
+    .mini-gallery,
+    .mode-card,
+    .theme-card,
+    .intent-panel,
+    .info-panel,
+    .top3-section {
+      border: 1px solid var(--museum-line);
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.62), rgba(255,253,248,0.86)),
+        var(--museum-paper);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+    }
+
+    .hero-panel,
+    .canvas-stage,
+    .control-panel,
+    .mini-gallery,
+    .mode-card,
+    .theme-card {
+      border-radius: 20px;
+    }
+
+    .hero-panel strong,
+    .panel-title,
+    .info-panel h3,
+    .gallery-head h2,
+    .top3-head h3 {
+      color: var(--museum-ink);
+    }
+
+    .mode-selector {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin: 6px 0 18px;
+    }
+
+    .mode-card {
+      display: grid;
+      gap: 9px;
+      min-height: 150px;
+      padding: 20px;
+      text-align: left;
+      color: var(--museum-ink);
+      transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+    }
+
+    .mode-card strong,
+    .theme-card strong {
+      font-family: "Times New Roman", "Songti SC", ui-serif, serif;
+      font-size: 30px;
+      font-weight: 700;
+      line-height: 1.15;
+    }
+
+    .mode-card p,
+    .theme-card p {
+      margin: 0;
+      color: var(--museum-muted);
+      line-height: 1.75;
+    }
+
+    .mode-card:hover,
+    .mode-card.active {
+      transform: translateY(-2px);
+      border-color: rgba(185, 146, 82, 0.45);
+      box-shadow: 0 22px 60px rgba(84, 67, 49, 0.15);
+    }
+
+    .theme-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin: -2px 0 20px;
+      padding: 18px 20px;
+    }
+
+    .studio-shell {
+      grid-template-columns: minmax(0, 1fr) 340px;
+    }
+
+    .curator-note {
+      color: var(--museum-muted);
+    }
+
+    .curator-note span {
+      border-color: rgba(140, 153, 199, 0.24);
+      background: rgba(140, 153, 199, 0.08);
+      color: #6875ad;
+    }
+
+    .canvas-frame {
+      background:
+        radial-gradient(circle at 40% 20%, rgba(185, 146, 82, 0.035), transparent 34%),
+        linear-gradient(0deg, rgba(83, 67, 49, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(83, 67, 49, 0.018) 1px, transparent 1px),
+        #ffffff;
+      background-size: auto, 18px 18px, 18px 18px, auto;
+      border: 1px solid rgba(83, 67, 49, 0.2);
+      border-radius: 14px;
+      box-shadow:
+        inset 0 0 0 10px rgba(255, 253, 248, 0.82),
+        0 18px 48px rgba(84, 67, 49, 0.12);
+    }
+
+    .canvas-hint {
+      border-color: rgba(185, 146, 82, 0.18);
+      background: rgba(255, 253, 248, 0.9);
+      color: var(--museum-muted);
+      box-shadow: 0 16px 36px rgba(84, 67, 49, 0.1);
+    }
+
+    .btn {
+      border: 1px solid rgba(83, 67, 49, 0.16);
+      border-radius: 999px;
+      background: rgba(255, 253, 248, 0.88);
+      color: var(--museum-ink);
+      box-shadow: 0 10px 24px rgba(84, 67, 49, 0.08);
+    }
+
+    .btn.primary,
+    .btn.portal {
+      border-color: rgba(185, 146, 82, 0.42);
+      background: linear-gradient(135deg, #c5a163, #a67e3f);
+      color: #fffaf0;
+      box-shadow: 0 16px 34px rgba(185, 146, 82, 0.22);
+    }
+
+    .btn.ghost {
+      background: rgba(255, 253, 248, 0.66);
+      color: var(--museum-ink);
+    }
+
+    .btn:hover:not(:disabled) {
+      border-color: rgba(185, 146, 82, 0.48);
+      background: #fffdf8;
+      box-shadow: 0 16px 34px rgba(84, 67, 49, 0.12);
+    }
+
+    .color-swatch.active,
+    .color-swatch:hover {
+      border-color: var(--museum-gold);
+      box-shadow: 0 0 0 4px rgba(185, 146, 82, 0.12), 0 12px 28px rgba(84, 67, 49, 0.14);
+    }
+
+    .brush-preview,
+    .tag,
+    .open-access,
+    .share-card,
+    .persona-card,
+    .curator-panel,
+    .top-match-card,
+    .deep-dive-block,
+    .choice-option,
+    .empty-analysis-actions {
+      border: 1px solid var(--museum-line);
+      background: rgba(255, 253, 248, 0.74);
+      color: var(--museum-ink);
+      box-shadow: none;
+    }
+
+    .intent-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 70;
+      display: none;
+      place-items: center;
+      padding: 24px;
+      background: rgba(246, 241, 233, 0.72);
+      backdrop-filter: blur(12px);
+    }
+
+    .intent-modal.active {
+      display: grid;
+    }
+
+    .intent-panel {
+      width: min(760px, 100%);
+      padding: clamp(20px, 4vw, 32px);
+      border-radius: 24px;
+    }
+
+    .intent-panel h2 {
+      margin: 12px 0 8px;
+      font-family: "Times New Roman", "Songti SC", ui-serif, serif;
+      font-size: clamp(28px, 4vw, 44px);
+      line-height: 1.1;
+      color: var(--museum-ink);
+    }
+
+    .intent-panel p {
+      margin: 0;
+      color: var(--museum-muted);
+      line-height: 1.8;
+    }
+
+    .choice-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .choice-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 48px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      text-align: left;
+      transition: border-color 0.2s ease, transform 0.2s ease, background 0.2s ease;
+    }
+
+    .choice-option:hover,
+    .choice-option.active {
+      transform: translateY(-1px);
+      border-color: rgba(185, 146, 82, 0.46);
+      background: rgba(185, 146, 82, 0.08);
+    }
+
+    .choice-option .icon {
+      width: 30px;
+      text-align: center;
+      font-size: 20px;
+    }
+
+    .intent-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .result-card {
+      border-radius: 26px;
+    }
+
+    .result-card::before {
+      background: conic-gradient(from var(--spin, 0deg), rgba(185,146,82,0.4), rgba(140,153,199,0.28), rgba(185,146,82,0.4));
+      opacity: 0.18;
+    }
+
+    .result-card::after {
+      background:
+        radial-gradient(circle at 10% 0%, rgba(185, 146, 82, 0.08), transparent 28%),
+        var(--museum-paper);
+    }
+
+    .curator-summary {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(220px, 320px);
+      gap: 18px;
+      align-items: stretch;
+      margin-bottom: 22px;
+    }
+
+    .summary-main {
+      padding: 20px;
+      border: 1px solid var(--museum-line);
+      border-radius: 20px;
+      background: rgba(255, 253, 248, 0.72);
+    }
+
+    .summary-main h2 {
+      margin: 8px 0 10px;
+      font-family: "Times New Roman", "Songti SC", ui-serif, serif;
+      font-size: clamp(32px, 4.5vw, 58px);
+      line-height: 1;
+      color: var(--museum-ink);
+    }
+
+    .observation-list {
+      margin: 14px 0 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 9px;
+    }
+
+    .observation-list li {
+      padding-left: 18px;
+      color: var(--museum-muted);
+      line-height: 1.65;
+      position: relative;
+    }
+
+    .observation-list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.72em;
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--museum-gold);
+    }
+
+    .summary-score {
+      display: grid;
+      place-items: center;
+      padding: 18px;
+      border: 1px solid rgba(185, 146, 82, 0.25);
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(185,146,82,0.12), rgba(140,153,199,0.08));
+      text-align: center;
+    }
+
+    .summary-score .score-number {
+      font-size: clamp(70px, 10vw, 128px);
+      background: linear-gradient(135deg, #9f793d, #c9a96a);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+
+    .top1-card {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+      gap: 18px;
+      padding: 18px;
+      border: 1px solid var(--museum-line);
+      border-radius: 22px;
+      background: rgba(255, 253, 248, 0.72);
+    }
+
+    .top1-meta h2 {
+      margin: 10px 0 8px;
+      font-family: "Times New Roman", "Songti SC", ui-serif, serif;
+      font-size: clamp(34px, 5vw, 62px);
+      line-height: 1;
+      color: var(--museum-ink);
+    }
+
+    .top1-meta p,
+    .top-match-body p,
+    .deep-dive-block p,
+    .persona-card p,
+    .curator-text,
+    .share-card,
+    .gallery-item p {
+      color: var(--museum-muted);
+    }
+
+    .image-tile,
+    .compare-pane,
+    .top-match-image {
+      border-color: rgba(83, 67, 49, 0.14);
+      background: #f7efe4;
+      box-shadow: 0 14px 34px rgba(84, 67, 49, 0.1);
+    }
+
+    .image-label,
+    .rank-ribbon,
+    .top-match-score {
+      border: 1px solid rgba(185, 146, 82, 0.25);
+      background: rgba(255, 253, 248, 0.88);
+      color: #9f793d;
+      box-shadow: none;
+    }
+
+    .top3-section {
+      margin-top: 20px;
+      border-radius: 22px;
+    }
+
+    .top-match-card {
+      border-radius: 18px;
+      overflow: hidden;
+    }
+
+    .match-type {
+      display: inline-flex;
+      margin-top: 8px;
+      color: #6875ad;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .top1-score-line {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin: 12px 0;
+      color: #8b6b36;
+    }
+
+    .top1-score-line strong {
+      font-size: 18px;
+      color: #9f793d;
+    }
+
+    .top1-score-line span {
+      padding: 5px 10px;
+      border: 1px solid rgba(185, 146, 82, 0.22);
+      border-radius: 999px;
+      background: rgba(185, 146, 82, 0.08);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .top1-intro {
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .top1-parts {
+      margin-top: 12px;
+    }
+
+    .mini-reasons {
+      display: grid;
+      gap: 7px;
+      margin: 12px 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .mini-reasons li {
+      position: relative;
+      padding-left: 15px;
+      color: var(--museum-muted);
+      line-height: 1.55;
+      font-size: 13px;
+    }
+
+    .mini-reasons li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.72em;
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--museum-gold);
+    }
+
+    .details-shell {
+      margin-top: 18px;
+      border: 1px solid var(--museum-line);
+      border-radius: 20px;
+      background: rgba(255, 253, 248, 0.58);
+      overflow: hidden;
+    }
+
+    .details-toggle {
+      width: 100%;
+      justify-content: space-between;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+      padding: 16px 18px;
+      color: var(--museum-ink);
+    }
+
+    .details-content {
+      display: none;
+      padding: 0 18px 18px;
+    }
+
+    .details-shell.open .details-content {
+      display: block;
+    }
+
+    .source-link {
+      color: #8b6b36;
+      border-bottom-color: rgba(185, 146, 82, 0.35);
+    }
+
+    .open-access,
+    .tag,
+    .similar-pill {
+      background: rgba(185, 146, 82, 0.08);
+      color: #8b6b36;
+      border-color: rgba(185, 146, 82, 0.18);
+    }
+
+    .analysis-overlay {
+      background: rgba(246, 241, 233, 0.74);
+    }
+
+    .analysis-console,
+    .toast {
+      background: rgba(255, 253, 248, 0.92);
+      border-color: var(--museum-line);
+      color: var(--museum-ink);
+    }
+
+    .analysis-console {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .analysis-console::before {
+      content: "";
+      position: absolute;
+      left: 8%;
+      right: 8%;
+      top: 18%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(140,153,199,0.72), rgba(185,146,82,0.62), transparent);
+      animation: softScan 1.7s ease-in-out infinite;
+    }
+
+    @keyframes softScan {
+      0% { transform: translateY(-34px); opacity: 0; }
+      22% { opacity: 1; }
+      100% { transform: translateY(126px); opacity: 0; }
+    }
+
+    .curator-avatar {
+      background: linear-gradient(135deg, #c5a163, #8c99c7);
+      color: #fffaf0;
+    }
+
+    .gallery-item b {
+      color: var(--museum-ink);
+    }
+
+    /* Title and hierarchy polish for Doodle to Masterpiece. */
+    body {
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    h1,
+    .mode-card strong,
+    .theme-card strong,
+    .summary-main h2,
+    .top1-meta h2,
+    .top-match-body h4,
+    .gallery-head h2,
+    .info-panel h3,
+    .top3-head h3 {
+      font-family: Georgia, "Cormorant Garamond", "Playfair Display", "Songti SC", STSong, serif;
+    }
+
+    .hero {
+      position: relative;
+      margin-bottom: 24px;
+      padding: clamp(26px, 4.5vw, 54px);
+      border: 1px solid rgba(185, 146, 82, 0.22);
+      border-radius: 30px;
+      background:
+        linear-gradient(120deg, rgba(255,253,248,0.92), rgba(248,242,232,0.82)),
+        radial-gradient(circle at 15% 12%, rgba(185,146,82,0.12), transparent 30%),
+        radial-gradient(circle at 84% 22%, rgba(140,153,199,0.12), transparent 32%);
+      box-shadow: 0 28px 80px rgba(84, 67, 49, 0.13);
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      left: clamp(22px, 4vw, 54px);
+      right: clamp(22px, 4vw, 54px);
+      bottom: 18px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(185,146,82,0.48), rgba(140,153,199,0.25), transparent);
+    }
+
+    .eyebrow {
+      border-radius: 10px;
+      letter-spacing: 0.12em;
+    }
+
+    h1 {
+      max-width: 980px;
+      margin-top: 16px;
+      font-size: clamp(58px, 8vw, 126px);
+      letter-spacing: 0.04em;
+      line-height: 0.94;
+      color: transparent;
+      background: linear-gradient(135deg, #2b2118 0%, #8b6b36 46%, #c5a163 72%, #2b2118 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      text-shadow: 0 12px 40px rgba(185, 146, 82, 0.13);
+    }
+
+    h1 span {
+      margin-top: 14px;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+      font-size: clamp(16px, 1.55vw, 24px);
+      letter-spacing: 0.18em;
+      color: #72685d;
+      -webkit-text-stroke: 0;
+    }
+
+    .subtitle {
+      max-width: 760px;
+      margin-top: 20px;
+      font-size: clamp(16px, 1.8vw, 20px);
+      line-height: 1.9;
+    }
+
+    .hero-panel {
+      border-radius: 22px;
+      background:
+        linear-gradient(180deg, rgba(255,253,248,0.94), rgba(248,242,232,0.82));
+    }
+
+    .hero-panel strong {
+      display: inline-flex;
+      padding: 6px 10px;
+      border: 1px solid rgba(185, 146, 82, 0.2);
+      border-radius: 999px;
+      background: rgba(185, 146, 82, 0.07);
+      color: #8b6b36;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .mode-selector {
+      margin: 0 0 22px;
+    }
+
+    .mode-card {
+      min-height: 136px;
+      border-radius: 22px;
+    }
+
+    .mode-card strong,
+    .theme-card strong {
+      font-size: clamp(26px, 3vw, 38px);
+    }
+
+    .studio-shell {
+      position: relative;
+      margin-top: 12px;
+    }
+
+    .studio-shell::before {
+      content: "";
+      position: absolute;
+      left: 1.5%;
+      right: 1.5%;
+      top: -20px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(185,146,82,0.42), transparent);
+    }
+
+    .canvas-stage {
+      border-radius: 26px;
+      padding: clamp(18px, 2.8vw, 32px);
+      background:
+        linear-gradient(180deg, rgba(255,253,248,0.9), rgba(247,240,230,0.78)),
+        var(--museum-paper);
+    }
+
+    .curator-note {
+      align-items: flex-start;
+      margin-bottom: 18px;
+      font-size: 15px;
+    }
+
+    .curator-note span {
+      border-radius: 10px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .canvas-frame {
+      border-radius: 18px;
+      border-color: rgba(83, 67, 49, 0.24);
+      box-shadow:
+        inset 0 0 0 12px rgba(255, 253, 248, 0.88),
+        inset 0 0 0 13px rgba(83, 67, 49, 0.08),
+        0 24px 64px rgba(84, 67, 49, 0.16);
+    }
+
+    @media (max-width: 1120px) {
+      .hero,
+      .studio-shell,
+      .result-top,
+      .content-grid,
+      .curator-summary,
+      .top1-card,
+      .mode-selector {
+        grid-template-columns: 1fr;
+      }
+
+      .top3-grid,
+      .deep-dive-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-panel,
+      .control-panel {
+        width: 100%;
+      }
+
+      .control-panel {
+        position: relative;
+        top: auto;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .page {
+        width: min(100% - 18px, 1460px);
+        padding-top: 18px;
+      }
+
+      .hero {
+        padding-bottom: 18px;
+      }
+
+      .canvas-frame {
+        min-height: auto;
+      }
+
+      .curator-note {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .curator-note span {
+        white-space: normal;
+      }
+
+      .studio-actions,
+      .share-row {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .palette {
+        grid-template-columns: repeat(8, 1fr);
+      }
+
+      .action-grid,
+      .artwork-showcase,
+      .comparison-wrap,
+      .comparison-grid,
+      .top3-grid,
+      .deep-dive-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .image-tile,
+      .image-tile.small,
+      .compare-pane {
+        min-height: 230px;
+      }
+
+      .curator-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .score-number {
+        font-size: clamp(72px, 24vw, 128px);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.001ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="ambient-particles" id="ambientParticles" aria-hidden="true"></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <div class="page">
+    <header class="hero">
+      <div>
+        <div class="eyebrow"><i class="status-dot"></i>AI Curated Gallery / 离线名画索引</div>
+        <h1>ArtTwin <span>ArtTwin</span></h1>
+        <p class="subtitle">随手画几笔，看看你的涂鸦会被哪幅名画收藏。AI 策展人会根据你的颜色、线条、构图和意象，为你寻找世界名画中的共鸣。</p>
+      </div>
+      <aside class="hero-panel">
+        <strong>AI Curated Gallery</strong>
+        <p>不需要会画画。乱线、留白、色块和一点点情绪，都可以成为进入名馆的线索。</p>
+      </aside>
+    </header>
+
+    <section class="mode-selector" aria-label="选择创作入口">
+      <button class="mode-card active" id="freeModeBtn" type="button">
+        <span class="mode-kicker">A / Free Doodle</span>
+        <strong>自由乱画</strong>
+        <p>随便画几笔，AI 会从你的线条、颜色和构图里找到最接近的世界名画。</p>
+      </button>
+      <button class="mode-card" id="themeModeBtn" type="button">
+        <span class="mode-kicker">B / Theme Challenge</span>
+        <strong>主题挑战</strong>
+        <p>不知道画什么？抽一个艺术主题，让 AI 帮你找到它对应的名画共鸣。</p>
+      </button>
+    </section>
+
+    <section class="theme-card" id="themeCard" hidden>
+      <div>
+        <span class="mode-kicker">Current Theme</span>
+        <strong id="themeTitle">画一种安静</strong>
+        <p id="themePrompt">你可以用空白、浅色或慢慢的线条表达它。</p>
+      </div>
+      <button class="btn small ghost" id="shuffleThemeBtn" type="button">换一个主题</button>
+    </section>
+
+    <main class="studio-shell" aria-label="AI 互动画室">
+      <section class="canvas-stage">
+        <div class="curator-note">
+          <div id="creativeGuide">画得像不像不重要，AI 只看你的颜色、线条和构图。</div>
+          <span><i class="status-dot"></i> Your Canvas / 临时展品 001</span>
+        </div>
+
+        <div class="canvas-frame" id="canvasFrame">
+          <canvas id="artCanvas" aria-label="创作画布"></canvas>
+          <div class="canvas-hint" id="canvasHint">点击「开始 AI 策展」前，先随手画几笔。三条线、几个色块，也可以被 AI 策展人阅读。</div>
+          <div class="scan-beam" aria-hidden="true"></div>
+          <div class="portal-layer" id="portalLayer" aria-hidden="true">
+            <div class="portal-backdrop"></div>
+            <div class="portal-vortex"></div>
+          </div>
+        </div>
+
+        <div class="studio-actions">
+          <button class="btn primary" id="startBtn" type="button">自由乱画</button>
+          <button class="btn portal" id="analyzeBtn" type="button">开始 AI 策展</button>
+          <button class="btn ghost" id="randomBtnTop" type="button">随机灵感</button>
+          <button class="btn ghost" id="resetBtnTop" type="button">再画一次</button>
+        </div>
+      </section>
+
+      <aside class="control-panel" aria-label="创作工具栏">
+        <section class="panel-section">
+          <h2 class="panel-title">画笔颜色 <span id="currentColorName">天蓝</span></h2>
+          <div class="palette" id="colorPalette"></div>
+        </section>
+
+        <section class="panel-section">
+          <h2 class="panel-title">画笔粗细</h2>
+          <div class="brush-row">
+            <input id="brushSize" type="range" min="2" max="36" value="10" aria-label="画笔粗细" />
+            <div class="brush-preview"><div class="brush-dot" id="brushDot"></div></div>
+          </div>
+          <div class="brush-value" id="brushValue">10 px</div>
+        </section>
+
+        <section class="panel-section">
+          <h2 class="panel-title">创作动作</h2>
+          <div class="action-grid">
+            <button class="btn small ghost" id="undoBtn" type="button">撤销上一步</button>
+            <button class="btn small ghost" id="randomBtn" type="button">随机灵感</button>
+            <button class="btn small ghost" id="clearBtn" type="button">清空画布</button>
+          </div>
+          <p class="hint-text">每一笔、每次随机灵感、清空前状态都会进入历史记录。Undo 后再次鉴定，会读取最新画面。</p>
+        </section>
+      </aside>
+    </main>
+
+    <section class="result-section" id="resultSection" hidden>
+      <article class="result-card" id="resultCard" aria-live="polite"></article>
+    </section>
+
+    <section class="mini-gallery" id="miniGallery">
+      <div class="gallery-head">
+        <div>
+          <h2>我的迷你名馆</h2>
+          <p>收藏你刚刚召唤出的名画共鸣卡，黑客松 Demo 时可以连续展示多次结果。</p>
+        </div>
+      </div>
+      <div class="gallery-grid" id="galleryGrid">
+        <div class="gallery-empty">还没有收藏。完成一次 AI 策展后，可以把结果放进这里。</div>
+      </div>
+    </section>
+  </div>
+
+  <div class="analysis-overlay" id="analysisOverlay" aria-hidden="true">
+    <div class="analysis-console">
+      <div class="analysis-orbit"></div>
+      <div class="analysis-text">正在寻找馆藏共鸣</div>
+      <div class="analysis-subtext" id="analysisStatus">Scanning paper surface...</div>
+    </div>
+  </div>
+
+  <div class="intent-modal" id="intentModal" aria-hidden="true">
+    <div class="intent-panel" role="dialog" aria-modal="true" aria-labelledby="intentTitle">
+      <span class="mode-kicker">AI Curator Follow-up</span>
+      <h2 id="intentTitle">AI 策展人追问 / 画作意象确认</h2>
+      <p>AI 已经看到了你的颜色和线条。现在告诉我：你觉得这幅画里更接近哪些意象？最多选择 3 个，也可以跳过。</p>
+      <div class="choice-grid" id="symbolicChoiceGrid"></div>
+      <div class="intent-actions">
+        <button class="btn ghost" id="skipIntentBtn" type="button">跳过，直接鉴定</button>
+        <button class="btn primary" id="confirmIntentBtn" type="button">确认意象并鉴定</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="./artworks-data.js"></script>
+  <script>
+    const artworkAssetManifest = getAllArtworks().map((artwork) => artwork.localImage || "assets/artworks/" + artwork.id + ".webp");
+    hydrateArtworkLibrary();
+
+    const paletteColors = [
+      { name: "深蓝", value: "#102a63", category: "blue" },
+      { name: "天蓝", value: "#72d8ff", category: "blue" },
+      { name: "紫色", value: "#8f66ff", category: "purple" },
+      { name: "粉色", value: "#ff76bd", category: "pink" },
+      { name: "红色", value: "#f0445f", category: "red" },
+      { name: "橙色", value: "#ff8a3d", category: "orange" },
+      { name: "金黄色", value: "#f6c96a", category: "gold" },
+      { name: "柠檬黄", value: "#f8ff70", category: "yellow" },
+      { name: "草绿色", value: "#8cff7a", category: "green" },
+      { name: "青绿色", value: "#28e0bf", category: "cyan" },
+      { name: "白色", value: "#fffdf2", category: "white" },
+      { name: "银灰色", value: "#b9c2d6", category: "gray" },
+      { name: "纯黑", value: "#000000", category: "black" },
+      { name: "棕色", value: "#8b5a36", category: "brown" },
+      { name: "靛蓝", value: "#3439a4", category: "indigo" },
+      { name: "玫瑰金", value: "#e9a29d", category: "pink" },
+      { name: "酒红", value: "#7b163c", category: "red" },
+      { name: "冷月银", value: "#dce8ff", category: "white" }
+    ];
+
+    const themeChallenges = [
+      { title: "画一个夜晚", prompt: "你可以用深色、点状光或慢慢旋转的线表达夜色。", tags: ["night", "stars", "dreamlike", "blue"] },
+      { title: "画一片海", prompt: "不必画出海浪本身，几条流动线也可以成为海。", tags: ["wave", "ocean", "water", "movement"] },
+      { title: "画一朵花", prompt: "用中心、放射线、黄色或柔软色块表达一朵花。", tags: ["flower", "sunlight", "nature", "yellow"] },
+      { title: "画一个房间", prompt: "试试用矩形、窗口感、角落和留白表达一个空间。", tags: ["interior", "room", "window", "daily life"] },
+      { title: "画一种情绪", prompt: "让线条速度、颜色强度和画面密度替你说话。", tags: ["emotion", "intense", "dramatic", "passion"] },
+      { title: "画一个梦", prompt: "梦不需要边界，可以用漂浮色块和不确定轮廓表达。", tags: ["dream", "dreamlike", "surreal", "soft"] },
+      { title: "画一张脸", prompt: "不需要五官完整，一个轮廓、视线或中心形状就够了。", tags: ["portrait", "human", "gaze", "identity"] },
+      { title: "画一个今天的你", prompt: "用今天最贴近你的颜色和线条节奏画一张自画像。", tags: ["self", "human", "daily life", "emotion"] },
+      { title: "画一种安静", prompt: "你可以用空白、浅色或慢慢的线条表达它。", tags: ["quiet", "minimal", "calm", "empty"] },
+      { title: "画一次混乱", prompt: "把速度、交叉线和高密度色块交给画面。", tags: ["chaotic", "swirl", "movement", "intense"] }
+    ];
+
+    const symbolicChoiceOptions = [
+      { id: "night", icon: "🌙", label: "夜晚 / 梦境", tags: ["night", "dreamlike", "stars", "lonely"] },
+      { id: "wave", icon: "🌊", label: "海浪 / 流动", tags: ["wave", "ocean", "water", "movement"] },
+      { id: "flower", icon: "🌻", label: "花朵 / 阳光", tags: ["flower", "sunlight", "yellow", "hopeful"] },
+      { id: "interior", icon: "🏠", label: "房间 / 日常", tags: ["interior", "home", "daily life", "quiet"] },
+      { id: "human", icon: "👤", label: "人物 / 自我", tags: ["human", "portrait", "identity", "gaze"] },
+      { id: "drama", icon: "🔥", label: "情绪 / 冲突", tags: ["passion", "energy", "drama", "intense"] },
+      { id: "swirl", icon: "🌀", label: "混乱 / 旋转", tags: ["swirl", "movement", "vortex", "chaotic"] },
+      { id: "nature", icon: "🌳", label: "自然 / 生命", tags: ["nature", "green", "alive", "landscape"] },
+      { id: "abstract", icon: "⬛", label: "抽象 / 几何", tags: ["abstract", "geometric", "minimal", "modern"] },
+      { id: "quiet", icon: "☁️", label: "安静 / 空白", tags: ["quiet", "empty", "calm", "minimal"] }
+    ];
+
+    const colorLabels = {
+      blue: "蓝色",
+      cyan: "青蓝色",
+      purple: "紫色",
+      pink: "粉色",
+      red: "红色",
+      orange: "橙色",
+      yellow: "黄色",
+      gold: "金色",
+      green: "绿色",
+      white: "白色",
+      gray: "灰色",
+      black: "黑色",
+      brown: "棕色",
+      indigo: "靛蓝色"
+    };
+
+    let canvas;
+    let ctx;
+    let canvasFrame;
+    let selectedColor = "#72d8ff";
+    let selectedColorName = "天蓝";
+    let brushSize = 10;
+    let isDrawing = false;
+    let currentStroke = null;
+    let strokeRecords = [];
+    let historyStates = [];
+    let currentResult = null;
+    let galleryItems = [];
+    let analysisRunning = false;
+    let pendingAnalysis = null;
+    let selectedMode = "free";
+    let currentThemeHint = null;
+    let symbolicChoices = [];
+    let typingTimer = null;
+    let fullCuratorText = "";
+    let toastTimer = null;
+    let resizeTimer = null;
+    let resultSerial = 0;
+    let restorePromise = Promise.resolve();
+
+    function initCanvas() {
+      canvas = document.getElementById("artCanvas");
+      ctx = canvas.getContext("2d", { willReadFrequently: true });
+      canvasFrame = document.getElementById("canvasFrame");
+
+      renderAmbientParticles();
+      renderPalette();
+      renderSymbolicChoices();
+      bindEvents();
+      setMode("free");
+      resizeCanvas(false);
+      saveHistoryState({ force: true });
+      updateUndoButton();
+      updateBrushPreview();
+      renderMiniGallery();
+    }
+
+    function bindEvents() {
+      canvasFrame.addEventListener("pointerdown", handleCanvasPointerDown);
+      canvasFrame.addEventListener("pointermove", draw);
+      canvasFrame.addEventListener("pointerup", stopDrawing);
+      canvasFrame.addEventListener("pointercancel", stopDrawing);
+      canvasFrame.addEventListener("pointerleave", stopDrawing);
+
+      document.getElementById("brushSize").addEventListener("input", (event) => {
+        brushSize = Number(event.target.value);
+        updateBrushPreview();
+      });
+
+      document.getElementById("startBtn").addEventListener("click", () => {
+        canvasFrame.scrollIntoView({ behavior: "smooth", block: "center" });
+        canvasFrame.animate([
+          { boxShadow: "0 0 38px rgba(120,231,255,0.18)" },
+          { boxShadow: "0 0 84px rgba(246,201,106,0.35)" },
+          { boxShadow: "0 0 38px rgba(120,231,255,0.18)" }
+        ], { duration: 800, easing: "ease-out" });
+        showToast("画框已点亮。直接用线条、色块和留白开始创作。");
+      });
+
+      document.getElementById("analyzeBtn").addEventListener("click", startAnalysisSequence);
+      document.getElementById("randomBtn").addEventListener("click", () => addRandomInspiration());
+      document.getElementById("randomBtnTop").addEventListener("click", () => addRandomInspiration());
+      document.getElementById("clearBtn").addEventListener("click", clearCanvas);
+      document.getElementById("undoBtn").addEventListener("click", undoLastAction);
+      document.getElementById("resetBtnTop").addEventListener("click", () => {
+        clearCanvas();
+        document.getElementById("resultSection").hidden = true;
+        showToast("画布已重置，下一幅偶然名画可以开始了。");
+      });
+      document.getElementById("freeModeBtn").addEventListener("click", () => setMode("free"));
+      document.getElementById("themeModeBtn").addEventListener("click", () => setMode("theme"));
+      document.getElementById("shuffleThemeBtn").addEventListener("click", () => pickTheme(true));
+      document.getElementById("skipIntentBtn").addEventListener("click", () => confirmIntentAndAnalyze(true));
+      document.getElementById("confirmIntentBtn").addEventListener("click", () => confirmIntentAndAnalyze(false));
+
+      window.addEventListener("resize", () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => resizeCanvas(true), 180);
+      });
+    }
+
+    function resizeCanvas(preserve) {
+      const snapshot = preserve && canvas.width ? createSnapshot() : null;
+      const rect = canvasFrame.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.max(320, Math.floor(rect.width * dpr));
+      canvas.height = Math.max(240, Math.floor(rect.height * dpr));
+      canvas.style.width = rect.width + "px";
+      canvas.style.height = rect.height + "px";
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      ctx.globalCompositeOperation = "source-over";
+      ctx.globalAlpha = 1;
+      if (snapshot) restoreSnapshot(snapshot);
+    }
+
+    function renderAmbientParticles() {
+      const host = document.getElementById("ambientParticles");
+      host.innerHTML = "";
+      const colors = ["rgba(120,231,255,0.65)", "rgba(246,201,106,0.58)", "rgba(157,124,255,0.54)", "rgba(255,119,183,0.42)"];
+      for (let i = 0; i < 58; i += 1) {
+        const node = document.createElement("i");
+        const size = rand(2, 7).toFixed(1) + "px";
+        node.className = "particle";
+        node.style.setProperty("--size", size);
+        node.style.setProperty("--left", rand(0, 100).toFixed(2) + "%");
+        node.style.setProperty("--top", rand(0, 100).toFixed(2) + "%");
+        node.style.setProperty("--color", colors[Math.floor(Math.random() * colors.length)]);
+        node.style.setProperty("--duration", rand(5, 14).toFixed(2) + "s");
+        node.style.setProperty("--delay", (-rand(0, 9)).toFixed(2) + "s");
+        node.style.setProperty("--drift-x", rand(-24, 24).toFixed(1) + "px");
+        node.style.setProperty("--drift-y", rand(-32, 32).toFixed(1) + "px");
+        host.appendChild(node);
+      }
+    }
+
+    function renderPalette() {
+      const palette = document.getElementById("colorPalette");
+      palette.innerHTML = "";
+      paletteColors.forEach((color, index) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "color-swatch" + (color.value === selectedColor ? " active" : "");
+        button.style.setProperty("--swatch", color.value);
+        button.title = color.name;
+        button.setAttribute("aria-label", "选择颜色：" + color.name);
+        button.addEventListener("click", () => {
+          selectedColor = color.value;
+          selectedColorName = color.name;
+          document.querySelectorAll(".color-swatch").forEach((item) => item.classList.remove("active"));
+          button.classList.add("active");
+          document.getElementById("currentColorName").textContent = color.name;
+          updateBrushPreview();
+        });
+        if (index === 1) button.classList.add("active");
+        palette.appendChild(button);
+      });
+    }
+
+    function setMode(mode) {
+      selectedMode = mode;
+      document.getElementById("freeModeBtn").classList.toggle("active", mode === "free");
+      document.getElementById("themeModeBtn").classList.toggle("active", mode === "theme");
+      document.getElementById("themeCard").hidden = mode !== "theme";
+      if (mode === "theme" && !currentThemeHint) pickTheme(false);
+      if (mode === "free") {
+        currentThemeHint = null;
+        document.getElementById("creativeGuide").textContent = "画得像不像不重要，AI 只看你的颜色、线条和构图。";
+      }
+      showToast(mode === "theme" ? "已进入主题挑战。你可以换一个主题，也可以直接开始画。" : "已进入自由创作。随便画几笔就可以鉴定。");
+    }
+
+    function pickTheme(announce = true) {
+      const next = themeChallenges[Math.floor(Math.random() * themeChallenges.length)];
+      currentThemeHint = next;
+      document.getElementById("themeTitle").textContent = next.title;
+      document.getElementById("themePrompt").textContent = next.prompt;
+      document.getElementById("creativeGuide").textContent = "主题：" + next.title + "。提示：" + next.prompt;
+      if (announce) showToast("新主题：" + next.title);
+    }
+
+    function renderSymbolicChoices() {
+      const grid = document.getElementById("symbolicChoiceGrid");
+      grid.innerHTML = "";
+      symbolicChoiceOptions.forEach((choice) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "choice-option";
+        button.dataset.choiceId = choice.id;
+        button.innerHTML = '<span class="icon">' + choice.icon + '</span><span>' + choice.label + '</span>';
+        button.title = "选择意象：" + choice.label;
+        button.addEventListener("click", () => {
+          toggleSymbolicChoice(choice.id);
+        });
+        grid.appendChild(button);
+      });
+    }
+
+    function toggleSymbolicChoice(choiceId) {
+      if (symbolicChoices.includes(choiceId)) {
+        symbolicChoices = symbolicChoices.filter((id) => id !== choiceId);
+      } else {
+        if (symbolicChoices.length >= 3) {
+          showToast("最多选择 3 个意象。");
+          return;
+        }
+        symbolicChoices.push(choiceId);
+      }
+      document.querySelectorAll(".choice-option").forEach((button) => {
+        button.classList.toggle("active", symbolicChoices.includes(button.dataset.choiceId));
+      });
+    }
+
+    function updateBrushPreview() {
+      document.documentElement.style.setProperty("--current-color", selectedColor);
+      document.getElementById("brushDot").style.setProperty("--brush", brushSize + "px");
+      document.getElementById("brushValue").textContent = brushSize + " px";
+      document.getElementById("currentColorName").textContent = selectedColorName;
+    }
+
+    function handleCanvasPointerDown(event) {
+      if (analysisRunning) return;
+      event.preventDefault();
+      canvasFrame.setPointerCapture?.(event.pointerId);
+      startDrawing(event);
+    }
+
+    function startDrawing(event) {
+      const point = getCanvasPoint(event);
+      isDrawing = true;
+      currentStroke = {
+        type: "stroke",
+        color: selectedColor,
+        width: brushSize,
+        size: brushSize,
+        points: [point],
+        startTime: Date.now(),
+        endTime: null,
+        boundingBox: computeBoundingBox([point]),
+        pointCount: 1,
+        random: false,
+        timestamp: Date.now()
+      };
+      ctx.strokeStyle = selectedColor;
+      ctx.lineWidth = brushSize;
+      ctx.beginPath();
+      ctx.moveTo(point.x, point.y);
+      document.getElementById("canvasHint").classList.add("hidden");
+    }
+
+    function draw(event) {
+      if (!isDrawing || analysisRunning) return;
+      event.preventDefault();
+      const point = getCanvasPoint(event);
+      const previous = currentStroke.points[currentStroke.points.length - 1];
+      currentStroke.points.push(point);
+      currentStroke.pointCount = currentStroke.points.length;
+      currentStroke.boundingBox = computeBoundingBox(currentStroke.points);
+      ctx.strokeStyle = currentStroke.color;
+      ctx.lineWidth = currentStroke.width;
+      ctx.beginPath();
+      ctx.moveTo(previous.x, previous.y);
+      ctx.lineTo(point.x, point.y);
+      ctx.stroke();
+    }
+
+    function stopDrawing(event) {
+      if (!isDrawing) return;
+      if (event) event.preventDefault();
+      isDrawing = false;
+      if (currentStroke && currentStroke.points.length > 1) {
+        strokeRecords.push(finalizeVisualMark(currentStroke));
+        saveHistoryState();
+      }
+      currentStroke = null;
+      updateHintVisibility();
+    }
+
+    function addRandomInspiration(options = {}) {
+      const save = options.save !== false;
+      const toast = options.toast !== false;
+      const rect = canvas.getBoundingClientRect();
+      const colors = paletteColors.map((item) => item.value);
+      const marks = Math.floor(rand(5, 9));
+
+      for (let i = 0; i < marks; i += 1) {
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        ctx.save();
+        ctx.globalAlpha = rand(0.38, 0.82);
+        if (Math.random() < 0.42) {
+          const points = [];
+          const start = { x: rand(40, rect.width - 40), y: rand(40, rect.height - 40) };
+          points.push(start);
+          const startedAt = Date.now();
+          const lineWidth = rand(4, 20);
+          ctx.strokeStyle = color;
+          ctx.lineWidth = lineWidth;
+          ctx.beginPath();
+          ctx.moveTo(start.x, start.y);
+          const segments = Math.floor(rand(3, 7));
+          for (let j = 0; j < segments; j += 1) {
+            const p = { x: rand(24, rect.width - 24), y: rand(24, rect.height - 24) };
+            points.push(p);
+            if (Math.random() < 0.55) {
+              const cpx = rand(0, rect.width);
+              const cpy = rand(0, rect.height);
+              ctx.quadraticCurveTo(cpx, cpy, p.x, p.y);
+            } else {
+              ctx.lineTo(p.x, p.y);
+            }
+          }
+          ctx.stroke();
+          strokeRecords.push(finalizeVisualMark({
+            type: "stroke",
+            markType: "random-line",
+            color,
+            width: lineWidth,
+            size: lineWidth,
+            points,
+            random: true,
+            startTime: startedAt,
+            endTime: startedAt + segments * 90,
+            timestamp: startedAt
+          }));
+        } else if (Math.random() < 0.7) {
+          const x = rand(30, rect.width - 30);
+          const y = rand(30, rect.height - 30);
+          const radius = rand(14, 58);
+          const startedAt = Date.now();
+          const gradient = ctx.createRadialGradient(x, y, 1, x, y, radius);
+          gradient.addColorStop(0, color);
+          gradient.addColorStop(1, "rgba(255,255,255,0)");
+          ctx.fillStyle = gradient;
+          ctx.beginPath();
+          ctx.arc(x, y, radius, 0, Math.PI * 2);
+          ctx.fill();
+          strokeRecords.push(finalizeVisualMark({
+            type: "shape",
+            shape: "circle",
+            markType: "random-circle",
+            color,
+            width: radius * 2,
+            size: radius,
+            points: makeCirclePoints(x, y, radius, 20),
+            random: true,
+            startTime: startedAt,
+            endTime: startedAt + 420,
+            timestamp: startedAt
+          }));
+        } else {
+          const x = rand(14, rect.width - 110);
+          const y = rand(14, rect.height - 90);
+          const w = rand(48, 132);
+          const h = rand(30, 100);
+          const startedAt = Date.now();
+          ctx.fillStyle = color;
+          if (ctx.roundRect) {
+            ctx.beginPath();
+            ctx.roundRect(x, y, w, h, rand(8, 22));
+            ctx.fill();
+          } else {
+            ctx.fillRect(x, y, w, h);
+          }
+          strokeRecords.push(finalizeVisualMark({
+            type: "shape",
+            shape: "block",
+            markType: "random-block",
+            color,
+            width: Math.max(w, h),
+            size: Math.max(w, h),
+            points: [
+              { x, y },
+              { x: x + w, y },
+              { x: x + w, y: y + h },
+              { x, y: y + h },
+              { x, y }
+            ],
+            random: true,
+            startTime: startedAt,
+            endTime: startedAt + 360,
+            timestamp: startedAt
+          }));
+        }
+        ctx.restore();
+      }
+
+      updateHintVisibility();
+      if (save) saveHistoryState();
+      if (toast) showToast("随机灵感已加入：线条、色块、圆点和抽象形状会参与 AI 鉴定。");
+    }
+
+    function clearCanvas() {
+      const rect = canvas.getBoundingClientRect();
+      ctx.clearRect(0, 0, rect.width, rect.height);
+      strokeRecords = [];
+      saveHistoryState();
+      updateHintVisibility();
+      showToast("画布已清空。可以撤销回到上一幅状态。");
+    }
+
+    function saveHistoryState(options = {}) {
+      const snapshot = createSnapshot();
+      const previous = historyStates[historyStates.length - 1];
+      if (!options.force && previous && previous.canvasData === snapshot.canvasData) {
+        return;
+      }
+      historyStates.push(snapshot);
+      if (historyStates.length > 42) historyStates.shift();
+      updateUndoButton();
+    }
+
+    function createSnapshot() {
+      return {
+        canvasData: canvas.toDataURL("image/png"),
+        strokes: deepClone(strokeRecords)
+      };
+    }
+
+    function undoLastAction() {
+      if (historyStates.length <= 1) {
+        showToast("暂无可撤销操作。");
+        updateUndoButton();
+        return;
+      }
+      historyStates.pop();
+      const snapshot = historyStates[historyStates.length - 1];
+      restoreSnapshot(snapshot);
+      showToast("已撤销上一步。");
+    }
+
+    function restoreSnapshot(snapshot) {
+      const rect = canvas.getBoundingClientRect();
+      strokeRecords = deepClone(snapshot.strokes || []);
+      ctx.clearRect(0, 0, rect.width, rect.height);
+      const image = new Image();
+      restorePromise = new Promise((resolve) => {
+        image.onload = () => {
+          ctx.clearRect(0, 0, rect.width, rect.height);
+          ctx.drawImage(image, 0, 0, rect.width, rect.height);
+          updateHintVisibility();
+          updateUndoButton();
+          resolve();
+        };
+        image.onerror = () => {
+          updateHintVisibility();
+          updateUndoButton();
+          resolve();
+        };
+      });
+      image.src = snapshot.canvasData;
+    }
+
+    function updateUndoButton() {
+      document.getElementById("undoBtn").disabled = historyStates.length <= 1;
+    }
+
+    function updateHintVisibility() {
+      document.getElementById("canvasHint").classList.toggle("hidden", !isWorkEmpty());
+    }
+
+    function isWorkEmpty() {
+      return strokeRecords.length === 0;
+    }
+
+    function getCanvasPoint(event) {
+      const rect = canvas.getBoundingClientRect();
+      return {
+        x: clamp(event.clientX - rect.left, 0, rect.width),
+        y: clamp(event.clientY - rect.top, 0, rect.height)
+      };
+    }
+
+    function finalizeVisualMark(record) {
+      const normalized = {
+        ...record,
+        width: Number(record.width || record.size || brushSize),
+        size: Number(record.size || record.width || brushSize),
+        points: (record.points || []).map((point) => ({ x: Number(point.x), y: Number(point.y) })),
+        startTime: record.startTime || record.timestamp || Date.now(),
+        endTime: record.endTime || Date.now()
+      };
+      normalized.boundingBox = computeBoundingBox(normalized.points);
+      normalized.pointCount = normalized.points.length;
+      normalized.duration = Math.max(1, normalized.endTime - normalized.startTime);
+      return normalized;
+    }
+
+    function computeBoundingBox(points) {
+      if (!points || !points.length) {
+        return { x: 0, y: 0, width: 0, height: 0, minX: 0, minY: 0, maxX: 0, maxY: 0 };
+      }
+      const xs = points.map((point) => Number(point.x) || 0);
+      const ys = points.map((point) => Number(point.y) || 0);
+      const minX = Math.min(...xs);
+      const maxX = Math.max(...xs);
+      const minY = Math.min(...ys);
+      const maxY = Math.max(...ys);
+      return {
+        x: minX,
+        y: minY,
+        width: maxX - minX,
+        height: maxY - minY,
+        minX,
+        minY,
+        maxX,
+        maxY
+      };
+    }
+
+    function makeCirclePoints(cx, cy, radius, count) {
+      const points = [];
+      for (let i = 0; i <= count; i += 1) {
+        const angle = (Math.PI * 2 * i) / count;
+        points.push({
+          x: cx + Math.cos(angle) * radius,
+          y: cy + Math.sin(angle) * radius
+        });
+      }
+      return points;
+    }
+
+    function exportCompositeImage() {
+      const rect = canvas.getBoundingClientRect();
+      const scale = 2;
+      const temp = document.createElement("canvas");
+      temp.width = Math.round(rect.width * scale);
+      temp.height = Math.round(rect.height * scale);
+      const tctx = temp.getContext("2d");
+      tctx.scale(scale, scale);
+
+      const base = tctx.createLinearGradient(0, 0, rect.width, rect.height);
+      base.addColorStop(0, "#ffffff");
+      base.addColorStop(0.62, "#fffdfd");
+      base.addColorStop(1, "#fff6f8");
+      tctx.fillStyle = base;
+      tctx.fillRect(0, 0, rect.width, rect.height);
+
+      const glow = tctx.createRadialGradient(rect.width * 0.28, rect.height * 0.22, 1, rect.width * 0.28, rect.height * 0.22, rect.width * 0.55);
+      glow.addColorStop(0, "rgba(255,47,86,0.06)");
+      glow.addColorStop(1, "rgba(255,47,86,0)");
+      tctx.fillStyle = glow;
+      tctx.fillRect(0, 0, rect.width, rect.height);
+
+      tctx.drawImage(canvas, 0, 0, rect.width, rect.height);
+
+      return temp.toDataURL("image/png");
+    }
+
+    function extractUserFeatures() {
+      const pixelSummary = analyzeCanvasPixels();
+      const strokeSummary = analyzeStrokeData();
+      const semanticHints = dedupeSemanticHints();
+      const dominantColors = pixelSummary.dominantColors.length ? pixelSummary.dominantColors : ["white", "gray"];
+      const colorTemperature = getColorTemperature(pixelSummary.colorFractions);
+      const strokeDensity = clamp(Math.max(pixelSummary.paintedRatio / 0.18, strokeSummary.totalStrokes / 24), 0, 1);
+      const centerOfMass = strokeSummary.totalPointSamples > 0 ? strokeSummary.centerOfMass : pixelSummary.centerOfMass;
+      const compositionZone = getCompositionBalance(centerOfMass.x, centerOfMass.y, pixelSummary.paintedRatio);
+      const visualEnergy = getVisualEnergy(strokeDensity, strokeSummary.totalStrokes, strokeSummary.curvatureScore, strokeSummary.averageStrokeSpeed);
+      const geometricStrength = strokeRecords.filter((record) => record.type === "shape" && record.shape === "block").length / Math.max(1, strokeRecords.length);
+      const leftRightBalanceValue = Number((pixelSummary.rightColorRatio - pixelSummary.leftColorRatio).toFixed(2));
+      const leftRightBalance = {
+        left: pixelSummary.leftColorRatio,
+        right: pixelSummary.rightColorRatio,
+        value: leftRightBalanceValue,
+        label: Math.abs(leftRightBalanceValue) < 0.12 ? "balanced" : leftRightBalanceValue > 0 ? "right-weighted" : "left-weighted"
+      };
+
+      const symbolicTags = new Set();
+      const visualTags = new Set();
+      const emotionalMood = new Set();
+      const colorTags = new Set(dominantColors);
+
+      dominantColors.forEach((color) => {
+        symbolicTags.add(color);
+        visualTags.add(color);
+        if (["blue", "cyan", "indigo", "purple"].includes(color)) {
+          emotionalMood.add("calm");
+          emotionalMood.add("dreamlike");
+          symbolicTags.add("cool");
+          visualTags.add("cool");
+        }
+        if (["yellow", "gold", "orange"].includes(color)) {
+          emotionalMood.add("warm");
+          emotionalMood.add("hopeful");
+          symbolicTags.add("sunlight");
+          visualTags.add("warm");
+        }
+        if (["red", "pink"].includes(color)) {
+          emotionalMood.add("intense");
+          emotionalMood.add("dramatic");
+          symbolicTags.add("passion");
+          visualTags.add("high-contrast");
+        }
+        if (["white", "gray"].includes(color)) {
+          emotionalMood.add("quiet");
+          symbolicTags.add("minimal");
+          visualTags.add("minimal");
+        }
+        if (color === "green") {
+          emotionalMood.add("fresh");
+          symbolicTags.add("nature");
+          visualTags.add("organic");
+        }
+        if (color === "black") {
+          emotionalMood.add("serious");
+          symbolicTags.add("sketch");
+          symbolicTags.add("graphic");
+          visualTags.add("black-line");
+          visualTags.add("graphic");
+        }
+        if (color === "brown") {
+          emotionalMood.add("warm");
+          symbolicTags.add("interior");
+          visualTags.add("earth-tone");
+        }
+      });
+
+      if (colorTemperature === "cool") {
+        symbolicTags.add("cool");
+        emotionalMood.add("lonely");
+        emotionalMood.add("dreamlike");
+      }
+      if (colorTemperature === "warm") {
+        symbolicTags.add("warm");
+        emotionalMood.add("hopeful");
+      }
+      if (pixelSummary.upperCoolRatio > 0.42) {
+        symbolicTags.add("sky");
+        symbolicTags.add("night");
+        visualTags.add("upper-cool-field");
+      }
+      if (pixelSummary.lowerColorRatio > 0.58 && strokeSummary.horizontalLineScore > 0.36) {
+        symbolicTags.add("landscape");
+        visualTags.add("grounded-lower-field");
+      }
+      if (strokeSummary.horizontalLineScore > 0.46) {
+        symbolicTags.add("horizon");
+        symbolicTags.add("water");
+        visualTags.add("horizontal-flow");
+      }
+      if (strokeSummary.verticalLineScore > 0.46) {
+        symbolicTags.add("vertical");
+        symbolicTags.add("figure");
+        visualTags.add("upright-structure");
+      }
+      if (strokeSummary.curvatureScore > 0.34) {
+        symbolicTags.add("flow");
+        symbolicTags.add("movement");
+        visualTags.add("curved-lines");
+      }
+      if (strokeSummary.curvatureScore > 0.48) {
+        symbolicTags.add("swirl");
+        symbolicTags.add("vortex");
+        emotionalMood.add("restless");
+      }
+      if (strokeSummary.circleLikeScore > 0.36) {
+        symbolicTags.add("circle");
+        symbolicTags.add("flower");
+        symbolicTags.add("sun");
+        visualTags.add("round-forms");
+      }
+      if (strokeSummary.averageStrokeLength < 72 && strokeSummary.totalStrokes > 8) {
+        symbolicTags.add("chaotic");
+        emotionalMood.add("intense");
+        visualTags.add("short-dense-marks");
+      }
+      if (geometricStrength > 0.2 || strokeSummary.densityMap.center > 0.34 && strokeSummary.horizontalLineScore + strokeSummary.verticalLineScore > 0.74) {
+        symbolicTags.add("abstract");
+        symbolicTags.add("geometric");
+        emotionalMood.add("ordered");
+        visualTags.add("geometric");
+      }
+      if (pixelSummary.emptySpaceRatio > 0.94 || strokeDensity < 0.16) {
+        symbolicTags.add("quiet");
+        symbolicTags.add("minimal");
+        emotionalMood.add("quiet");
+        emotionalMood.add("lonely");
+        visualTags.add("empty-space");
+      }
+      if (compositionZone === "center-heavy") {
+        symbolicTags.add("subject-centered");
+        visualTags.add("centered");
+      }
+      if (visualEnergy === "high") {
+        emotionalMood.add("intense");
+        symbolicTags.add("expressionist");
+        visualTags.add("high-energy");
+      }
+
+      semanticHints.combinedTags.forEach((tag) => symbolicTags.add(tag));
+      semanticHints.combinedTags.forEach((tag) => {
+        if (["dreamlike", "lonely", "hopeful", "quiet", "calm", "intense", "dramatic", "warm"].includes(tag)) emotionalMood.add(tag);
+      });
+
+      return {
+        dominantColors,
+        colorHistogram: pixelSummary.colorHistogram,
+        colorFractions: pixelSummary.colorFractions,
+        colorTemperature,
+        strokeDensity: Number(strokeDensity.toFixed(2)),
+        strokeDirection: strokeSummary.strokeDirection,
+        averageCurvature: Number(strokeSummary.curvatureScore.toFixed(2)),
+        horizontalLineScore: Number(strokeSummary.horizontalLineScore.toFixed(2)),
+        verticalLineScore: Number(strokeSummary.verticalLineScore.toFixed(2)),
+        circleLikeScore: Number(strokeSummary.circleLikeScore.toFixed(2)),
+        centerOfMass: {
+          x: Number(centerOfMass.x.toFixed(3)),
+          y: Number(centerOfMass.y.toFixed(3))
+        },
+        upperColorRatio: Number(pixelSummary.upperColorRatio.toFixed(2)),
+        lowerColorRatio: Number(pixelSummary.lowerColorRatio.toFixed(2)),
+        leftRightBalance,
+        emptySpaceRatio: Number(pixelSummary.emptySpaceRatio.toFixed(2)),
+        compositionZone,
+        visualEnergy,
+        symbolicTags: Array.from(symbolicTags),
+        emotionalMood: Array.from(emotionalMood),
+        themeHint: currentThemeHint ? currentThemeHint.title : "",
+        symbolicChoices: semanticHints.choiceLabels,
+        semanticHints,
+        strokeSummary,
+        paintedRatio: Number(pixelSummary.paintedRatio.toFixed(3)),
+        compositionBalance: compositionZone,
+        lineDirection: strokeSummary.strokeDirection,
+        curveRatio: Number(strokeSummary.curvatureScore.toFixed(2)),
+        geometricStrength: Number(geometricStrength.toFixed(2)),
+        strokeCount: strokeRecords.length,
+        colorTags: Array.from(colorTags),
+        visualTags: Array.from(visualTags)
+      };
+    }
+
+    function analyzeCanvasPixels() {
+      const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+      const width = canvas.width;
+      const height = canvas.height;
+      const step = Math.max(4, Math.round(Math.min(width, height) / 170));
+      const colorHistogram = {};
+      let sampled = 0;
+      let painted = 0;
+      let upperPainted = 0;
+      let lowerPainted = 0;
+      let leftPainted = 0;
+      let rightPainted = 0;
+      let upperCool = 0;
+      let sx = 0;
+      let sy = 0;
+
+      for (let y = 0; y < height; y += step) {
+        for (let x = 0; x < width; x += step) {
+          sampled += 1;
+          const index = (y * width + x) * 4;
+          const alpha = data[index + 3];
+          if (alpha < 18) continue;
+          painted += 1;
+          sx += x / width;
+          sy += y / height;
+          const category = categorizeRgb(data[index], data[index + 1], data[index + 2]);
+          colorHistogram[category] = (colorHistogram[category] || 0) + 1;
+          if (y < height / 2) upperPainted += 1;
+          else lowerPainted += 1;
+          if (x < width / 2) leftPainted += 1;
+          else rightPainted += 1;
+          if (y < height / 2 && ["blue", "cyan", "indigo", "purple", "gray", "white"].includes(category)) upperCool += 1;
+        }
+      }
+
+      const dominantColors = Object.entries(colorHistogram)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 4)
+        .map(([key]) => key);
+      const colorFractions = {};
+      Object.entries(colorHistogram).forEach(([color, count]) => {
+        colorFractions[color] = painted ? count / painted : 0;
+      });
+
+      return {
+        colorHistogram,
+        colorFractions,
+        dominantColors,
+        paintedRatio: sampled ? painted / sampled : 0,
+        emptySpaceRatio: sampled ? 1 - painted / sampled : 1,
+        centerOfMass: {
+          x: painted ? sx / painted : 0.5,
+          y: painted ? sy / painted : 0.5
+        },
+        upperColorRatio: painted ? upperPainted / painted : 0,
+        lowerColorRatio: painted ? lowerPainted / painted : 0,
+        leftColorRatio: painted ? leftPainted / painted : 0,
+        rightColorRatio: painted ? rightPainted / painted : 0,
+        upperCoolRatio: upperPainted ? upperCool / upperPainted : 0
+      };
+    }
+
+    function analyzeStrokeData() {
+      const rect = canvas.getBoundingClientRect();
+      const width = Math.max(1, rect.width);
+      const height = Math.max(1, rect.height);
+      const directionDistribution = { horizontal: 0, vertical: 0, diagonal: 0 };
+      const densityMap = {
+        upper: 0,
+        lower: 0,
+        left: 0,
+        right: 0,
+        center: 0,
+        upperLeft: 0,
+        upperRight: 0,
+        lowerLeft: 0,
+        lowerRight: 0
+      };
+      let totalLength = 0;
+      let totalSpeed = 0;
+      let speedSamples = 0;
+      let curvatureTotal = 0;
+      let curvatureSamples = 0;
+      let circleLikeTotal = 0;
+      let pointSamples = 0;
+      let sx = 0;
+      let sy = 0;
+
+      strokeRecords.forEach((sourceRecord) => {
+        const record = finalizeVisualMark(sourceRecord);
+        const points = record.points || [];
+        const bounds = record.boundingBox || computeBoundingBox(points);
+        if (points.length) {
+          points.forEach((point) => {
+            const nx = clamp(point.x / width, 0, 1);
+            const ny = clamp(point.y / height, 0, 1);
+            sx += nx;
+            sy += ny;
+            pointSamples += 1;
+            if (ny < 0.5) densityMap.upper += 1;
+            else densityMap.lower += 1;
+            if (nx < 0.5) densityMap.left += 1;
+            else densityMap.right += 1;
+            if (nx > 0.33 && nx < 0.67 && ny > 0.25 && ny < 0.75) densityMap.center += 1;
+            if (nx < 0.5 && ny < 0.5) densityMap.upperLeft += 1;
+            if (nx >= 0.5 && ny < 0.5) densityMap.upperRight += 1;
+            if (nx < 0.5 && ny >= 0.5) densityMap.lowerLeft += 1;
+            if (nx >= 0.5 && ny >= 0.5) densityMap.lowerRight += 1;
+          });
+        }
+
+        let previousAngle = null;
+        let turns = 0;
+        let segments = 0;
+        let recordLength = 0;
+        for (let i = 1; i < points.length; i += 1) {
+          const dx = points[i].x - points[i - 1].x;
+          const dy = points[i].y - points[i - 1].y;
+          const length = Math.hypot(dx, dy);
+          if (length < 1.5) continue;
+          const angle = Math.atan2(dy, dx);
+          const abs = Math.abs(angle);
+          if (abs < 0.38 || abs > Math.PI - 0.38) directionDistribution.horizontal += length;
+          else if (Math.abs(abs - Math.PI / 2) < 0.45) directionDistribution.vertical += length;
+          else directionDistribution.diagonal += length;
+          if (previousAngle !== null) {
+            const delta = Math.abs(normalizeAngle(angle - previousAngle));
+            turns += clamp(delta / Math.PI, 0, 1);
+          }
+          previousAngle = angle;
+          segments += 1;
+          recordLength += length;
+        }
+
+        if (record.type === "shape" && record.shape === "block") {
+          const perimeter = Math.max(1, (bounds.width + bounds.height) * 2);
+          recordLength = Math.max(recordLength, perimeter);
+          directionDistribution.horizontal += bounds.width * 2;
+          directionDistribution.vertical += bounds.height * 2;
+        }
+        if (record.type === "shape" && record.shape === "circle") {
+          const radius = Math.max(record.size || 0, bounds.width / 2, bounds.height / 2);
+          recordLength = Math.max(recordLength, Math.PI * 2 * radius);
+          circleLikeTotal += 1;
+        } else if (points.length > 5) {
+          const first = points[0];
+          const last = points[points.length - 1];
+          const closeDistance = Math.hypot(last.x - first.x, last.y - first.y);
+          const diagonal = Math.hypot(bounds.width, bounds.height) || 1;
+          const aspect = bounds.width && bounds.height ? bounds.width / bounds.height : 1;
+          const curvature = segments ? turns / segments : 0;
+          if (closeDistance / diagonal < 0.36 && aspect > 0.48 && aspect < 2.1 && curvature > 0.2) {
+            circleLikeTotal += clamp(1 - closeDistance / diagonal, 0, 1);
+          }
+        }
+
+        const curvature = segments ? turns / segments : 0;
+        curvatureTotal += curvature;
+        curvatureSamples += 1;
+        totalLength += recordLength;
+        const durationSeconds = Math.max((record.endTime - record.startTime) / 1000, 0.08);
+        if (recordLength > 0) {
+          totalSpeed += recordLength / durationSeconds;
+          speedSamples += 1;
+        }
+      });
+
+      const directionTotal = directionDistribution.horizontal + directionDistribution.vertical + directionDistribution.diagonal;
+      Object.keys(directionDistribution).forEach((key) => {
+        directionDistribution[key] = directionTotal ? directionDistribution[key] / directionTotal : 0;
+      });
+      Object.keys(densityMap).forEach((key) => {
+        densityMap[key] = pointSamples ? densityMap[key] / pointSamples : 0;
+      });
+      const horizontalLineScore = directionDistribution.horizontal || 0;
+      const verticalLineScore = directionDistribution.vertical || 0;
+      const curvatureScore = clamp(curvatureSamples ? curvatureTotal / curvatureSamples : 0, 0, 1);
+      const circleLikeScore = clamp(circleLikeTotal / Math.max(1, strokeRecords.length), 0, 1);
+      const strokeDirection = getDominantStrokeDirection(directionDistribution, curvatureScore);
+      const averageStrokeLength = strokeRecords.length ? totalLength / strokeRecords.length : 0;
+      const averageStrokeSpeed = speedSamples ? totalSpeed / speedSamples : 0;
+      const energyValue = clamp(
+        strokeRecords.length / 18 * 0.25 +
+        Math.min(1, averageStrokeLength / Math.max(width, height)) * 0.2 +
+        curvatureScore * 0.25 +
+        Math.min(1, averageStrokeSpeed / 900) * 0.18 +
+        circleLikeScore * 0.12,
+        0,
+        1
+      );
+
+      return {
+        totalStrokes: strokeRecords.length,
+        averageStrokeLength: Number(averageStrokeLength.toFixed(1)),
+        averageStrokeSpeed: Number(averageStrokeSpeed.toFixed(1)),
+        directionDistribution,
+        curvatureScore,
+        circleLikeScore,
+        horizontalLineScore,
+        verticalLineScore,
+        densityMap,
+        centerOfMass: {
+          x: pointSamples ? sx / pointSamples : 0.5,
+          y: pointSamples ? sy / pointSamples : 0.5
+        },
+        visualEnergy: energyValue > 0.66 ? "high" : energyValue < 0.26 ? "low" : "medium",
+        strokeDirection,
+        totalPointSamples: pointSamples
+      };
+    }
+
+    function analyzeLineStats() {
+      const summary = analyzeStrokeData();
+      return {
+        direction: summary.strokeDirection,
+        curveRatio: summary.curvatureScore,
+        horizontalLineScore: summary.horizontalLineScore,
+        verticalLineScore: summary.verticalLineScore,
+        circleLikeScore: summary.circleLikeScore
+      };
+    }
+
+    function getDominantStrokeDirection(directionDistribution, curvatureScore) {
+      if (curvatureScore > 0.42) return "swirling";
+      const entries = Object.entries(directionDistribution).sort((a, b) => b[1] - a[1]);
+      if (!entries.length || entries[0][1] < 0.34) return "mixed";
+      return entries[0][0];
+    }
+
+    function getColorTemperature(fractions) {
+      const warm = (fractions.red || 0) + (fractions.orange || 0) + (fractions.yellow || 0) + (fractions.gold || 0) + (fractions.pink || 0) + (fractions.brown || 0);
+      const cool = (fractions.blue || 0) + (fractions.cyan || 0) + (fractions.indigo || 0) + (fractions.purple || 0) + (fractions.green || 0);
+      if (cool > warm * 1.18 && cool > 0.16) return "cool";
+      if (warm > cool * 1.18 && warm > 0.16) return "warm";
+      return "neutral";
+    }
+
+    function getCompositionBalance(avgX, avgY, paintedRatio) {
+      if (paintedRatio < 0.012 && strokeRecords.length === 0) return "open-space";
+      if (avgX > 0.38 && avgX < 0.62 && avgY > 0.3 && avgY < 0.72) return "center-heavy";
+      if (avgX <= 0.38) return "left-weighted";
+      if (avgX >= 0.62) return "right-weighted";
+      if (avgY <= 0.3) return "upper-heavy";
+      if (avgY >= 0.72) return "lower-heavy";
+      return "balanced";
+    }
+
+    function getVisualEnergy(strokeDensity, strokeCount, curveRatio, strokeSpeed = 0) {
+      if (strokeDensity > 0.62 || strokeCount > 14 || curveRatio > 0.48 || strokeSpeed > 760) return "high";
+      if (strokeDensity < 0.18 && strokeCount < 4 && curveRatio < 0.22) return "low";
+      return "medium";
+    }
+
+    function dedupeSemanticHints() {
+      const themeTags = getThemeTags().map(normalizeSemanticTag).filter(Boolean);
+      const choiceObjects = getSymbolicChoiceObjects();
+      const choiceLabels = choiceObjects.map((choice) => choice.label);
+      const choiceTagsRaw = choiceObjects.flatMap((choice) => choice.tags || []).map(normalizeSemanticTag).filter(Boolean);
+      const seenKeys = new Set();
+      const dedupedThemeTags = [];
+      const dedupedChoiceTags = [];
+      const overlaps = [];
+
+      themeTags.forEach((tag) => {
+        const key = semanticKey(tag);
+        if (!seenKeys.has(key)) {
+          seenKeys.add(key);
+          dedupedThemeTags.push(tag);
+        }
+      });
+
+      choiceTagsRaw.forEach((tag) => {
+        const key = semanticKey(tag);
+        if (seenKeys.has(key)) {
+          overlaps.push(tag);
+          return;
+        }
+        seenKeys.add(key);
+        dedupedChoiceTags.push(tag);
+      });
+
+      return {
+        themeTags: unique(dedupedThemeTags),
+        choiceTags: unique(dedupedChoiceTags),
+        combinedTags: unique([...dedupedThemeTags, ...dedupedChoiceTags]),
+        choiceLabels,
+        overlaps: unique(overlaps)
+      };
+    }
+
+    function semanticKey(tag) {
+      const groups = [
+        ["wave", "ocean", "water", "sea", "flow"],
+        ["night", "stars", "dream", "dreamlike"],
+        ["quiet", "empty", "minimal", "calm"],
+        ["flower", "sunlight", "yellow", "sun"],
+        ["interior", "room", "home", "window", "daily life"],
+        ["human", "portrait", "self", "identity", "gaze", "figure"],
+        ["passion", "energy", "drama", "dramatic", "intense", "anxiety"],
+        ["swirl", "vortex", "chaotic", "movement"],
+        ["nature", "green", "alive", "landscape", "tree"],
+        ["abstract", "geometric", "modern", "grid"]
+      ];
+      const normalized = normalizeSemanticTag(tag);
+      const group = groups.find((items) => items.includes(normalized));
+      return group ? group[0] : normalized;
+    }
+
+    function normalizeSemanticTag(tag) {
+      return String(tag || "").trim().toLowerCase().replace(/\s+/g, " ");
+    }
+
+    function getThemeTags() {
+      return currentThemeHint ? currentThemeHint.tags || [] : [];
+    }
+
+    function getSymbolicChoiceTags() {
+      return dedupeSemanticHints().choiceTags;
+    }
+
+    function getSymbolicChoiceObjects() {
+      return symbolicChoices.map((id) => symbolicChoiceOptions.find((item) => item.id === id)).filter(Boolean);
+    }
+
+    function getSymbolicChoiceLabel(id) {
+      const choice = symbolicChoiceOptions.find((item) => item.id === id);
+      return choice ? choice.label : id;
+    }
+
+    function getSymbolicChoiceIcon(id) {
+      const choice = symbolicChoiceOptions.find((item) => item.id === id);
+      return choice ? choice.icon : "";
+    }
+
+    function buildUserFeatureVector(userFeatures) {
+      const semanticHints = userFeatures.semanticHints || dedupeSemanticHints();
+      const lineShapeTags = [];
+      const styleTags = [];
+      const compositionTags = compositionToKeywords(userFeatures.compositionZone, userFeatures.strokeDirection);
+
+      if (userFeatures.horizontalLineScore > 0.36) lineShapeTags.push("horizontal", "horizon", "landscape", "water", "wave");
+      if (userFeatures.verticalLineScore > 0.36) lineShapeTags.push("vertical", "architecture", "figure", "portrait");
+      if (userFeatures.averageCurvature > 0.28) lineShapeTags.push("curve", "curved lines", "flow", "movement");
+      if (userFeatures.averageCurvature > 0.45) lineShapeTags.push("swirl", "vortex", "wavy sky");
+      if (userFeatures.circleLikeScore > 0.3) lineShapeTags.push("circle", "round", "flower", "sun", "face");
+      if (userFeatures.emptySpaceRatio > 0.94) lineShapeTags.push("minimal", "quiet", "empty");
+      if (userFeatures.compositionZone === "center-heavy") lineShapeTags.push("center", "single figure", "subject-centered");
+      if (userFeatures.colorTemperature === "cool") lineShapeTags.push("cool", "night", "water", "dreamlike");
+      if (userFeatures.colorTemperature === "warm") lineShapeTags.push("warm", "sunlight", "flower");
+      if ((userFeatures.colorFractions.black || 0) > 0.18 || userFeatures.dominantColors.includes("black")) lineShapeTags.push("black", "sketch", "graphic", "dramatic");
+
+      if (userFeatures.geometricStrength > 0.2 || userFeatures.symbolicTags.includes("geometric")) styleTags.push("abstract", "geometric", "de stijl", "suprematism", "modern");
+      if (userFeatures.visualEnergy === "high" || userFeatures.averageCurvature > 0.44) styleTags.push("expressionism", "post-impressionism", "movement");
+      if (userFeatures.emptySpaceRatio > 0.94) styleTags.push("minimal", "suprematism");
+      if (userFeatures.circleLikeScore > 0.32 && userFeatures.colorTemperature === "warm") styleTags.push("still life", "post-impressionism");
+      if (userFeatures.horizontalLineScore > 0.42 && userFeatures.colorTemperature === "cool") styleTags.push("ukiyo-e", "romanticism", "impressionism", "landscape");
+      if (userFeatures.verticalLineScore > 0.42 && userFeatures.compositionZone === "center-heavy") styleTags.push("portrait", "renaissance", "dutch golden age");
+      if ((userFeatures.colorFractions.black || 0) > 0.18) styleTags.push("graphic", "suprematism", "portrait");
+
+      const visualTags = unique([
+        ...userFeatures.visualTags,
+        ...lineShapeTags,
+        ...userFeatures.dominantColors,
+        userFeatures.colorTemperature,
+        userFeatures.visualEnergy
+      ].map(normalizeSemanticTag));
+
+      return {
+        colorTags: unique(userFeatures.dominantColors.concat(userFeatures.colorTags || []).map(normalizeSemanticTag)),
+        visualTags,
+        lineShapeTags: unique(lineShapeTags.map(normalizeSemanticTag)),
+        compositionTags: unique(compositionTags.map(normalizeSemanticTag)),
+        styleTags: unique(styleTags.map(normalizeSemanticTag)),
+        emotionTags: unique((userFeatures.emotionalMood || []).map(normalizeSemanticTag)),
+        semanticTags: semanticHints.choiceTags || [],
+        themeTags: semanticHints.themeTags || [],
+        allTags: unique([
+          ...visualTags,
+          ...lineShapeTags.map(normalizeSemanticTag),
+          ...styleTags.map(normalizeSemanticTag),
+          ...(semanticHints.choiceTags || []),
+          ...(semanticHints.themeTags || [])
+        ])
+      };
+    }
+
+    function buildArtworkFeatureVector(artwork) {
+      const baseTags = expandTags(artwork.tags || []);
+      const colorTags = unique([...(artwork.colorMood || []), ...(artwork.visualTags || []), ...(artwork.tags || []).filter(isColorTag)].map(normalizeSemanticTag).filter((tag) => isColorTag(tag) || tag.includes("blue") || tag.includes("yellow") || tag.includes("warm") || tag.includes("gold") || tag.includes("black") || tag.includes("gray") || tag.includes("red") || tag.includes("green")));
+      const visualTags = unique([...expandTags(artwork.visualTags || []), ...baseTags, ...colorTags]);
+      const themeTags = unique([...expandTags(artwork.themeTags || []), ...baseTags, ...expandTags([artwork.title || ""])]);
+      const compositionTags = unique([...expandTags(artwork.compositionTags || []), ...expandTags(artwork.composition || []), ...baseTags.filter(isCompositionTag)]);
+      const emotionTags = unique([...expandTags(artwork.emotionTags || []), ...expandTags(artwork.emotion || []), ...baseTags.filter(isEmotionTag)]);
+      const styleTags = unique([...expandTags(artwork.styleTags || []), ...styleToTags(artwork.style), ...baseTags.filter(isStyleTag)]);
+      return {
+        colorTags,
+        visualTags,
+        themeTags,
+        compositionTags,
+        emotionTags,
+        styleTags,
+        colorTemperature: getArtworkTemperature(colorTags)
+      };
+    }
+
+    function expandTags(list) {
+      return unique((list || []).flatMap((item) => {
+        const tag = normalizeSemanticTag(item);
+        const words = tag.split(/[^a-z0-9]+/).filter((word) => word.length > 2);
+        return [tag, ...words];
+      }));
+    }
+
+    function styleToTags(style) {
+      const text = normalizeSemanticTag(style);
+      const tags = [text];
+      if (text.includes("impressionism")) tags.push("impressionism", "color", "light", "movement");
+      if (text.includes("post-impressionism")) tags.push("post-impressionism", "expressionism", "brushwork", "intense");
+      if (text.includes("expressionism")) tags.push("expressionism", "dramatic", "intense", "curved lines");
+      if (text.includes("abstract")) tags.push("abstract", "geometric", "modern", "line");
+      if (text.includes("stijl")) tags.push("de stijl", "grid", "geometric", "minimal");
+      if (text.includes("suprematism")) tags.push("suprematism", "minimal", "geometric", "black");
+      if (text.includes("ukiyo")) tags.push("ukiyo-e", "wave", "graphic", "landscape", "line");
+      if (text.includes("renaissance")) tags.push("renaissance", "classical", "human", "center", "portrait");
+      if (text.includes("dutch")) tags.push("dutch golden age", "interior", "quiet", "human", "light");
+      if (text.includes("romanticism")) tags.push("romanticism", "landscape", "sublime", "movement", "fog");
+      if (text.includes("symbolism")) tags.push("symbolism", "gold", "pattern", "dreamlike");
+      return unique(tags);
+    }
+
+    function getArtworkTemperature(colorTags) {
+      const warm = colorTags.filter((tag) => ["red", "orange", "yellow", "gold", "pink", "brown"].includes(tag)).length;
+      const cool = colorTags.filter((tag) => ["blue", "cyan", "indigo", "purple", "green", "gray", "white"].includes(tag)).length;
+      if (cool > warm) return "cool";
+      if (warm > cool) return "warm";
+      return "neutral";
+    }
+
+    function getTemperatureMatch(userTemperature, artworkTemperature) {
+      if (userTemperature === artworkTemperature) return 1;
+      if (userTemperature === "neutral" || artworkTemperature === "neutral") return 0.58;
+      return 0.22;
+    }
+
+    function shapeAffinity(userFeatures, artworkVector) {
+      let score = 0;
+      const tags = new Set([...artworkVector.visualTags, ...artworkVector.compositionTags, ...artworkVector.themeTags]);
+      if (userFeatures.circleLikeScore > 0.34 && ["circle", "flower", "sun", "face", "round"].some((tag) => tags.has(tag))) score += 0.34;
+      if (userFeatures.averageCurvature > 0.34 && ["movement", "swirl", "curve", "flowing lines", "wave"].some((tag) => tags.has(tag))) score += 0.34;
+      if (userFeatures.geometricStrength > 0.2 && ["geometric", "grid", "abstract", "square"].some((tag) => tags.has(tag))) score += 0.32;
+      if (userFeatures.emptySpaceRatio > 0.95 && ["minimal", "quiet", "empty"].some((tag) => tags.has(tag))) score += 0.24;
+      return clamp(score, 0, 1);
+    }
+
+    function numericCompositionAffinity(userFeatures, artworkVector) {
+      let score = 0;
+      const tags = new Set([...artworkVector.compositionTags, ...artworkVector.themeTags, ...artworkVector.visualTags]);
+      if (userFeatures.horizontalLineScore > 0.44 && ["wave", "horizon", "landscape", "water", "diagonal"].some((tag) => tags.has(tag))) score += 0.22;
+      if (userFeatures.verticalLineScore > 0.44 && ["architecture", "vertical", "single figure", "portrait", "building"].some((tag) => tags.has(tag))) score += 0.22;
+      if (userFeatures.circleLikeScore > 0.34 && ["center", "circle", "flower", "sun"].some((tag) => tags.has(tag))) score += 0.18;
+      if (userFeatures.upperColorRatio > 0.56 && ["upper sky", "sky", "night", "vast landscape"].some((tag) => tags.has(tag))) score += 0.18;
+      if (userFeatures.lowerColorRatio > 0.56 && ["table", "still life", "village below", "ground"].some((tag) => tags.has(tag))) score += 0.16;
+      if (userFeatures.compositionZone === "center-heavy" && ["center", "center figure", "single figure", "symmetry"].some((tag) => tags.has(tag))) score += 0.24;
+      return clamp(score, 0, 0.42);
+    }
+
+    function pickRankedMatch(scored, selected, scoringFn) {
+      const selectedIds = new Set(selected.filter(Boolean).map((item) => item.artwork.id));
+      return scored
+        .filter((item) => !selectedIds.has(item.artwork.id))
+        .map((item) => ({ item, rankScore: scoringFn(item) }))
+        .sort((a, b) => b.rankScore - a.rankScore)[0]?.item || null;
+    }
+
+    function diversityPenalty(item, selected) {
+      const cluster = getArtworkCluster(item.artwork);
+      const sameCluster = selected.filter(Boolean).some((selectedItem) => getArtworkCluster(selectedItem.artwork) === cluster);
+      const sameArtist = selected.filter(Boolean).some((selectedItem) => selectedItem.artwork.artist === item.artwork.artist);
+      return (sameCluster ? 7 : 0) + (sameArtist ? 2.5 : 0);
+    }
+
+    function getArtworkCluster(artwork) {
+      const tags = new Set([...(artwork.tags || []), ...(artwork.themeTags || []), ...(artwork.styleTags || [])].map(normalizeSemanticTag));
+      if (["night", "stars", "dream"].some((tag) => tags.has(tag))) return "night";
+      if (["wave", "ocean", "water", "sea"].some((tag) => tags.has(tag))) return "water";
+      if (["flower", "sunlight", "nature"].some((tag) => tags.has(tag))) return "flower-nature";
+      if (["interior", "room", "daily life", "window"].some((tag) => tags.has(tag))) return "interior";
+      if (["portrait", "human", "gaze"].some((tag) => tags.has(tag))) return "portrait";
+      if (["abstract", "geometric", "grid", "minimal"].some((tag) => tags.has(tag))) return "abstract";
+      if (["landscape", "mountain", "fog"].some((tag) => tags.has(tag))) return "landscape";
+      if (["still life", "fruit", "apple", "table"].some((tag) => tags.has(tag))) return "still-life";
+      return artwork.style || "misc";
+    }
+
+    function isCompositionTag(tag) {
+      return ["center", "center figure", "single figure", "balanced", "symmetry", "asymmetric", "diagonal", "grid", "geometric", "interior", "table", "all-over", "upper sky", "large wave", "landscape", "architecture", "minimal", "left light", "perspective", "vanishing point"].includes(tag);
+    }
+
+    function isEmotionTag(tag) {
+      return ["dreamlike", "lonely", "intense", "restless", "powerful", "dramatic", "sublime", "warm", "hopeful", "quiet", "calm", "gentle", "ordered", "curious", "mysterious", "human", "anxious", "intimate", "fresh", "radical", "empty", "serious", "modern", "strange"].includes(tag);
+    }
+
+    function isStyleTag(tag) {
+      return ["abstract", "geometric", "minimal", "modern", "classical", "portrait", "still life", "landscape", "expressionism", "symbolic", "decorative", "graphic", "pattern", "grid"].includes(tag);
+    }
+
+    function calculateResonanceScore(userFeatures, artwork) {
+      const userVector = buildUserFeatureVector(userFeatures);
+      const artworkVector = buildArtworkFeatureVector(artwork);
+      const matchedEvidence = [];
+      const penalties = [];
+
+      const colorHits = intersection(userVector.colorTags, artworkVector.colorTags);
+      const colorOverlap = overlapRatio(userVector.colorTags, artworkVector.colorTags);
+      const temperatureMatch = getTemperatureMatch(userFeatures.colorTemperature, artworkVector.colorTemperature);
+      const lineHits = intersection(userVector.lineShapeTags, artworkVector.visualTags.concat(artworkVector.compositionTags));
+      const lineOverlap = overlapRatio(userVector.lineShapeTags, artworkVector.visualTags.concat(artworkVector.compositionTags));
+      const energyTarget = artworkEnergy(artwork);
+      const energyValue = energyTarget === userFeatures.visualEnergy ? 1 : energyAdjacent(energyTarget, userFeatures.visualEnergy) ? 0.62 : 0.26;
+      const visualRaw = clamp(colorOverlap * 0.34 + temperatureMatch * 0.14 + lineOverlap * 0.3 + energyValue * 0.12 + shapeAffinity(userFeatures, artworkVector) * 0.1, 0, 1);
+      const visualScore = visualRaw * 35;
+
+      if (colorHits.length) matchedEvidence.push("用户画面里的" + colorHits.slice(0, 3).map(labelColor).join("、") + "与作品色彩气候形成视觉共鸣。");
+      if (userFeatures.colorTemperature === "cool" && ["cool", "blue", "night", "water"].some((tag) => artworkVector.visualTags.includes(tag))) matchedEvidence.push("用户冷色占比较高，接近作品中的蓝调、夜色或水面视觉线索。");
+      if (userFeatures.colorTemperature === "warm" && ["warm", "gold", "yellow", "sunlight"].some((tag) => artworkVector.visualTags.includes(tag))) matchedEvidence.push("用户暖色占比较高，呼应作品中的阳光、金色或高温情绪。");
+      if (userFeatures.upperColorRatio > 0.52 && userFeatures.colorTemperature === "cool" && ["upper sky", "sky", "night", "ocean"].some((tag) => artworkVector.compositionTags.includes(tag) || artworkVector.themeTags.includes(tag))) matchedEvidence.push("你的上半部分冷色占比较高，触发了夜空 / 海面区域共鸣。");
+      if (userFeatures.horizontalLineScore > 0.42 && ["wave", "horizon", "landscape", "water", "diagonal"].some((tag) => artworkVector.visualTags.includes(tag) || artworkVector.compositionTags.includes(tag))) matchedEvidence.push("你的横向线条较多，让系统识别到地平线、海面或流动感。");
+      if (userFeatures.verticalLineScore > 0.42 && ["architecture", "single figure", "portrait", "vertical", "building"].some((tag) => artworkVector.visualTags.includes(tag) || artworkVector.compositionTags.includes(tag))) matchedEvidence.push("你的垂直线条给画面带来人物、建筑或直立结构的倾向。");
+      if (userFeatures.averageCurvature > 0.34 && ["swirl", "movement", "curve", "flowing lines", "wavy sky"].some((tag) => artworkVector.visualTags.includes(tag) || artworkVector.compositionTags.includes(tag))) matchedEvidence.push("你的弧形笔迹与作品中的曲线运动形成呼应。");
+      if (userFeatures.circleLikeScore > 0.32 && ["circle", "flower", "sun", "face"].some((tag) => artworkVector.visualTags.includes(tag) || artworkVector.themeTags.includes(tag))) matchedEvidence.push("你的圆形轨迹让系统读到花、太阳、脸或中心形态的视觉线索。");
+      if (userFeatures.strokeSummary.averageStrokeLength < 72 && userFeatures.strokeSummary.totalStrokes > 8 && ["expressionism", "chaotic", "intense", "restless"].some((tag) => artworkVector.styleTags.includes(tag) || artworkVector.emotionTags.includes(tag))) matchedEvidence.push("你的高密度短线让系统识别到表现主义式能量。");
+
+      const semanticHits = intersection(userVector.semanticTags, artworkVector.themeTags);
+      const semanticRaw = userVector.semanticTags.length ? clamp(overlapRatio(userVector.semanticTags, artworkVector.themeTags) + semanticHits.length * 0.08, 0, 1) : 0;
+      const semanticScore = semanticRaw * 15;
+      if (semanticHits.length) matchedEvidence.push("你确认的「" + userFeatures.symbolicChoices.join("、") + "」意象与作品主题形成辅助共鸣。");
+
+      const themeHits = intersection(userVector.themeTags, artworkVector.themeTags);
+      const themeRaw = userVector.themeTags.length ? clamp(overlapRatio(userVector.themeTags, artworkVector.themeTags) + themeHits.length * 0.06, 0, 1) : 0;
+      const themeScore = themeRaw * 10;
+      if (themeHits.length && userFeatures.themeHint) matchedEvidence.push("主题挑战「" + userFeatures.themeHint + "」只作为轻量语境，与作品的 " + themeHits.slice(0, 3).join(" / ") + " 标签发生一次辅助匹配。");
+
+      const emotionHits = intersection(userFeatures.emotionalMood, artworkVector.emotionTags);
+      const emotionRaw = clamp(overlapRatio(userFeatures.emotionalMood, artworkVector.emotionTags) * 0.78 + energyValue * 0.22, 0, 1);
+      const emotionScore = emotionRaw * 15;
+      if (emotionHits.length) matchedEvidence.push("你的情绪倾向 " + emotionHits.slice(0, 3).join(" / ") + " 与作品的情绪标签相近。");
+
+      const compositionKeywords = compositionToKeywords(userFeatures.compositionZone, userFeatures.strokeDirection);
+      const compositionHits = intersection(compositionKeywords, artworkVector.compositionTags.concat(artworkVector.themeTags));
+      const compositionRaw = clamp(
+        overlapRatio(compositionKeywords, artworkVector.compositionTags.concat(artworkVector.themeTags)) +
+        compositionBonus(userFeatures.compositionZone, artwork.composition) +
+        numericCompositionAffinity(userFeatures, artworkVector),
+        0,
+        1
+      );
+      const compositionScore = compositionRaw * 15;
+      if (compositionHits.length) matchedEvidence.push("你的画面重心和方向接近作品中的 " + compositionHits.slice(0, 3).join(" / ") + " 构图线索。");
+      if (userFeatures.compositionZone === "center-heavy" && artworkVector.compositionTags.includes("center")) matchedEvidence.push("你的画面重心偏中央，接近这幅作品的主体构图。");
+
+      const styleHits = intersection(userVector.styleTags, artworkVector.styleTags.concat(artworkVector.themeTags));
+      const styleRaw = clamp(overlapRatio(userVector.styleTags, artworkVector.styleTags.concat(artworkVector.themeTags)) + styleHits.length * 0.07, 0, 1);
+      const styleScore = styleRaw * 10;
+      if (styleHits.length) matchedEvidence.push("用户笔迹呈现出 " + styleHits.slice(0, 3).join(" / ") + " 倾向，与作品风格语言相互靠近。");
+
+      let penaltyValue = 0;
+      (artwork.avoidIf || []).forEach((tag) => {
+        if (avoidHintApplies(tag, userVector, userFeatures)) {
+          penaltyValue += 6;
+          penalties.push("作品设置了 avoidIf: " + tag + "，已降低该候选的共鸣指数。");
+        }
+      });
+      if (userFeatures.colorTemperature === "warm" && artworkVector.colorTemperature === "cool" && colorHits.length === 0) {
+        penaltyValue += 3;
+        penalties.push("用户暖色倾向与作品冷色倾向距离较远。");
+      }
+      if (userFeatures.emptySpaceRatio > 0.96 && artworkVector.themeTags.includes("chaotic")) {
+        penaltyValue += 4;
+        penalties.push("用户画面留白很高，而作品主题较繁复。");
+      }
+      if (userFeatures.visualEnergy === "high" && artworkVector.emotionTags.includes("minimal")) {
+        penaltyValue += 3;
+        penalties.push("用户视觉能量较高，与极简安静作品存在轻微偏差。");
+      }
+
+      const totalScore = clamp(Math.round(visualScore + semanticScore + themeScore + emotionScore + compositionScore + styleScore - penaltyValue), 0, 100);
+
+      return {
+        totalScore,
+        total: totalScore,
+        visualScore: Number(visualScore.toFixed(1)),
+        semanticScore: Number(semanticScore.toFixed(1)),
+        themeScore: Number(themeScore.toFixed(1)),
+        emotionScore: Number(emotionScore.toFixed(1)),
+        compositionScore: Number(compositionScore.toFixed(1)),
+        styleScore: Number(styleScore.toFixed(1)),
+        matchedEvidence: unique(matchedEvidence),
+        penalties,
+        parts: {
+          visualScore: Number(visualScore.toFixed(1)),
+          semanticScore: Number(semanticScore.toFixed(1)),
+          themeScore: Number(themeScore.toFixed(1)),
+          emotionScore: Number(emotionScore.toFixed(1)),
+          compositionScore: Number(compositionScore.toFixed(1)),
+          styleScore: Number(styleScore.toFixed(1)),
+          penalty: Number(penaltyValue.toFixed(1))
+        }
+      };
+    }
+
+    function avoidHintApplies(tag, userVector, userFeatures) {
+      const hint = normalizeSemanticTag(tag);
+      const all = new Set(userVector.allTags.map(normalizeSemanticTag));
+      if (all.has(hint) || all.has(semanticKey(hint))) return true;
+      const contains = (word) => hint.includes(word) && (all.has(word) || all.has(semanticKey(word)));
+      if (contains("portrait") || contains("human")) return true;
+      if (contains("flower")) return true;
+      if (contains("interior") || contains("room")) return true;
+      if (contains("ocean") || contains("wave") || contains("water")) return true;
+      if (hint.includes("warm still life")) {
+        return userFeatures.colorTemperature === "warm" && (all.has("still life") || all.has("fruit") || all.has("flower") || userFeatures.compositionZone === "lower-heavy");
+      }
+      if (hint.includes("quiet minimal")) {
+        return userFeatures.emptySpaceRatio > 0.94 && userFeatures.visualEnergy !== "high";
+      }
+      if (hint.includes("hard geometric") || hint.includes("pure geometric")) {
+        return userFeatures.geometricStrength > 0.2 || all.has("geometric");
+      }
+      if (hint.includes("chaotic")) {
+        return userFeatures.visualEnergy === "high" || all.has("chaotic");
+      }
+      return hint.split(/\s+/).filter((word) => word.length > 3).some((word) => all.has(word) || all.has(semanticKey(word)));
+    }
+
+    function findTopArtworkMatches(userFeatures) {
+      const scored = getAllArtworks().map((artwork) => {
+        const scoreData = calculateResonanceScore(userFeatures, artwork);
+        return {
+          artwork,
+          score: scoreData.totalScore,
+          totalScore: scoreData.totalScore,
+          visualScore: scoreData.visualScore,
+          semanticScore: scoreData.semanticScore,
+          themeScore: scoreData.themeScore,
+          emotionScore: scoreData.emotionScore,
+          compositionScore: scoreData.compositionScore,
+          styleScore: scoreData.styleScore,
+          matchedEvidence: scoreData.matchedEvidence,
+          penalties: scoreData.penalties,
+          parts: scoreData.parts,
+          matchReasons: generateMatchReasons(userFeatures, artwork, scoreData)
+        };
+      }).sort((a, b) => b.score - a.score);
+
+      const top1 = scored[0];
+      const selected = [top1];
+      const top2 = pickRankedMatch(scored, selected, (item) => item.emotionScore * 1.35 + item.score * 0.18 - diversityPenalty(item, selected));
+      selected.push(top2 || scored.find((item) => item.artwork.id !== top1.artwork.id));
+      const top3 = pickRankedMatch(scored, selected, (item) => Math.max(item.compositionScore, item.styleScore) * 1.45 + item.visualScore * 0.16 - diversityPenalty(item, selected));
+      selected.push(top3 || scored.find((item) => !selected.some((selectedItem) => selectedItem && selectedItem.artwork.id === item.artwork.id)));
+      const displayMatches = selected.filter(Boolean).slice(0, 3);
+      const roles = [
+        "Top1 最佳共鸣 / Overall Match",
+        "Top2 情绪共鸣 / Mood Match",
+        "Top3 构图 / 风格共鸣 / Composition or Style Match"
+      ];
+      displayMatches.forEach((item, index) => {
+        item.matchRole = roles[index];
+      });
+      const displayIds = new Set(displayMatches.map((item) => item.artwork.id));
+      const ranked = displayMatches.concat(scored.filter((item) => !displayIds.has(item.artwork.id)));
+
+      return {
+        topMatch: ranked[0].artwork,
+        secondMatch: ranked[1].artwork,
+        thirdMatch: ranked[2].artwork,
+        score: ranked[0].score,
+        parts: ranked[0].parts,
+        matchReasons: ranked[0].matchReasons,
+        ranked,
+        displayMatches
+      };
+    }
+
+    function generateMatchReasons(userFeatures, artwork, scoreData) {
+      const score = scoreData || calculateResonanceScore(userFeatures, artwork);
+      const reasons = [];
+      score.matchedEvidence.forEach((evidence) => reasons.push(evidence));
+
+      if (!reasons.some((reason) => reason.includes("线条"))) {
+        if (userFeatures.strokeDirection === "swirling") reasons.push("你的弧形和旋转线条让画面出现流动倾向，这是系统判断风格共鸣的重要视觉线索。");
+        else if (userFeatures.horizontalLineScore > 0.4) reasons.push("你的横向线条较多，系统把它理解为地平线、海面或安静铺开的空间。");
+        else if (userFeatures.verticalLineScore > 0.4) reasons.push("你的垂直线条让画面更接近人物、建筑或植物的直立结构。");
+      }
+
+      if (!reasons.some((reason) => reason.includes("重心")) && userFeatures.compositionZone !== "balanced") {
+        reasons.push("你的画面重心呈现出 " + userFeatures.compositionZone + " 倾向，这会影响系统对主体位置和构图关系的判断。");
+      }
+      if (userFeatures.emptySpaceRatio > 0.94) {
+        reasons.push("你的留白较多，系统把它作为 quiet / minimal 的视觉线索，而不是把空白视为失败。");
+      }
+      if (userFeatures.semanticHints && userFeatures.semanticHints.overlaps.length) {
+        reasons.push("主题和画后意象中重复的语义已经被合并处理，没有重复叠加权重。");
+      }
+      if (!reasons.length) {
+        reasons.push("系统主要依据你的色彩分布、线条方向和画面重心生成这次共鸣，而非绝对识别具体物体。");
+      }
+
+      return unique(reasons).slice(0, 5);
+    }
+
+    function generatePersona(userFeatures, artwork) {
+      const tags = new Set([...userFeatures.symbolicTags, ...userFeatures.emotionalMood, ...artwork.tags.map(normalizeSemanticTag)]);
+      const colors = new Set(userFeatures.dominantColors);
+      let name = "未来博物馆访客";
+      let description = "你在随机与秩序之间留下了可观看的痕迹，像把一次短暂心情挂进小型展厅。";
+
+      if ((userFeatures.colorTemperature === "cool" && userFeatures.upperColorRatio > 0.46) || tags.has("night") || colors.has("indigo")) {
+        name = "夜色幻想家";
+        description = "你的冷色区域、上方空间和梦境情绪较明显，画面像一段轻轻展开的夜色。";
+      }
+      if (userFeatures.horizontalLineScore > 0.44 && (tags.has("water") || tags.has("wave") || colors.has("blue") || colors.has("cyan"))) {
+        name = userFeatures.visualEnergy === "high" ? "风暴观察者" : "海浪倾听者";
+        description = "你用横向流动线条和冷色制造水面感，情绪像一场从远处传来的潮汐。";
+      }
+      if (userFeatures.circleLikeScore > 0.34 && (userFeatures.colorTemperature === "warm" || tags.has("flower") || colors.has("yellow") || colors.has("gold"))) {
+        name = "太阳花信徒";
+        description = "你的圆形轨迹与暖色让画面接近花、太阳和生命力，不必画完整物体也能被读到。";
+      }
+      if (tags.has("interior") || tags.has("room") || tags.has("daily life")) {
+        name = "孤独房间收藏家";
+        description = "你的画面带有日常空间的安静倾向，像把一个房间压缩成几条线和几块颜色。";
+      }
+      if (userFeatures.geometricStrength > 0.2 || tags.has("geometric") || tags.has("abstract")) {
+        name = "几何秩序建造者";
+        description = "你更像是在建造结构：边界、方向和色块让画面拥有清晰的内部秩序。";
+      }
+      if (tags.has("still life") || tags.has("fruit") || (userFeatures.compositionZone === "lower-heavy" && userFeatures.visualEnergy !== "high")) {
+        name = "静物收藏家";
+        description = "你的重心和节奏让画面接近桌面、物件或静静摆放的东西。";
+      }
+      if (userFeatures.visualEnergy === "high" || tags.has("chaotic") || tags.has("expressionist")) {
+        name = "混乱抽象派诗人";
+        description = "你的线条密度、速度和曲率让画面带着明显冲动，混乱在这里变成能量。";
+      }
+      if (tags.has("passion") || tags.has("dramatic") || colors.has("red")) {
+        name = "情绪色块实验者";
+        description = "你用高饱和颜色和强对比制造情绪开关，画面更像一种直接的心理温度。";
+      }
+      if (userFeatures.emptySpaceRatio > 0.96 && userFeatures.strokeDensity < 0.16) {
+        name = "梦境策展人";
+        description = "你保留了大量空白，让少量线条像展签旁的低声说明，安静但可被观看。";
+      }
+      return { name, description };
+    }
+
+    async function startAnalysisSequence() {
+      if (analysisRunning) return;
+      symbolicChoices = [];
+      document.querySelectorAll(".choice-option").forEach((button) => button.classList.remove("active"));
+      pendingAnalysis = { allowEmpty: isWorkEmpty() };
+      if (isWorkEmpty()) {
+        showToast("画几笔会更有意思；也可以跳过意象确认，直接鉴定留白与安静。");
+      }
+      showSymbolicChoiceModal();
+    }
+
+    function showSymbolicChoiceModal() {
+      document.getElementById("intentModal").classList.add("active");
+      document.getElementById("intentModal").setAttribute("aria-hidden", "false");
+    }
+
+    async function confirmIntentAndAnalyze(skipped) {
+      if (!pendingAnalysis || analysisRunning) return;
+      if (skipped) symbolicChoices = [];
+      document.getElementById("intentModal").classList.remove("active");
+      document.getElementById("intentModal").setAttribute("aria-hidden", "true");
+      analysisRunning = true;
+      document.getElementById("analyzeBtn").disabled = true;
+
+      if (isWorkEmpty()) {
+        showToast("正在鉴定留白、安静和空画框的构图倾向。");
+      }
+
+      await restorePromise;
+      const userFeatures = extractUserFeatures();
+      const match = findTopArtworkMatches(userFeatures);
+      const thumbnail = exportCompositeImage();
+
+      await showPortalReveal();
+      showResultCard(match, userFeatures, thumbnail);
+
+      analysisRunning = false;
+      pendingAnalysis = null;
+      document.getElementById("analyzeBtn").disabled = false;
+    }
+
+    function showPortalReveal() {
+      return new Promise((resolve) => {
+        const overlay = document.getElementById("analysisOverlay");
+        const status = document.getElementById("analysisStatus");
+        const portal = document.getElementById("portalLayer");
+        const statuses = [
+          "Scanning paper surface...",
+          "Reading color and line energy...",
+          "Searching open museum library...",
+          "Finding curatorial resonance..."
+        ];
+        let index = 0;
+
+        overlay.classList.add("active");
+        canvasFrame.classList.add("analyzing");
+        portal.classList.add("active");
+        portal.classList.remove("burst");
+        createPortalFragments();
+        status.textContent = statuses[0];
+
+        const interval = setInterval(() => {
+          index += 1;
+          status.textContent = statuses[index] || "Preparing curator report...";
+        }, 520);
+
+        setTimeout(() => {
+          portal.classList.add("burst");
+          status.textContent = "Soft gallery reveal...";
+        }, 2200);
+
+        setTimeout(() => {
+          clearInterval(interval);
+          overlay.classList.remove("active");
+          canvasFrame.classList.remove("analyzing");
+          portal.classList.remove("active");
+          setTimeout(() => {
+            portal.classList.remove("burst");
+            portal.querySelectorAll(".portal-fragment").forEach((node) => node.remove());
+          }, 420);
+          resolve();
+        }, 3000);
+      });
+    }
+
+    function createPortalFragments() {
+      const portal = document.getElementById("portalLayer");
+      portal.querySelectorAll(".portal-fragment").forEach((node) => node.remove());
+      const rect = canvas.getBoundingClientRect();
+      const cx = rect.width / 2;
+      const cy = rect.height / 2;
+      const colors = ["rgba(120,231,255,0.95)", "rgba(246,201,106,0.95)", "rgba(157,124,255,0.9)", "rgba(255,119,183,0.8)", "rgba(255,255,255,0.72)"];
+
+      const fragments = [];
+
+      for (let i = 0; i < 38; i += 1) {
+        const horizontal = Math.random() > 0.5;
+        fragments.push({
+          x: rand(20, rect.width - 20),
+          y: rand(20, rect.height - 20),
+          w: horizontal ? rand(18, 58).toFixed(0) + "px" : rand(4, 12).toFixed(0) + "px",
+          h: horizontal ? rand(3, 9).toFixed(0) + "px" : rand(18, 48).toFixed(0) + "px",
+          font: "0px",
+          radius: Math.random() > 0.42 ? "999px" : "4px",
+          bgc: colors[Math.floor(Math.random() * colors.length)],
+          text: ""
+        });
+      }
+
+      fragments.forEach((fragment, index) => {
+        const node = document.createElement("span");
+        node.className = "portal-fragment";
+        node.textContent = fragment.text;
+        node.style.setProperty("--x", fragment.x + "px");
+        node.style.setProperty("--y", fragment.y + "px");
+        node.style.setProperty("--dx", (cx - fragment.x) + "px");
+        node.style.setProperty("--dy", (cy - fragment.y) + "px");
+        node.style.setProperty("--w", fragment.w);
+        node.style.setProperty("--h", fragment.h);
+        node.style.setProperty("--font", fragment.font);
+        node.style.setProperty("--radius", fragment.radius);
+        node.style.setProperty("--bgc", fragment.bgc);
+        node.style.setProperty("--angle", rand(-110, 110).toFixed(1) + "deg");
+        node.style.setProperty("--time", rand(2.1, 3.2).toFixed(2) + "s");
+        node.style.setProperty("--delay", (index * 0.012).toFixed(3) + "s");
+        portal.appendChild(node);
+      });
+    }
+
+    function safeArtworkImageRenderer(artwork, options = {}) {
+      const className = options.className || "image-tile masterpiece-tile";
+      const label = options.label || "匹配名画";
+      const loading = options.loading || "lazy";
+      const overlayHtml = options.overlayHtml || "";
+      const imageCandidates = getArtworkImageCandidates(artwork);
+      const imageUrl = imageCandidates[0] || "";
+      const candidateAttr = escapeHtml(JSON.stringify(imageCandidates));
+      const imageHtml = imageUrl ? `
+                <img
+                  class="masterpiece-image"
+                  src="${escapeHtml(imageUrl)}"
+                  alt="${escapeHtml(label + "：" + artwork.title + "，" + artwork.artist)}"
+                  loading="${escapeHtml(loading)}"
+                  referrerpolicy="no-referrer"
+                  data-artwork-id="${escapeHtml(artwork.id)}"
+                  data-source-url="${escapeHtml(artwork.sourceUrl)}"
+                  data-candidates="${candidateAttr}"
+                  data-candidate-index="0"
+                  onerror="tryNextArtworkImage(this)"
+                />` : "";
+
+      return `
+              <div class="${escapeHtml(className)}" data-role="matched-masterpiece" data-artwork-id="${escapeHtml(artwork.id)}">
+                ${imageHtml}
+                ${renderArtworkFallback(artwork, !imageUrl)}
+                ${overlayHtml}
+                <span class="image-label">${escapeHtml(label)}</span>
+              </div>`;
+    }
+
+    function getArtworkImageCandidates(artwork) {
+      const candidates = [];
+      if (Array.isArray(artwork.imageCandidates)) candidates.push(...artwork.imageCandidates);
+      if (stableArtworkImages[artwork.id]) candidates.push(stableArtworkImages[artwork.id]);
+      if (artwork.imageUrl) candidates.push(artwork.imageUrl);
+      const commonsFilePath = getCommonsFilePathCandidate(artwork.imageUrl);
+      if (commonsFilePath) candidates.push(commonsFilePath);
+      return unique(candidates);
+    }
+
+    function getCommonsFilePathCandidate(url) {
+      if (!url || !url.includes("wikimedia.org")) return "";
+      const fileName = decodeURIComponent(url.split("/").pop() || "");
+      if (!fileName) return "";
+      return "https://commons.wikimedia.org/wiki/Special:FilePath/" + encodeURIComponent(fileName) + "?width=960";
+    }
+
+    function hydrateArtworkLibrary() {
+      getAllArtworks().forEach((artwork) => {
+        const meta = artworkMetadata[artwork.id] || {};
+        const commonsCandidate = getCommonsFilePathCandidate(artwork.imageUrl);
+        const imageCandidates = unique([
+          ...(meta.imageCandidates || []),
+          stableArtworkImages[artwork.id],
+          artwork.imageUrl,
+          commonsCandidate
+        ]);
+        Object.assign(artwork, {
+          imageCandidates,
+          shortIntro: meta.shortIntro || artwork.story,
+          visualTags: unique([...(meta.visualTags || []), ...(artwork.colorMood || []), ...(artwork.tags || []).filter(isColorTag)]),
+          themeTags: unique([...(meta.themeTags || []), ...(artwork.tags || [])]),
+          compositionTags: unique([...(meta.compositionTags || []), ...(artwork.composition || [])]),
+          emotionTags: unique([...(meta.emotionTags || []), ...(artwork.emotion || [])]),
+          styleTags: unique([...(meta.styleTags || []), ...styleToTags(artwork.style)]),
+          bestFor: meta.bestFor || [],
+          avoidIf: meta.avoidIf || [],
+          era: meta.era || artwork.style,
+          detailedIntro: meta.detailedIntro || artwork.story,
+          artistLife: meta.artistLife || artwork.artistBio,
+          historicalContext: meta.historicalContext || getEraBackground(artwork)
+        });
+        if (!artwork.imageUrl && imageCandidates[0]) artwork.imageUrl = imageCandidates[0];
+      });
+    }
+
+    function renderArtworkFallback(artwork, visible = false) {
+      return `
+                <div class="art-fallback" ${visible ? 'style="display:grid;"' : ""}>
+                  <div>
+                    <strong>${escapeHtml(artwork.title)}</strong>
+                    <span>${escapeHtml(artwork.artist)} · ${escapeHtml(artwork.year)}</span>
+                    <span class="fallback-museum">${escapeHtml(artwork.museum)}</span>
+                    <span class="fallback-license">${escapeHtml(artwork.license)}</span>
+                  </div>
+                </div>`;
+    }
+
+    function renderTop3Matches(match, userFeatures) {
+      const topThree = match.displayMatches || match.ranked.slice(0, 3);
+      return `
+        <section class="top3-section">
+          <div class="top3-head">
+            <div>
+              <h3>Top3 动态近似名画</h3>
+              <p>系统把你的颜色、线条、留白和构图拆成线索，分别生成综合、情绪、构图 / 风格三个维度的真实名画候选。</p>
+            </div>
+          </div>
+          <div class="top3-grid">
+            ${topThree.map((item, index) => {
+              const parts = generateSimilarityParts(userFeatures, item.artwork, item.matchReasons);
+              const image = safeArtworkImageRenderer(item.artwork, {
+                className: "top-match-image",
+                label: index === 0 ? "Top1 最佳共鸣" : "共鸣名画",
+                loading: "eager"
+              });
+              const matchTypes = ["Top1 最佳共鸣 / Overall Match", "Top2 情绪共鸣 / Mood Match", "Top3 构图或风格共鸣 / Composition Match"];
+              return `
+                <article class="top-match-card" style="--rank:${index}">
+                  <span class="rank-ribbon">TOP ${index + 1}</span>
+                  ${image}
+                  <div class="top-match-body">
+                    <span class="top-match-score">${item.score}% 共鸣</span>
+                    <span class="match-type">${item.matchRole || matchTypes[index]}</span>
+                    <h4>${item.artwork.title}</h4>
+                    <p class="meta">${item.artwork.artist} · ${item.artwork.year} · ${item.artwork.style}</p>
+                    <div class="similar-parts">
+                      ${parts.map((part) => `<span class="similar-pill">${part}</span>`).join("")}
+                    </div>
+                    <ul class="mini-reasons">
+                      ${item.matchReasons.slice(0, 3).map((reason) => `<li>${briefText(reason, 72)}</li>`).join("")}
+                    </ul>
+                    <p>${briefText(item.artwork.shortIntro || item.artwork.story, 86)}</p>
+                  </div>
+                </article>`;
+            }).join("")}
+          </div>
+        </section>`;
+    }
+
+    function renderTopMatchDeepDive(artwork, reasons = []) {
+      return `
+        <section class="info-panel deep-dive-card">
+          <h3>Top1 深度策展报告</h3>
+          <p>这部分展开作品档案、时代背景、作者生平和你这张画的共鸣证据。</p>
+          <div class="deep-dive-grid">
+            <div class="deep-dive-block">
+              <b>作品档案</b>
+              <p>《${artwork.title}》创作于 ${artwork.year}，风格归属为 ${artwork.style}。馆藏 / 来源：${artwork.museum}。版权标记：${artwork.license}。</p>
+            </div>
+            <div class="deep-dive-block">
+              <b>画作背景</b>
+              <p>${artwork.detailedIntro || artwork.story}</p>
+            </div>
+            <div class="deep-dive-block">
+              <b>时代背景</b>
+              <p>${artwork.historicalContext || getEraBackground(artwork)}</p>
+            </div>
+            <div class="deep-dive-block">
+              <b>作者生平</b>
+              <p>${artwork.artistLife || getExpandedArtistBio(artwork)}</p>
+            </div>
+            <div class="deep-dive-block">
+              <b>作品小故事</b>
+              <p>${artwork.funFact}</p>
+            </div>
+            <div class="deep-dive-block">
+              <b>为什么与你的画相似</b>
+              <p>${reasons.slice(0, 3).join(" ")}</p>
+            </div>
+          </div>
+        </section>`;
+    }
+
+    function generateSimilarityParts(userFeatures, artwork, reasons = []) {
+      const parts = [];
+      const colorHits = intersection(userFeatures.dominantColors, artwork.colorMood);
+      const tagHits = intersection(userFeatures.symbolicTags, artwork.tags);
+      if (colorHits.length) parts.push(colorHits.slice(0, 2).map(labelColor).join(" / ") + "主调");
+      if (tagHits.length) parts.push(tagHits.slice(0, 2).join(" / ") + "线索");
+      if (userFeatures.strokeDirection === "swirling") parts.push("曲线运动");
+      if (userFeatures.horizontalLineScore > 0.42) parts.push("横向流动");
+      if (userFeatures.verticalLineScore > 0.42) parts.push("垂直结构");
+      if (userFeatures.circleLikeScore > 0.32) parts.push("圆形轨迹");
+      if (userFeatures.compositionZone === "center-heavy") parts.push("中心构图");
+      if (userFeatures.emptySpaceRatio > 0.94) parts.push("留白感");
+      if (reasons[0] && parts.length < 3) parts.push("情绪共鸣");
+      while (parts.length < 3) parts.push(["色彩关系", "线条能量", "构图位置"][parts.length]);
+      return parts.slice(0, 4);
+    }
+
+    function getExpandedArtistBio(artwork) {
+      const bios = {
+        "Vincent van Gogh": "文森特·梵高出生于荷兰，早年做过画商和传教相关工作，后来几乎以燃烧式的速度投入绘画。他一生经济拮据、精神状态波动明显，却在短短十年左右留下大量作品；他去世后，强烈笔触和情绪化色彩成为现代艺术的重要起点。",
+        "Katsushika Hokusai": "葛饰北斋活跃于江户时代，长期创作浮世绘版画、插图和风景系列。他不断改名、不断换画法，对构图和线条极其敏感；《富岳三十六景》让他成为跨越日本与欧洲现代艺术的重要桥梁。",
+        "Claude Monet": "克洛德·莫奈是法国印象派核心人物。他关注光线在不同时间、天气和水面上的变化，晚年在吉维尼花园反复描绘睡莲，把自然景物推进到近乎抽象的色彩空间。",
+        "Wassily Kandinsky": "瓦西里·康定斯基出生于俄罗斯，后来在德国包豪斯任教。他把音乐感、精神性和几何形态引入绘画，是抽象艺术的重要先驱之一。",
+        "Piet Mondrian": "皮特·蒙德里安来自荷兰，从自然风景逐渐走向垂直线、水平线和原色结构。他的风格派理念深刻影响了平面设计、建筑和现代界面秩序。",
+        "Johannes Vermeer": "约翰内斯·维米尔是荷兰黄金时代画家，作品数量很少，却以室内光线、人物静默和细腻空间闻名。他擅长把日常瞬间处理成安静而持久的心理场景。",
+        "Leonardo da Vinci": "列奥纳多·达·芬奇是文艺复兴盛期代表人物，兼具画家、工程师、解剖研究者与科学观察者身份。他将光学、人体结构和绘画技法融合，使肖像拥有罕见的真实与神秘感。",
+        "Edvard Munch": "爱德华·蒙克来自挪威，是表现主义的重要先驱。他将焦虑、孤独、死亡和欲望等现代心理经验转化为颜色与线条，让风景也成为内心状态。",
+        "Paul Cézanne": "保罗·塞尚是后印象派关键人物，被后来的艺术家称作现代绘画的重要起点。他用苹果、山体和桌面研究体积与结构，影响了立体主义和二十世纪绘画。",
+        "Caspar David Friedrich": "卡斯帕·大卫·弗里德里希是德国浪漫主义代表画家。他常使用背影、山、雾、海和废墟，表现人面对自然与命运时的孤独、敬畏和精神追问。",
+        "Sandro Botticelli": "桑德罗·波提切利活跃于佛罗伦萨文艺复兴早期，线条优雅、人物带有诗意理想化。他的神话题材作品把古典传说与人文主义美学结合起来。",
+        "Gustav Klimt": "古斯塔夫·克里姆特是维也纳分离派代表人物。他把金色装饰、图案、象征和人体情感结合，形成介于绘画、装饰艺术和梦境之间的视觉语言。"
+      };
+      return bios[artwork.artist] || artwork.artistBio;
+    }
+
+    function getEraBackground(artwork) {
+      const style = artwork.style.toLowerCase();
+      if (style.includes("renaissance")) return "文艺复兴时期强调人文主义、透视法和古典精神，艺术家开始更系统地研究人体、空间和现实世界的秩序。";
+      if (style.includes("impressionism")) return "印象派产生于十九世纪后半叶的法国，艺术家走出画室观察真实光线，用松动笔触记录瞬间感受。";
+      if (style.includes("post-impressionism")) return "后印象派延续印象派的色彩实验，但更强调个人情绪、结构和象征表达，为现代艺术打开道路。";
+      if (style.includes("expressionism")) return "表现主义重视内心经验而非表面真实，常用强烈色彩和扭曲线条表达焦虑、精神性与时代震动。";
+      if (style.includes("abstract") || style.includes("stijl") || style.includes("suprematism")) return "二十世纪早期的抽象艺术试图摆脱再现对象，转向颜色、线条、几何和纯形式，回应现代社会的新秩序。";
+      if (style.includes("ukiyo")) return "浮世绘兴盛于江户时代的城市文化，版画以清晰轮廓、平面色彩和大胆构图影响了欧洲现代艺术。";
+      if (style.includes("romanticism")) return "浪漫主义强调个体情感、自然崇高感和不可控力量，常用风景表达精神处境。";
+      if (style.includes("dutch")) return "荷兰黄金时代的绘画常关注室内、日常生活和光线，市民社会的兴起让普通场景也成为重要题材。";
+      return "这幅作品所处的时代正在重新定义“什么可以成为艺术”。它的风格语言与社会、技术和观看方式的变化密切相关。";
+    }
+
+    function briefText(text, limit) {
+      if (!text || text.length <= limit) return text || "";
+      return text.slice(0, limit).replace(/[，。；、\s]+$/, "") + "…";
+    }
+
+    function generateCuratorNotes(userFeatures, match) {
+      const notes = [];
+      const colorText = userFeatures.dominantColors.map(labelColor).slice(0, 3).join("、");
+      notes.push("Color Mood：AI 观察到你的主色接近 " + colorText + "，整体色温为 " + translateTemperature(userFeatures.colorTemperature) + "。");
+      notes.push("Line Energy：线条方向偏 " + describeLineDirection(userFeatures.strokeDirection) + "，平均曲率约 " + Math.round(userFeatures.averageCurvature * 100) + "%，视觉能量为 " + translateEnergy(userFeatures.visualEnergy) + "。");
+      notes.push("Composition：画面重心位于 (" + Math.round(userFeatures.centerOfMass.x * 100) + "%, " + Math.round(userFeatures.centerOfMass.y * 100) + "%)，构图倾向为 " + describeComposition(userFeatures.compositionZone) + "。");
+      if (userFeatures.symbolicChoices.length || userFeatures.themeHint) {
+        const semanticText = userFeatures.symbolicChoices.length ? userFeatures.symbolicChoices.join("、") : "未选择画后意象";
+        notes.push("Style Resonance：主题与意象只作为辅助语境；当前语境为「" + (userFeatures.themeHint || "自由创作") + " / " + semanticText + "」。");
+      } else {
+        notes.push("Style Resonance：你没有额外选择意象，因此结果更依赖实际画面里的颜色、笔迹和留白。");
+      }
+      notes.push("Top1 匹配为《" + match.topMatch.title + "》，共鸣来自视觉、情绪、构图与风格通道的综合接近。");
+      return notes.slice(0, 4);
+    }
+
+    function generateObservationNotes(userFeatures, match) {
+      return generateCuratorNotes(userFeatures, match);
+    }
+
+    function describeLineDirection(direction) {
+      const map = {
+        swirling: "旋转线条",
+        diagonal: "斜向动势",
+        horizontal: "水平线条",
+        vertical: "垂直线条",
+        mixed: "混合线条"
+      };
+      return map[direction] || "线条方向";
+    }
+
+    function describeComposition(zone) {
+      const map = {
+        "center-heavy": "中心主体",
+        "left-weighted": "左侧重心",
+        "right-weighted": "右侧重心",
+        "upper-heavy": "上方重心",
+        "lower-heavy": "下方重心",
+        "open-space": "开放留白",
+        balanced: "均衡构图"
+      };
+      return map[zone] || zone;
+    }
+
+    function translateTemperature(temperature) {
+      return { cool: "冷色", warm: "暖色", neutral: "中性" }[temperature] || temperature;
+    }
+
+    function translateEnergy(energy) {
+      return { high: "高", medium: "中", low: "低" }[energy] || energy;
+    }
+
+    function showResultCard(match, userFeatures, thumbnail) {
+      const artwork = match.topMatch;
+      const persona = generatePersona(userFeatures, artwork);
+      const statusLabel = match.score >= 80 ? "名画强共鸣卡" : match.score >= 60 ? "相近风格原创卡" : "原创艺术人格卡";
+      const shareText = "我随手画了一幅画，AI 策展人说它和一幅世界名画产生了 " + match.score + "% 的共鸣。我的艺术人格是：" + persona.name + "。";
+      const resultSection = document.getElementById("resultSection");
+      const card = document.getElementById("resultCard");
+      const tags = unique([...userFeatures.symbolicTags.slice(0, 6), ...(artwork.themeTags || []), ...(artwork.visualTags || [])]).slice(0, 12);
+      const overlayLabels = buildOverlayLabels(userFeatures, artwork);
+      const scoreCaption = getScoreCaption(match.score, artwork);
+      const top3Section = renderTop3Matches(match, userFeatures);
+      const deepDive = renderTopMatchDeepDive(artwork, match.matchReasons);
+      const observationNotes = generateObservationNotes(userFeatures, match);
+      const topSimilarityParts = generateSimilarityParts(userFeatures, artwork, match.matchReasons).slice(0, 3);
+      const topArtworkImage = safeArtworkImageRenderer(artwork, {
+        className: "image-tile masterpiece-tile",
+        label: "匹配名画",
+        loading: "eager"
+      });
+      const comparisonArtworkImage = safeArtworkImageRenderer(artwork, {
+        className: "compare-pane masterpiece-panel",
+        label: "匹配名画",
+        overlayHtml: `
+                  <div class="morph-overlay" aria-hidden="true">
+                    <img class="user-outline" src="${thumbnail}" alt="" />
+                    ${overlayLabels.lines}
+                    ${overlayLabels.callouts}
+                  </div>`
+      });
+
+      currentResult = {
+        artwork,
+        score: match.score,
+        parts: match.parts,
+        reasons: match.matchReasons,
+        userFeatures,
+        thumbnail,
+        persona,
+        shareText,
+        topMatches: (match.displayMatches || match.ranked).slice(0, 3),
+        createdAt: new Date()
+      };
+
+      card.innerHTML = `
+        <section class="curator-summary">
+          <div class="summary-main">
+            <span class="score-badge">${statusLabel} / AI Curator Report</span>
+            <h2>${persona.name}</h2>
+            <p class="score-caption">${persona.description}</p>
+            <ul class="observation-list">${observationNotes.map((note) => `<li>${note}</li>`).join("")}</ul>
+          </div>
+          <aside class="summary-score">
+            <span class="mode-kicker">Classic Resonance Index</span>
+            <div class="score-number">${match.score}%</div>
+            <p>${scoreCaption}</p>
+          </aside>
+        </section>
+
+        <section class="top1-card">
+          <div>
+            <div class="artwork-showcase">
+              <div class="image-tile small">
+                <img src="${thumbnail}" alt="用户画作缩略图" />
+                <span class="image-label">你的画作</span>
+              </div>
+              ${topArtworkImage}
+            </div>
+          </div>
+          <div class="top1-meta">
+            <span class="score-badge">Top1 最佳共鸣名画 / Overall Match</span>
+            <h2>${artwork.title}</h2>
+            <p>${artwork.artist} · ${artwork.year} · ${artwork.style}</p>
+            <div class="top1-score-line"><strong>${match.score}% 共鸣指数</strong><span>${persona.name}</span></div>
+            <p class="top1-intro">${artwork.shortIntro || briefText(artwork.story, 80)}</p>
+            <p>${artwork.museum}</p>
+            <span class="open-access">${artwork.license}</span>
+            <div class="similar-parts top1-parts">
+              ${topSimilarityParts.map((part) => `<span class="similar-pill">${part}</span>`).join("")}
+            </div>
+            <div class="tag-row">${tags.map((tag) => `<span class="tag">#${tag}</span>`).join("")}</div>
+            <div class="share-row">
+              <button class="btn small primary" type="button" id="topOverlayJumpBtn">查看相似区域</button>
+              <button class="btn small ghost" type="button" id="topSaveGalleryBtn">收藏到我的迷你美术馆</button>
+              <button class="btn small ghost" type="button" id="topCopyShareBtn">复制分享文案</button>
+              <a class="btn primary" href="${artwork.sourceUrl}" target="_blank" rel="noreferrer">查看馆藏来源</a>
+            </div>
+          </div>
+        </section>
+
+        ${top3Section}
+
+        <section class="details-shell" id="reportDetails">
+          <button class="btn details-toggle" type="button" id="toggleReportBtn">
+            <span>展开 AI 策展报告</span>
+            <span>＋</span>
+          </button>
+          <div class="details-content">
+            <div class="content-grid">
+              <section class="info-panel">
+                <h3>为什么相似</h3>
+                <ol class="reason-list">${match.matchReasons.map((reason) => `<li>${reason}</li>`).join("")}</ol>
+              </section>
+
+              <section class="info-panel">
+                <h3>名画背景</h3>
+                <p>${artwork.detailedIntro || artwork.story}</p>
+                <p style="margin-top:12px;">${artwork.artistLife || artwork.artistBio}</p>
+                <p style="margin-top:12px;color:#8b6b36;">作品小故事：${artwork.funFact}</p>
+              </section>
+            </div>
+            ${deepDive}
+          </div>
+        </section>
+
+        <section class="info-panel comparison-card" id="comparisonCard" style="margin-top:18px;">
+          <h3>用户画作 × 名画 Morphing Overlay</h3>
+          <p>点击后，用户画作轮廓会覆盖到匹配名画上，系统用发光线条标出相似区域。</p>
+          <div class="comparison-grid">
+            <div class="compare-pane user-art-panel">
+              <img src="${thumbnail}" alt="用户画作对照" />
+              <span class="image-label">你的画作</span>
+            </div>
+            ${comparisonArtworkImage}
+          </div>
+          <div class="share-row">
+            <button class="btn small primary" type="button" id="overlayBtn">查看相似区域</button>
+          </div>
+        </section>
+
+        <section class="curator-panel">
+          <div class="curator-avatar">AI</div>
+          <div class="curator-copy">
+            <header>
+              <b>AI 策展人语音式讲解</b>
+              <button class="btn small ghost" type="button" id="skipTypingBtn">跳过动画</button>
+            </header>
+            <div class="curator-text" id="curatorText"></div>
+          </div>
+        </section>
+
+        <section class="share-card" id="shareCard">${shareText}</section>
+        <div class="share-row">
+          <button class="btn primary" type="button" id="saveGalleryBtn">收藏到我的迷你美术馆</button>
+          <button class="btn ghost" type="button" id="copyShareBtn">复制分享文案</button>
+          <button class="btn ghost" type="button" id="drawAgainBtn">再画一次</button>
+          <a class="btn ghost" href="${artwork.sourceUrl}" target="_blank" rel="noreferrer">查看馆藏来源</a>
+        </div>
+      `;
+
+      resultSection.hidden = false;
+      card.classList.remove("revealed");
+      requestAnimationFrame(() => card.classList.add("revealed"));
+      resultSection.scrollIntoView({ behavior: "smooth", block: "start" });
+
+      document.getElementById("overlayBtn").addEventListener("click", toggleMorphingOverlay);
+      document.getElementById("topOverlayJumpBtn").addEventListener("click", () => {
+        document.getElementById("comparisonCard").scrollIntoView({ behavior: "smooth", block: "center" });
+        if (!document.getElementById("comparisonCard").classList.contains("overlay-active")) toggleMorphingOverlay();
+      });
+      document.getElementById("topSaveGalleryBtn").addEventListener("click", saveToMiniGallery);
+      document.getElementById("topCopyShareBtn").addEventListener("click", copyShareText);
+      document.getElementById("toggleReportBtn").addEventListener("click", toggleReportDetails);
+      document.getElementById("skipTypingBtn").addEventListener("click", skipCuratorTyping);
+      document.getElementById("saveGalleryBtn").addEventListener("click", saveToMiniGallery);
+      document.getElementById("copyShareBtn").addEventListener("click", copyShareText);
+      document.getElementById("drawAgainBtn").addEventListener("click", () => {
+        clearCanvas();
+        resultSection.hidden = true;
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+
+      startCuratorTyping(match, userFeatures, persona);
+    }
+
+    function getScoreCaption(score, artwork) {
+      if (score >= 80) {
+        return "Classic Resonance Index 已达到强共鸣。AI 策展人认为你的作品与《" + artwork.title + "》共享了明显的色彩、线条、构图和情绪骨架。";
+      }
+      if (score >= 60) {
+        return "这不是复制某幅名画，而是一张相近风格原创卡。它借用了艺术史里的气候，但保留了你自己的偶然性。";
+      }
+      return "系统没有强行把你塞进某幅名画，而是生成了原创艺术人格，并推荐最靠近的一条艺术史线索。";
+    }
+
+    function buildOverlayLabels(userFeatures, artwork) {
+      const labels = [];
+      const colorHits = intersection(userFeatures.dominantColors, artwork.colorMood);
+      const tagHits = intersection(userFeatures.symbolicTags, unique([...(artwork.themeTags || []), ...(artwork.visualTags || []), ...(artwork.compositionTags || [])]));
+      if (userFeatures.upperColorRatio > 0.48 && userFeatures.colorTemperature === "cool") {
+        labels.push("你的上半部分冷色区域触发了夜空 / 海面共鸣。");
+      }
+      if (userFeatures.averageCurvature > 0.32 || userFeatures.strokeDirection === "swirling" || (artwork.visualTags || []).join(" ").includes("curved")) {
+        labels.push("你的弧形线条与作品中的流动感相似。");
+      }
+      if (colorHits.length) {
+        labels.push("你的" + colorHits.map(labelColor).join("、") + "区域与名画色彩气候相互靠近。");
+      }
+      if (userFeatures.compositionZone === "center-heavy" || (artwork.compositionTags || []).join(" ").includes("center")) {
+        labels.push("你的画面重心接近这幅作品的主体构图。");
+      }
+      if (userFeatures.visualEnergy === "high" || userFeatures.strokeSummary.totalStrokes > 8) {
+        labels.push("你的高密度线条让系统识别到表现主义式能量。");
+      }
+      if (tagHits.length && labels.length < 3) {
+        labels.push("主题提示与画后意象只作为辅助，帮助解释 " + tagHits.slice(0, 2).join(" / ") + " 视觉线索。");
+      }
+      if (labels.length < 3) labels.push("色块、留白和方向之间形成了可解释的视觉回声。");
+      while (labels.length < 3) labels.push("这个区域不是精准识别，而是 AI 策展人的相似线索标注。");
+
+      const linePositions = [
+        { left: "18%", top: "28%", rot: "-18deg", delay: "0.08s" },
+        { left: "34%", top: "58%", rot: "14deg", delay: "0.24s" },
+        { left: "52%", top: "40%", rot: "-34deg", delay: "0.38s" }
+      ];
+      const calloutPositions = [
+        { left: "7%", top: "12%", delay: "0.42s" },
+        { left: "42%", top: "62%", delay: "0.58s" },
+        { left: "48%", top: "18%", delay: "0.74s" }
+      ];
+
+      return {
+        lines: linePositions.map((item) => `<i class="glow-line" style="--left:${item.left};--top:${item.top};--rot:${item.rot};--delay:${item.delay};"></i>`).join(""),
+        callouts: labels.slice(0, 3).map((label, index) => {
+          const pos = calloutPositions[index];
+          return `<span class="callout" style="--left:${pos.left};--top:${pos.top};--delay:${pos.delay};">${label}</span>`;
+        }).join("")
+      };
+    }
+
+    function toggleMorphingOverlay() {
+      const card = document.getElementById("comparisonCard");
+      const button = document.getElementById("overlayBtn");
+      const active = !card.classList.contains("overlay-active");
+      card.classList.toggle("overlay-active", active);
+      button.textContent = active ? "隐藏相似区域" : "查看相似区域";
+      if (active) showToast("相似区域已点亮：用户轮廓正在覆盖到名画上。");
+    }
+
+    function toggleReportDetails() {
+      const shell = document.getElementById("reportDetails");
+      const button = document.getElementById("toggleReportBtn");
+      const active = !shell.classList.contains("open");
+      shell.classList.toggle("open", active);
+      button.querySelector("span").textContent = active ? "收起 AI 策展报告" : "展开 AI 策展报告";
+      button.querySelector("span:last-child").textContent = active ? "－" : "＋";
+    }
+
+    function startCuratorTyping(match, userFeatures, persona) {
+      clearTimeout(typingTimer);
+      const artwork = match.topMatch;
+      const colorText = userFeatures.dominantColors.map(labelColor).join("、");
+      const choiceText = userFeatures.symbolicChoices.length ? userFeatures.symbolicChoices.join("、") : "未额外选择意象";
+      const reasonText = match.matchReasons[0] || "它们在色彩和构图上形成了接近的视觉回声。";
+      const compositionText = describeComposition(userFeatures.compositionZone);
+
+      const paragraphs = [
+        "我看到了什么：你的画面里出现了 " + colorText + "，线条方向偏 " + describeLineDirection(userFeatures.strokeDirection) + "，平均曲率约 " + Math.round(userFeatures.averageCurvature * 100) + "%，构图倾向为" + compositionText + "。这些是视觉线索，不是对具体物体的绝对识别。画后意象：" + choiceText + "。",
+        "它为什么像这幅名画：" + reasonText + " 你的颜色、线条能量、留白和主题语境共同指向《" + artwork.title + "》。其中视觉通道仍然是主要依据，意象确认只提供辅助语境。",
+        "这幅名画背后的故事：" + (artwork.detailedIntro || artwork.story) + " " + (artwork.historicalContext || getEraBackground(artwork)) + " 小故事：" + artwork.funFact + " 所以，我给你的艺术人格命名为「" + persona.name + "」。"
+      ];
+
+      fullCuratorText = paragraphs.join("\n\n");
+      const target = document.getElementById("curatorText");
+      target.innerHTML = '<span class="typing-cursor"></span>';
+      let index = 0;
+
+      const tick = () => {
+        index += index < 28 ? 2 : 3;
+        const visible = fullCuratorText.slice(0, index);
+        target.innerHTML = escapeHtml(visible).replace(/\n/g, "<br>") + '<span class="typing-cursor"></span>';
+        if (index < fullCuratorText.length) {
+          typingTimer = setTimeout(tick, index % 17 === 0 ? 80 : 22);
+        }
+      };
+      typingTimer = setTimeout(tick, 280);
+    }
+
+    function skipCuratorTyping() {
+      clearTimeout(typingTimer);
+      const target = document.getElementById("curatorText");
+      if (target) {
+        target.innerHTML = escapeHtml(fullCuratorText).replace(/\n/g, "<br>");
+        showToast("已显示完整策展人讲解。");
+      }
+    }
+
+    function saveToMiniGallery() {
+      if (!currentResult) return;
+      resultSerial += 1;
+      galleryItems.unshift({
+        serial: resultSerial,
+        thumbnail: currentResult.thumbnail,
+        artworkTitle: currentResult.artwork.title,
+        score: currentResult.score,
+        persona: currentResult.persona.name,
+        time: formatTime(currentResult.createdAt)
+      });
+      galleryItems = galleryItems.slice(0, 12);
+      renderMiniGallery();
+      document.getElementById("miniGallery").scrollIntoView({ behavior: "smooth", block: "start" });
+      showToast("已收藏到我的迷你美术馆。");
+    }
+
+    function renderMiniGallery() {
+      const grid = document.getElementById("galleryGrid");
+      if (!galleryItems.length) {
+        grid.innerHTML = '<div class="gallery-empty">还没有收藏。完成一次 AI 艺术鉴定后，可以把结果放进这里。</div>';
+        return;
+      }
+      grid.innerHTML = galleryItems.map((item) => `
+        <article class="gallery-item">
+          <img src="${item.thumbnail}" alt="收藏的用户画作 ${item.serial}" />
+          <div>
+            <b>#${item.serial} · ${item.score}% · ${item.persona}</b>
+            <p>匹配：${item.artworkTitle}<br />收藏时间：${item.time}</p>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    async function copyShareText() {
+      if (!currentResult) return;
+      let copied = false;
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(currentResult.shareText);
+          copied = true;
+        } else {
+          const textarea = document.createElement("textarea");
+          textarea.value = currentResult.shareText;
+          textarea.style.position = "fixed";
+          textarea.style.opacity = "0";
+          textarea.setAttribute("readonly", "");
+          document.body.appendChild(textarea);
+          textarea.focus();
+          textarea.select();
+          copied = document.execCommand("copy");
+          textarea.remove();
+        }
+        showToast(copied ? "分享文案已复制" : "分享文案已准备好，可在结果卡底部查看。");
+      } catch (error) {
+        showToast("分享文案已准备好，可在结果卡底部查看。");
+      }
+    }
+
+    function museumApiSearch() {
+      return Promise.resolve({
+        message: "Demo 当前使用本地图库索引。未来可在此接入 The Met、Art Institute of Chicago 或 Rijksmuseum IIIF API。",
+        results: []
+      });
+    }
+
+    async function analyzeDrawingWithVisionAI(imageDataUrl, localFeatures) {
+      // 预留接口：未来应由后端安全调用视觉模型，把用户画作截图转成结构化特征。
+      // 当前黑客松 Demo 不调用真实 API、不暴露 API key，默认继续使用本地 Canvas + stroke 分析。
+      void imageDataUrl;
+      void localFeatures;
+      return {
+        subjects: [],
+        colorPalette: [],
+        visibleObjects: [],
+        abstractShapes: [],
+        lineQuality: [],
+        composition: "",
+        mood: [],
+        possibleArtStyles: [],
+        confidence: 0,
+        shortDescription: ""
+      };
+    }
+
+    function tryNextArtworkImage(image) {
+      let candidates = [];
+      try {
+        candidates = JSON.parse(image.dataset.candidates || "[]");
+      } catch (error) {
+        candidates = [];
+      }
+      const currentIndex = Number(image.dataset.candidateIndex || 0);
+      const nextIndex = currentIndex + 1;
+      if (candidates[nextIndex]) {
+        image.dataset.candidateIndex = String(nextIndex);
+        image.src = candidates[nextIndex];
+        return;
+      }
+      handleArtworkImageError(image);
+    }
+
+    function handleArtworkImageError(image) {
+      image.style.display = "none";
+      const fallback = image.nextElementSibling;
+      if (fallback && fallback.classList.contains("art-fallback")) {
+        fallback.style.display = "grid";
+      }
+    }
+
+    function categorizeRgb(r, g, b) {
+      const { h, s, l } = rgbToHsl(r, g, b);
+      if (l < 14) return "black";
+      if (s < 12 && l > 82) return "white";
+      if (s < 14) return l > 55 ? "gray" : "black";
+      if (h >= 345 || h < 14) return l < 34 ? "brown" : "red";
+      if (h < 34) return l < 38 ? "brown" : "orange";
+      if (h < 52) return s < 45 ? "gold" : "orange";
+      if (h < 72) return l > 62 ? "yellow" : "gold";
+      if (h < 165) return "green";
+      if (h < 198) return "cyan";
+      if (h < 244) return "blue";
+      if (h < 270) return "indigo";
+      if (h < 312) return "purple";
+      if (h < 345) return "pink";
+      return "gray";
+    }
+
+    function rgbToHsl(r, g, b) {
+      r /= 255; g /= 255; b /= 255;
+      const max = Math.max(r, g, b);
+      const min = Math.min(r, g, b);
+      let h = 0;
+      let s = 0;
+      const l = (max + min) / 2;
+      if (max !== min) {
+        const d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        switch (max) {
+          case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+          case g: h = (b - r) / d + 2; break;
+          case b: h = (r - g) / d + 4; break;
+        }
+        h *= 60;
+      }
+      return { h, s: s * 100, l: l * 100 };
+    }
+
+    function compositionToKeywords(balance, direction) {
+      const map = {
+        "center-heavy": ["center", "single figure", "center figure", "balanced"],
+        "left-weighted": ["asymmetric", "diagonal", "left light"],
+        "right-weighted": ["asymmetric", "diagonal"],
+        "upper-heavy": ["upper sky", "large wave", "vast landscape"],
+        "lower-heavy": ["table", "still life", "village below"],
+        "open-space": ["minimal", "quiet center", "clear sky"],
+        balanced: ["balanced", "soft balance", "symmetry"]
+      };
+      const directionMap = {
+        swirling: ["swirling motion", "flowing lines", "wavy sky", "movement"],
+        diagonal: ["diagonal", "diagonal motion", "speed"],
+        horizontal: ["grid", "balanced"],
+        vertical: ["vertical vase", "architecture"],
+        mixed: ["all-over", "dynamic balance"]
+      };
+      return unique([...(map[balance] || []), ...(directionMap[direction] || [])]);
+    }
+
+    function compositionBonus(balance, artworkComposition) {
+      const text = artworkComposition.join(" ").toLowerCase();
+      if (balance === "center-heavy" && text.includes("center")) return 0.32;
+      if (balance.includes("weighted") && (text.includes("asymmetric") || text.includes("diagonal"))) return 0.25;
+      if (balance === "open-space" && (text.includes("minimal") || text.includes("clear"))) return 0.25;
+      if (balance === "balanced" && (text.includes("balanced") || text.includes("symmetry"))) return 0.25;
+      return 0;
+    }
+
+    function artworkEnergy(artwork) {
+      const pool = artwork.tags.concat(artwork.emotion, artwork.composition).join(" ").toLowerCase();
+      if (/(dramatic|intense|movement|speed|wave|chaotic|restless|diagonal|swirl|powerful)/.test(pool)) return "high";
+      if (/(minimal|quiet|calm|still life|interior|focused|empty)/.test(pool)) return "low";
+      return "medium";
+    }
+
+    function energyAdjacent(a, b) {
+      return (a === "medium" && (b === "high" || b === "low")) || (b === "medium" && (a === "high" || a === "low"));
+    }
+
+    function deterministicSurprise(userFeatures, artwork) {
+      const input = artwork.id + userFeatures.symbolicTags.join("") + userFeatures.dominantColors.join("") + userFeatures.strokeCount;
+      let hash = 0;
+      for (let i = 0; i < input.length; i += 1) {
+        hash = (hash << 5) - hash + input.charCodeAt(i);
+        hash |= 0;
+      }
+      return (Math.abs(hash) % 100) / 100;
+    }
+
+    function overlapRatio(listA, listB) {
+      const a = unique(listA.map(String));
+      const b = unique(listB.map(String));
+      if (!a.length || !b.length) return 0;
+      const hit = intersection(a, b).length;
+      return hit / Math.min(Math.max(1, a.length), Math.max(1, b.length));
+    }
+
+    function intersection(listA, listB) {
+      const b = new Set(listB.map(String));
+      return unique(listA.map(String).filter((item) => b.has(item)));
+    }
+
+    function unique(list) {
+      return Array.from(new Set(list.filter(Boolean)));
+    }
+
+    function isColorTag(tag) {
+      return ["blue", "cyan", "purple", "pink", "red", "orange", "yellow", "gold", "green", "white", "gray", "black", "brown", "indigo"].includes(tag);
+    }
+
+    function labelColor(color) {
+      return colorLabels[color] || color;
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove("show"), 2200);
+    }
+
+    function escapeHtml(text) {
+      return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function normalizeAngle(angle) {
+      while (angle > Math.PI) angle -= Math.PI * 2;
+      while (angle < -Math.PI) angle += Math.PI * 2;
+      return angle;
+    }
+
+    function clamp(value, min, max) {
+      return Math.min(max, Math.max(min, value));
+    }
+
+    function rand(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    function average(values, fallback) {
+      const clean = values.filter((value) => Number.isFinite(value));
+      if (!clean.length) return fallback;
+      return clean.reduce((sum, value) => sum + value, 0) / clean.length;
+    }
+
+    function deepClone(value) {
+      return JSON.parse(JSON.stringify(value));
+    }
+
+    function formatTime(date) {
+      return new Intl.DateTimeFormat("zh-CN", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit"
+      }).format(date);
+    }
+
+    window.addEventListener("DOMContentLoaded", initCanvas);
+  </script>
+</body>
+</html>

@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Codex 小练习：口袋记账</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: #182033;
+      background: #f3f5f8;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    .phone {
+      width: min(430px, 100%);
+      min-height: 760px;
+      background: #fbfcfe;
+      border: 1px solid #dce2eb;
+      border-radius: 32px;
+      box-shadow: 0 24px 70px rgba(28, 39, 60, 0.2);
+      overflow: hidden;
+    }
+
+    header {
+      padding: 28px 22px 18px;
+      background: #152033;
+      color: #ffffff;
+    }
+
+    .topline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 22px;
+      font-size: 14px;
+      color: #b8c3d4;
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: 26px;
+      letter-spacing: 0;
+    }
+
+    .balance {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .metric {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 14px;
+      padding: 12px;
+    }
+
+    .metric span {
+      display: block;
+      font-size: 12px;
+      color: #bac7d8;
+      margin-bottom: 4px;
+    }
+
+    .metric strong {
+      font-size: 20px;
+    }
+
+    main {
+      padding: 18px;
+    }
+
+    form {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    input,
+    select,
+    button {
+      min-height: 46px;
+      border-radius: 14px;
+      font-size: 15px;
+      font-family: inherit;
+    }
+
+    input,
+    select {
+      width: 100%;
+      border: 1px solid #d8dee8;
+      background: #ffffff;
+      padding: 0 13px;
+      color: #182033;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    button {
+      border: 0;
+      background: #2474e8;
+      color: #ffffff;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    button.secondary {
+      background: #e7ebf1;
+      color: #182033;
+    }
+
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 18px 0 10px;
+      font-weight: 800;
+    }
+
+    .hint {
+      font-size: 13px;
+      color: #6f7a8d;
+      font-weight: 400;
+    }
+
+    .chips {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .chip {
+      border: 1px solid #dfe5ee;
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 10px;
+      min-height: 70px;
+    }
+
+    .chip span {
+      display: block;
+      color: #6f7a8d;
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+
+    .chip strong {
+      font-size: 16px;
+    }
+
+    .list {
+      display: grid;
+      gap: 8px;
+      max-height: 250px;
+      overflow: auto;
+      padding-right: 2px;
+    }
+
+    .item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: #ffffff;
+      border: 1px solid #e1e6ef;
+      border-radius: 14px;
+      padding: 12px;
+    }
+
+    .item-name {
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .item-meta {
+      color: #758094;
+      font-size: 12px;
+    }
+
+    .amount {
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .income {
+      color: #0b8f67;
+    }
+
+    .expense {
+      color: #d84d38;
+    }
+
+    .empty {
+      border: 1px dashed #cad3df;
+      border-radius: 14px;
+      padding: 22px;
+      text-align: center;
+      color: #718096;
+      background: #ffffff;
+    }
+  </style>
+</head>
+<body>
+  <div class="phone">
+    <header>
+      <div class="topline">
+        <span>口袋记账</span>
+        <span id="today"></span>
+      </div>
+      <h1>今天花了多少？</h1>
+      <div class="balance">
+        <div class="metric">
+          <span>当前余额</span>
+          <strong id="balance">¥0</strong>
+        </div>
+        <div class="metric">
+          <span>总支出</span>
+          <strong id="totalExpense">¥0</strong>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <form id="entryForm">
+        <input id="title" type="text" placeholder="账目名称，例如 奶茶" required>
+        <div class="row">
+          <input id="amount" type="number" min="0.01" step="0.01" placeholder="金额" required>
+          <select id="type">
+            <option value="expense">支出</option>
+            <option value="income">收入</option>
+          </select>
+        </div>
+        <div class="row">
+          <select id="category">
+            <option value="餐饮">餐饮</option>
+            <option value="交通">交通</option>
+            <option value="购物">购物</option>
+            <option value="学习">学习</option>
+            <option value="其他">其他</option>
+          </select>
+          <button type="submit">添加</button>
+        </div>
+      </form>
+
+      <div class="section-title">
+        <span>分类统计</span>
+        <span class="hint">自动计算</span>
+      </div>
+      <div class="chips" id="categoryStats"></div>
+
+      <div class="section-title">
+        <span>最近账目</span>
+        <button class="secondary" id="clearButton" type="button">清空</button>
+      </div>
+      <div class="list" id="list"></div>
+    </main>
+  </div>
+
+  <script>
+    const form = document.querySelector("#entryForm");
+    const titleInput = document.querySelector("#title");
+    const amountInput = document.querySelector("#amount");
+    const typeInput = document.querySelector("#type");
+    const categoryInput = document.querySelector("#category");
+    const list = document.querySelector("#list");
+    const balanceText = document.querySelector("#balance");
+    const totalExpenseText = document.querySelector("#totalExpense");
+    const categoryStats = document.querySelector("#categoryStats");
+    const clearButton = document.querySelector("#clearButton");
+    const today = document.querySelector("#today");
+
+    let entries = JSON.parse(localStorage.getItem("budgetEntries") || "[]");
+
+    today.textContent = new Date().toLocaleDateString("zh-CN", {
+      month: "long",
+      day: "numeric"
+    });
+
+    function money(value) {
+      return `¥${value.toFixed(2).replace(".00", "")}`;
+    }
+
+    function save() {
+      localStorage.setItem("budgetEntries", JSON.stringify(entries));
+    }
+
+    function render() {
+      const income = entries
+        .filter((entry) => entry.type === "income")
+        .reduce((sum, entry) => sum + entry.amount, 0);
+      const expense = entries
+        .filter((entry) => entry.type === "expense")
+        .reduce((sum, entry) => sum + entry.amount, 0);
+
+      balanceText.textContent = money(income - expense);
+      totalExpenseText.textContent = money(expense);
+
+      const categories = ["餐饮", "交通", "购物", "学习", "其他"];
+      categoryStats.innerHTML = categories.map((category) => {
+        const total = entries
+          .filter((entry) => entry.type === "expense" && entry.category === category)
+          .reduce((sum, entry) => sum + entry.amount, 0);
+
+        return `
+          <div class="chip">
+            <span>${category}</span>
+            <strong>${money(total)}</strong>
+          </div>
+        `;
+      }).join("");
+
+      if (entries.length === 0) {
+        list.innerHTML = `<div class="empty">还没有账目，先添加一笔试试。</div>`;
+        return;
+      }
+
+      list.innerHTML = entries.slice().reverse().map((entry) => {
+        const sign = entry.type === "income" ? "+" : "-";
+        const amountClass = entry.type === "income" ? "income" : "expense";
+
+        return `
+          <div class="item">
+            <div>
+              <div class="item-name">${entry.title}</div>
+              <div class="item-meta">${entry.category} · ${entry.date}</div>
+            </div>
+            <div class="amount ${amountClass}">${sign}${money(entry.amount)}</div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      entries.push({
+        title: titleInput.value.trim(),
+        amount: Number(amountInput.value),
+        type: typeInput.value,
+        category: categoryInput.value,
+        date: new Date().toLocaleDateString("zh-CN")
+      });
+
+      form.reset();
+      save();
+      render();
+      titleInput.focus();
+    });
+
+    clearButton.addEventListener("click", () => {
+      entries = [];
+      save();
+      render();
+    });
+
+    render();
+  </script>
+</body>
+</html>

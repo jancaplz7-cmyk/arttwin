@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>雷霆星舰小游戏</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: #eef7ff;
+      background: #070b18;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+    }
+
+    .game {
+      width: min(480px, 100%);
+      border: 1px solid #28445f;
+      border-radius: 8px;
+      background: #0b1020;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+      overflow: hidden;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      background: #111a2c;
+      border-bottom: 1px solid #243a55;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 20px;
+      letter-spacing: 0;
+    }
+
+    .stats {
+      display: flex;
+      gap: 8px;
+      font-weight: 700;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .panel {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: #0d1425;
+      border-top: 1px solid #243a55;
+    }
+
+    .hint {
+      color: #9fb8d6;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    button {
+      min-height: 40px;
+      border: 0;
+      border-radius: 6px;
+      padding: 0 14px;
+      background: #2de0ff;
+      color: #06101e;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: auto;
+      background: #050915;
+      touch-action: none;
+    }
+  </style>
+</head>
+<body>
+  <section class="game" aria-label="雷霆星舰小游戏">
+    <header>
+      <h1>雷霆星舰</h1>
+      <div class="stats">
+        <span>分数 <span id="score">0</span></span>
+        <span>生命 <span id="lives">3</span></span>
+      </div>
+    </header>
+
+    <canvas id="canvas" width="480" height="640"></canvas>
+
+    <div class="panel">
+      <div class="hint">方向键或 A/D 移动，空格开始。手机可按住画面左右滑动。</div>
+      <button id="restart" type="button">重新开始</button>
+    </div>
+  </section>
+
+  <script>
+    const canvas = document.querySelector("#canvas");
+    const ctx = canvas.getContext("2d");
+    const scoreText = document.querySelector("#score");
+    const livesText = document.querySelector("#lives");
+    const restartButton = document.querySelector("#restart");
+
+    const keys = new Set();
+    const ship = {
+      x: canvas.width / 2,
+      y: canvas.height - 78,
+      width: 44,
+      height: 58,
+      speed: 6
+    };
+
+    let bullets = [];
+    let enemies = [];
+    let stars = [];
+    let score = 0;
+    let lives = 3;
+    let running = false;
+    let gameOver = false;
+    let lastShot = 0;
+    let enemyTimer = 0;
+    let frame = 0;
+
+    function resetStars() {
+      stars = Array.from({ length: 90 }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        size: Math.random() * 2 + 0.5,
+        speed: Math.random() * 2 + 0.6
+      }));
+    }
+
+    function resetGame() {
+      bullets = [];
+      enemies = [];
+      score = 0;
+      lives = 3;
+      running = true;
+      gameOver = false;
+      enemyTimer = 0;
+      frame = 0;
+      ship.x = canvas.width / 2;
+      updateStats();
+      resetStars();
+    }
+
+    function updateStats() {
+      scoreText.textContent = score;
+      livesText.textContent = lives;
+    }
+
+    function drawStars() {
+      ctx.fillStyle = "#050915";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      stars.forEach((star) => {
+        star.y += star.speed;
+        if (star.y > canvas.height) {
+          star.y = 0;
+          star.x = Math.random() * canvas.width;
+        }
+        ctx.fillStyle = `rgba(180, 229, 255, ${0.35 + star.size / 4})`;
+        ctx.fillRect(star.x, star.y, star.size, star.size * 2);
+      });
+    }
+
+    function drawShip() {
+      const x = ship.x;
+      const y = ship.y;
+
+      ctx.save();
+      ctx.translate(x, y);
+
+      ctx.fillStyle = "#34e6ff";
+      ctx.beginPath();
+      ctx.moveTo(0, -34);
+      ctx.lineTo(24, 24);
+      ctx.lineTo(0, 12);
+      ctx.lineTo(-24, 24);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.fillStyle = "#f3fbff";
+      ctx.beginPath();
+      ctx.moveTo(0, -20);
+      ctx.lineTo(9, 9);
+      ctx.lineTo(0, 3);
+      ctx.lineTo(-9, 9);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.fillStyle = "#ff7b43";
+      ctx.beginPath();
+      ctx.moveTo(-9, 24);
+      ctx.lineTo(0, 42 + Math.sin(frame / 5) * 5);
+      ctx.lineTo(9, 24);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.restore();
+    }
+
+    function drawBullets() {
+      ctx.fillStyle = "#ffe15c";
+      bullets.forEach((bullet) => {
+        ctx.fillRect(bullet.x - 3, bullet.y - 16, 6, 18);
+      });
+    }
+
+    function drawEnemies() {
+      enemies.forEach((enemy) => {
+        ctx.save();
+        ctx.translate(enemy.x, enemy.y);
+        ctx.fillStyle = enemy.color;
+        ctx.beginPath();
+        ctx.moveTo(0, 24);
+        ctx.lineTo(24, -16);
+        ctx.lineTo(9, -23);
+        ctx.lineTo(0, -12);
+        ctx.lineTo(-9, -23);
+        ctx.lineTo(-24, -16);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.fillStyle = "#160918";
+        ctx.fillRect(-8, -6, 16, 10);
+        ctx.restore();
+      });
+    }
+
+    function drawOverlay() {
+      if (running && !gameOver) {
+        return;
+      }
+
+      ctx.fillStyle = "rgba(3, 8, 18, 0.72)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.textAlign = "center";
+      ctx.fillStyle = "#eef7ff";
+      ctx.font = "800 34px Arial";
+      ctx.fillText(gameOver ? "任务失败" : "雷霆星舰", canvas.width / 2, canvas.height / 2 - 34);
+      ctx.fillStyle = "#a9bed8";
+      ctx.font = "16px Arial";
+      ctx.fillText(gameOver ? `最终得分：${score}` : "按空格或点击重新开始", canvas.width / 2, canvas.height / 2 + 4);
+      ctx.fillText("左右移动，自动开火，别让敌机漏到底部", canvas.width / 2, canvas.height / 2 + 34);
+    }
+
+    function shoot() {
+      if (frame - lastShot < 12) {
+        return;
+      }
+
+      lastShot = frame;
+      bullets.push({ x: ship.x, y: ship.y - 30, speed: 9 });
+    }
+
+    function spawnEnemy() {
+      const size = 36;
+      enemies.push({
+        x: size + Math.random() * (canvas.width - size * 2),
+        y: -30,
+        radius: 25,
+        speed: 2.1 + Math.random() * 1.8 + Math.min(score / 600, 2),
+        color: Math.random() > 0.5 ? "#ff4e8a" : "#9b5cff"
+      });
+    }
+
+    function collide(a, b, radius) {
+      const dx = a.x - b.x;
+      const dy = a.y - b.y;
+      return Math.sqrt(dx * dx + dy * dy) < radius;
+    }
+
+    function update() {
+      frame += 1;
+
+      if (!running || gameOver) {
+        return;
+      }
+
+      if (keys.has("ArrowLeft") || keys.has("a")) {
+        ship.x -= ship.speed;
+      }
+      if (keys.has("ArrowRight") || keys.has("d")) {
+        ship.x += ship.speed;
+      }
+      ship.x = Math.max(32, Math.min(canvas.width - 32, ship.x));
+
+      shoot();
+
+      bullets = bullets
+        .map((bullet) => ({ ...bullet, y: bullet.y - bullet.speed }))
+        .filter((bullet) => bullet.y > -20);
+
+      enemyTimer -= 1;
+      if (enemyTimer <= 0) {
+        spawnEnemy();
+        enemyTimer = Math.max(24, 62 - Math.floor(score / 80));
+      }
+
+      enemies.forEach((enemy) => {
+        enemy.y += enemy.speed;
+      });
+
+      bullets.forEach((bullet) => {
+        enemies.forEach((enemy) => {
+          if (!enemy.hit && collide(bullet, enemy, enemy.radius)) {
+            enemy.hit = true;
+            bullet.hit = true;
+            score += 10;
+          }
+        });
+      });
+
+      bullets = bullets.filter((bullet) => !bullet.hit);
+      enemies = enemies.filter((enemy) => {
+        if (enemy.hit) {
+          return false;
+        }
+        if (enemy.y > canvas.height + 35) {
+          lives -= 1;
+          if (lives <= 0) {
+            lives = 0;
+            gameOver = true;
+            running = false;
+          }
+          return false;
+        }
+        return true;
+      });
+
+      updateStats();
+    }
+
+    function render() {
+      drawStars();
+      drawBullets();
+      drawEnemies();
+      drawShip();
+      drawOverlay();
+    }
+
+    function loop() {
+      update();
+      render();
+      requestAnimationFrame(loop);
+    }
+
+    window.addEventListener("keydown", (event) => {
+      if (event.key === " ") {
+        event.preventDefault();
+        if (!running) {
+          resetGame();
+        }
+      }
+      keys.add(event.key);
+    });
+
+    window.addEventListener("keyup", (event) => {
+      keys.delete(event.key);
+    });
+
+    canvas.addEventListener("pointermove", (event) => {
+      if (!running || gameOver) {
+        return;
+      }
+      const rect = canvas.getBoundingClientRect();
+      const scale = canvas.width / rect.width;
+      ship.x = (event.clientX - rect.left) * scale;
+    });
+
+    canvas.addEventListener("pointerdown", () => {
+      if (!running) {
+        resetGame();
+      }
+    });
+
+    restartButton.addEventListener("click", resetGame);
+
+    resetStars();
+    render();
+    loop();
+  </script>
+</body>
+</html>

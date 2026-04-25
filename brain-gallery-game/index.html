@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="脑内美术馆 Brain Gallery - 轻量级互动空间网页游戏" />
+    <title>脑内美术馆 Brain Gallery</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="global-grain" aria-hidden="true"></div>
+    <div class="global-glow glow-a" aria-hidden="true"></div>
+    <div class="global-glow glow-b" aria-hidden="true"></div>
+
+    <main id="app">
+      <section id="homeScreen" class="screen home-screen is-active">
+        <div class="home-hall">
+          <div class="home-copy">
+            <p class="kicker">LIGHT INTERACTIVE SPACE</p>
+            <h1>脑内美术馆 <span>Brain Gallery</span></h1>
+            <p class="slogan">进入你的脑海，把看不见的情绪策展成一场展览。</p>
+            <p class="home-note">4 个房间，4 次选择，生成你的个人内心展览海报。</p>
+            <button id="startBtn" class="primary-action" type="button">领取入场券</button>
+          </div>
+          <div class="home-portal" aria-hidden="true">
+            <div class="museum-door">
+              <span>INNER<br />GALLERY</span>
+            </div>
+            <div class="hall-floor"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="ticketScreen" class="screen ticket-screen">
+        <div class="ticket-card">
+          <p class="kicker">VISITOR PASS</p>
+          <h2>领取你的入场券</h2>
+          <label for="playerName">访客昵称</label>
+          <input id="playerName" maxlength="12" placeholder="例如：小李 / Moon / 早八幸存者" autocomplete="off" />
+          <p class="ticket-label">选择今天带进展馆的心情</p>
+          <div id="moodGrid" class="mood-grid"></div>
+          <p id="ticketError" class="error-text" role="alert"></p>
+          <div class="ticket-actions">
+            <button id="enterBtn" class="primary-action" type="button">开始探索</button>
+            <button id="backHomeBtn" class="secondary-action" type="button">返回入口</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="gameScreen" class="screen game-screen">
+        <header class="game-header">
+          <div>
+            <p class="kicker">BRAIN GALLERY</p>
+            <h2 id="roomTitle">房间名</h2>
+            <p id="roomIntro">房间说明</p>
+          </div>
+          <div class="status-panel">
+            <span id="visitorInfo">Visitor</span>
+            <span id="roomIndex">Room 1 / 4</span>
+            <span id="fragmentCount">Fragments 0</span>
+          </div>
+        </header>
+
+        <section id="sceneStage" class="scene-stage" aria-label="互动房间舞台">
+          <div id="room" class="room">
+            <div class="back-wall"></div>
+            <div class="floor"></div>
+            <div class="ambient-light"></div>
+            <div class="particles" aria-hidden="true">
+              <i></i><i></i><i></i><i></i><i></i><i></i>
+            </div>
+            <div class="furniture-layer" aria-hidden="true">
+              <span class="furniture furniture-a"></span>
+              <span class="furniture furniture-b"></span>
+              <span class="furniture furniture-c"></span>
+            </div>
+            <div id="objectsLayer" class="objects-layer"></div>
+            <button id="portalBtn" class="portal" type="button" disabled>
+              <span></span>
+              <b>进入下一房间</b>
+            </button>
+            <div class="room-progress">
+              <b id="coreState">核心选择未完成</b>
+              <span id="fragmentState">已收集 0 枚碎片</span>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <section id="resultScreen" class="screen result-screen">
+        <div class="result-hall">
+          <article id="poster" class="poster">
+            <div class="poster-line">
+              <span>Brain Gallery Archive</span>
+              <span id="posterNo">NO.0000</span>
+            </div>
+            <div id="posterDate" class="poster-date">0000/00/00</div>
+            <p id="posterVisitor" class="poster-visitor">访客的内心展览</p>
+            <h2 id="resultTitle">人格结果</h2>
+            <p id="hiddenTitle" class="hidden-title">隐藏称号</p>
+            <div class="route">
+              <span>温室</span><i></i><span>剧场</span><i></i><span>档案室</span><i></i><span>修复间</span>
+            </div>
+            <div id="keywordTags" class="keyword-tags"></div>
+            <p id="shareText" class="share-text">分享文案</p>
+            <div class="poster-stats">
+              <div><b id="posterMood">平静</b><span>入馆心情</span></div>
+              <div><b id="posterFragments">0</b><span>收集碎片</span></div>
+              <div><b id="posterComplete">0%</b><span>展览完整度</span></div>
+            </div>
+          </article>
+
+          <aside class="result-report">
+            <p class="kicker">CURATOR REPORT</p>
+            <h3>你为什么得到这个结果</h3>
+            <p id="resultReason" class="result-reason"></p>
+            <h4>四个关键选择</h4>
+            <div id="choiceReview" class="choice-review"></div>
+            <h4>收集到的碎片</h4>
+            <div id="fragmentReview" class="fragment-review"></div>
+            <div class="result-actions">
+              <button id="copyBtn" class="primary-action" type="button">复制结果文案</button>
+              <button id="restartBtn" class="secondary-action" type="button">重新开始</button>
+              <button id="reviewBtn" class="secondary-action" type="button">回看展览</button>
+            </div>
+            <p id="copyHint" class="copy-hint">海报区域可直接截图分享。</p>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <div id="storyPanel" class="story-panel" role="dialog" aria-modal="true" aria-labelledby="panelTitle">
+      <div class="story-card">
+        <button id="closePanelBtn" class="close-btn" type="button" aria-label="关闭">×</button>
+        <p id="panelKicker" class="kicker">OBJECT</p>
+        <h3 id="panelTitle">物件名称</h3>
+        <p id="panelText">剧情文本</p>
+        <p id="panelFragment" class="panel-fragment">获得碎片</p>
+        <div id="choiceArea" class="choice-area"></div>
+      </div>
+    </div>
+
+    <div id="eventToast" class="event-toast" role="status"></div>
+
+    <script src="./script.js"></script>
+  </body>
+</html>

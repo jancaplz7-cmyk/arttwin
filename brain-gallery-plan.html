@@ -1,0 +1,1271 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>今天我的脑子长什么样 - 方案可视化</title>
+    <style>
+      :root {
+        --ink: #161616;
+        --muted: #666b73;
+        --line: #d9dde4;
+        --paper: #f7f4ed;
+        --panel: #fffdfa;
+        --red: #e84b3c;
+        --amber: #f3b43f;
+        --blue: #315fc4;
+        --cyan: #37b8bf;
+        --green: #36a66a;
+        --violet: #7760ce;
+        --shadow: 0 18px 45px rgba(28, 30, 35, 0.12);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        background:
+          radial-gradient(circle at 12% 8%, rgba(232, 75, 60, 0.16), transparent 28rem),
+          radial-gradient(circle at 88% 4%, rgba(55, 184, 191, 0.18), transparent 26rem),
+          linear-gradient(180deg, #fbf7ef 0%, #f0f2f6 48%, #f8faf9 100%);
+        color: var(--ink);
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+        line-height: 1.65;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .page {
+        width: min(1180px, calc(100% - 32px));
+        margin: 0 auto;
+      }
+
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        border-bottom: 1px solid rgba(22, 22, 22, 0.08);
+        background: rgba(251, 247, 239, 0.88);
+        backdrop-filter: blur(16px);
+      }
+
+      .nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        min-height: 64px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 800;
+        letter-spacing: 0;
+      }
+
+      .mark {
+        display: grid;
+        width: 36px;
+        height: 36px;
+        place-items: center;
+        border: 2px solid var(--ink);
+        border-radius: 8px;
+        background: var(--panel);
+        box-shadow: 4px 4px 0 var(--ink);
+      }
+
+      .links {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 8px;
+        font-size: 13px;
+        color: #343942;
+      }
+
+      .links a {
+        border: 1px solid rgba(22, 22, 22, 0.12);
+        border-radius: 999px;
+        padding: 6px 10px;
+        background: rgba(255, 255, 255, 0.54);
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1.03fr) minmax(300px, 0.97fr);
+        gap: 36px;
+        align-items: center;
+        min-height: calc(100vh - 64px);
+        padding: 56px 0 42px;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 20px;
+        border: 1px solid rgba(22, 22, 22, 0.12);
+        border-radius: 999px;
+        padding: 7px 12px;
+        background: rgba(255, 255, 255, 0.66);
+        color: #4f5661;
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: var(--green);
+        box-shadow: 0 0 0 5px rgba(54, 166, 106, 0.14);
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin-top: 0;
+      }
+
+      h1 {
+        max-width: 800px;
+        margin-bottom: 18px;
+        font-size: clamp(44px, 8vw, 92px);
+        line-height: 0.98;
+        letter-spacing: 0;
+      }
+
+      .subtitle {
+        max-width: 720px;
+        margin-bottom: 28px;
+        color: #3f4651;
+        font-size: clamp(17px, 2vw, 22px);
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin: 28px 0 32px;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 44px;
+        border: 2px solid var(--ink);
+        border-radius: 8px;
+        padding: 10px 16px;
+        font-weight: 800;
+        box-shadow: 4px 4px 0 var(--ink);
+        transition: transform 160ms ease, box-shadow 160ms ease;
+      }
+
+      .button:hover {
+        transform: translate(2px, 2px);
+        box-shadow: 2px 2px 0 var(--ink);
+      }
+
+      .button.primary {
+        background: var(--ink);
+        color: #fff;
+      }
+
+      .button.secondary {
+        background: var(--panel);
+      }
+
+      .warning {
+        max-width: 820px;
+        border-left: 5px solid var(--red);
+        border-radius: 8px;
+        padding: 14px 16px;
+        background: rgba(255, 255, 255, 0.78);
+        color: #3f3331;
+        font-size: 14px;
+      }
+
+      .brain-board {
+        position: relative;
+        min-height: 540px;
+        border: 2px solid var(--ink);
+        border-radius: 16px;
+        padding: 24px;
+        background:
+          linear-gradient(90deg, rgba(22, 22, 22, 0.05) 1px, transparent 1px),
+          linear-gradient(0deg, rgba(22, 22, 22, 0.05) 1px, transparent 1px),
+          #fffdf7;
+        background-size: 28px 28px;
+        box-shadow: var(--shadow), 8px 8px 0 var(--ink);
+        overflow: hidden;
+      }
+
+      .board-title {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        color: #4f5661;
+        font-size: 13px;
+        font-weight: 800;
+      }
+
+      .brain-map {
+        position: relative;
+        height: 430px;
+        margin-top: 20px;
+      }
+
+      .room-node {
+        position: absolute;
+        width: 42%;
+        min-height: 136px;
+        border: 2px solid var(--ink);
+        border-radius: 12px;
+        padding: 16px;
+        background: var(--panel);
+        box-shadow: 5px 5px 0 var(--ink);
+      }
+
+      .room-node h3 {
+        margin-bottom: 6px;
+        font-size: 20px;
+      }
+
+      .room-node p {
+        margin: 0;
+        color: #525964;
+        font-size: 14px;
+      }
+
+      .node-1 {
+        top: 0;
+        left: 0;
+        border-color: #70251f;
+        background: #fff2ed;
+      }
+
+      .node-2 {
+        top: 24px;
+        right: 0;
+        border-color: #1c3c82;
+        background: #eef4ff;
+      }
+
+      .node-3 {
+        bottom: 18px;
+        left: 20px;
+        border-color: #1f6b46;
+        background: #effbf3;
+      }
+
+      .node-4 {
+        right: 14px;
+        bottom: 0;
+        border-color: #4c3f93;
+        background: #f4f0ff;
+      }
+
+      .center-core {
+        position: absolute;
+        top: 48%;
+        left: 50%;
+        display: grid;
+        width: 150px;
+        height: 150px;
+        place-items: center;
+        border: 2px solid var(--ink);
+        border-radius: 50%;
+        background: #fff8c9;
+        box-shadow: 6px 6px 0 var(--ink);
+        color: #222;
+        font-weight: 900;
+        text-align: center;
+        transform: translate(-50%, -50%);
+      }
+
+      .section {
+        padding: 58px 0;
+      }
+
+      .section-head {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 24px;
+        margin-bottom: 22px;
+      }
+
+      .section h2 {
+        margin-bottom: 0;
+        font-size: clamp(28px, 4vw, 46px);
+        line-height: 1.08;
+        letter-spacing: 0;
+      }
+
+      .section-note {
+        max-width: 480px;
+        margin: 0;
+        color: var(--muted);
+      }
+
+      .grid {
+        display: grid;
+        gap: 18px;
+      }
+
+      .grid.two {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .grid.three {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .grid.four {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .card {
+        border: 1px solid rgba(22, 22, 22, 0.13);
+        border-radius: 8px;
+        padding: 18px;
+        background: rgba(255, 255, 255, 0.75);
+        box-shadow: 0 12px 30px rgba(24, 32, 44, 0.07);
+      }
+
+      .card.strong {
+        border: 2px solid var(--ink);
+        background: var(--panel);
+        box-shadow: 5px 5px 0 var(--ink);
+      }
+
+      .card h3 {
+        margin-bottom: 8px;
+        font-size: 20px;
+        line-height: 1.22;
+      }
+
+      .card p {
+        margin-bottom: 0;
+        color: #515964;
+      }
+
+      .pill-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 14px;
+      }
+
+      .pill {
+        border: 1px solid rgba(22, 22, 22, 0.16);
+        border-radius: 999px;
+        padding: 5px 9px;
+        background: rgba(255, 255, 255, 0.74);
+        color: #3f4651;
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .flow {
+        display: grid;
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .step {
+        position: relative;
+        min-height: 148px;
+        border: 2px solid var(--ink);
+        border-radius: 8px;
+        padding: 14px;
+        background: var(--panel);
+        box-shadow: 4px 4px 0 var(--ink);
+      }
+
+      .step small {
+        display: inline-flex;
+        margin-bottom: 10px;
+        color: var(--muted);
+        font-weight: 900;
+      }
+
+      .step b {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 17px;
+        line-height: 1.25;
+      }
+
+      .step span {
+        color: #5b626d;
+        font-size: 13px;
+      }
+
+      .room {
+        display: grid;
+        grid-template-columns: 0.82fr 1.18fr;
+        gap: 18px;
+        align-items: stretch;
+        margin-bottom: 18px;
+      }
+
+      .room-cover {
+        display: flex;
+        min-height: 100%;
+        flex-direction: column;
+        justify-content: space-between;
+        border: 2px solid var(--ink);
+        border-radius: 10px;
+        padding: 18px;
+        box-shadow: 5px 5px 0 var(--ink);
+      }
+
+      .ddl {
+        background:
+          linear-gradient(135deg, rgba(232, 75, 60, 0.18), transparent),
+          #fff3ef;
+      }
+
+      .night {
+        background:
+          linear-gradient(135deg, rgba(49, 95, 196, 0.18), transparent),
+          #eef4ff;
+      }
+
+      .social {
+        background:
+          linear-gradient(135deg, rgba(54, 166, 106, 0.18), transparent),
+          #effbf3;
+      }
+
+      .future {
+        background:
+          linear-gradient(135deg, rgba(119, 96, 206, 0.18), transparent),
+          #f5f1ff;
+      }
+
+      .room-kicker {
+        color: #4b515b;
+        font-size: 13px;
+        font-weight: 900;
+      }
+
+      .room-cover h3 {
+        margin: 12px 0 10px;
+        font-size: clamp(24px, 3.5vw, 34px);
+        line-height: 1.05;
+      }
+
+      .object-list {
+        display: grid;
+        gap: 12px;
+      }
+
+      details {
+        border: 1px solid rgba(22, 22, 22, 0.14);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.78);
+        overflow: hidden;
+      }
+
+      summary {
+        cursor: pointer;
+        padding: 13px 14px;
+        font-weight: 900;
+      }
+
+      details[open] summary {
+        border-bottom: 1px solid rgba(22, 22, 22, 0.1);
+      }
+
+      .detail-body {
+        padding: 14px;
+      }
+
+      .quote {
+        margin-bottom: 12px;
+        color: #39404a;
+      }
+
+      .choices {
+        display: grid;
+        gap: 8px;
+      }
+
+      .choice {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        border: 1px solid rgba(22, 22, 22, 0.12);
+        border-radius: 8px;
+        padding: 10px;
+        background: #fff;
+        color: #363d47;
+        font-size: 14px;
+      }
+
+      .choice em {
+        color: #68707c;
+        font-style: normal;
+        font-weight: 800;
+        white-space: nowrap;
+      }
+
+      .poster-zone {
+        display: grid;
+        grid-template-columns: minmax(300px, 0.82fr) minmax(0, 1.18fr);
+        gap: 22px;
+        align-items: start;
+      }
+
+      .poster {
+        border: 2px solid #131313;
+        border-radius: 12px;
+        padding: 22px;
+        background:
+          linear-gradient(180deg, rgba(49, 95, 196, 0.15), transparent 30%),
+          #10151d;
+        color: #f8fbff;
+        box-shadow: var(--shadow), 7px 7px 0 #131313;
+      }
+
+      .poster-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 42px;
+        color: #b7c4d5;
+        font-size: 12px;
+        font-weight: 900;
+      }
+
+      .poster h3 {
+        margin-bottom: 8px;
+        font-size: 40px;
+        line-height: 1.02;
+      }
+
+      .poster-sub {
+        color: #dfe8f6;
+        font-size: 16px;
+      }
+
+      .meters {
+        display: grid;
+        gap: 12px;
+        margin: 26px 0;
+      }
+
+      .meter-label {
+        display: flex;
+        justify-content: space-between;
+        color: #d7e0ef;
+        font-size: 13px;
+        font-weight: 800;
+      }
+
+      .bar {
+        height: 10px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.18);
+        overflow: hidden;
+      }
+
+      .fill {
+        height: 100%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, #f8cf65, #55d6c7);
+      }
+
+      .poster-quote {
+        border-top: 1px solid rgba(255, 255, 255, 0.18);
+        padding-top: 18px;
+        color: #fff;
+        font-size: 20px;
+        font-weight: 900;
+      }
+
+      .result-list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .result {
+        border-left: 5px solid var(--cyan);
+        border-radius: 8px;
+        padding: 14px;
+        background: rgba(255, 255, 255, 0.78);
+      }
+
+      .result b {
+        display: block;
+        margin-bottom: 6px;
+      }
+
+      .timeline {
+        display: grid;
+        gap: 12px;
+      }
+
+      .slot {
+        display: grid;
+        grid-template-columns: 170px minmax(0, 1fr);
+        gap: 16px;
+        border: 1px solid rgba(22, 22, 22, 0.13);
+        border-radius: 8px;
+        padding: 16px;
+        background: rgba(255, 255, 255, 0.78);
+      }
+
+      .slot time {
+        color: #29313c;
+        font-weight: 900;
+      }
+
+      .slot p {
+        margin-bottom: 0;
+      }
+
+      .speech {
+        border: 2px solid var(--ink);
+        border-radius: 10px;
+        padding: 22px;
+        background: #fffdf7;
+        box-shadow: 5px 5px 0 var(--ink);
+      }
+
+      .speech p {
+        margin-bottom: 14px;
+      }
+
+      .speech p:last-child {
+        margin-bottom: 0;
+      }
+
+      .footer {
+        padding: 34px 0 46px;
+        color: var(--muted);
+        text-align: center;
+      }
+
+      @media (max-width: 960px) {
+        .hero,
+        .room,
+        .poster-zone {
+          grid-template-columns: 1fr;
+        }
+
+        .flow,
+        .grid.four,
+        .grid.three {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .links {
+          display: none;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .page {
+          width: min(100% - 22px, 1180px);
+        }
+
+        .hero {
+          min-height: auto;
+          padding-top: 34px;
+        }
+
+        .brain-board {
+          min-height: auto;
+          padding: 16px;
+        }
+
+        .brain-map {
+          display: grid;
+          height: auto;
+          gap: 12px;
+        }
+
+        .room-node,
+        .center-core {
+          position: static;
+          width: 100%;
+          min-height: auto;
+          transform: none;
+        }
+
+        .center-core {
+          width: 100%;
+          height: auto;
+          border-radius: 10px;
+          padding: 18px;
+        }
+
+        .section-head {
+          display: block;
+        }
+
+        .section-note {
+          margin-top: 10px;
+        }
+
+        .grid.two,
+        .grid.three,
+        .grid.four,
+        .flow,
+        .result-list {
+          grid-template-columns: 1fr;
+        }
+
+        .slot {
+          grid-template-columns: 1fr;
+        }
+
+        .poster h3 {
+          font-size: 32px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <nav class="page nav" aria-label="页面导航">
+        <a class="brand" href="#top">
+          <span class="mark">脑</span>
+          <span>方案可视化</span>
+        </a>
+        <div class="links">
+          <a href="#flow">流程</a>
+          <a href="#rooms">房间</a>
+          <a href="#result">结果</a>
+          <a href="#timeline">执行</a>
+          <a href="#speech">答辩</a>
+        </div>
+      </nav>
+    </header>
+
+    <main id="top" class="page">
+      <section class="hero" aria-labelledby="title">
+        <div>
+          <div class="eyebrow"><span class="dot"></span> 轻量级互动空间方案</div>
+          <h1 id="title">今天我的脑子长什么样</h1>
+          <p class="subtitle">
+            把大学生一天的精神状态做成一座可探索的脑内展厅。用户通过逛房间、点物件、做选择，收集脑内碎片，最终生成一张专属的今日脑内海报。
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="#rooms">查看房间方案</a>
+            <a class="button secondary" href="#timeline">查看执行排期</a>
+          </div>
+          <p class="warning">
+            合规提醒：此页面是赛前方案可视化与沟通文档，不是参赛成品。正式比赛开始前不要提前开发可提交的互动作品代码。
+          </p>
+        </div>
+
+        <aside class="brain-board" aria-label="脑内展厅结构图">
+          <div class="board-title">
+            <span>BRAIN GALLERY MAP</span>
+            <span>4 ROOMS / 4 FRAGMENTS</span>
+          </div>
+          <div class="brain-map">
+            <article class="room-node node-1">
+              <h3>DDL 风暴室</h3>
+              <p>倒计时、作业堆、小组群，让压力具象成一场室内天气。</p>
+            </article>
+            <article class="room-node node-2">
+              <h3>熬夜漂流室</h3>
+              <p>发光手机、漂浮床、咖啡杯星球，记录报复性休息。</p>
+            </article>
+            <article class="room-node node-3">
+              <h3>社交电量室</h3>
+              <p>未读消息、半开的门、两把椅子，测试今日社交余量。</p>
+            </article>
+            <article class="room-node node-4">
+              <h3>未来想象室</h3>
+              <p>简历、三扇门、未来留言，把不确定变成可探索空间。</p>
+            </article>
+            <div class="center-core">脑内大厅<br />收集碎片</div>
+          </div>
+        </aside>
+      </section>
+
+      <section id="position" class="section">
+        <div class="section-head">
+          <h2>作品定位</h2>
+          <p class="section-note">
+            不是严肃心理测试，而是带一点荒诞感的大学生状态展厅。重点是共鸣、探索、反馈和分享。
+          </p>
+        </div>
+        <div class="grid four">
+          <article class="card strong">
+            <h3>可探索</h3>
+            <p>四个房间构成完整空间，玩家通过点击物件进入微剧情。</p>
+          </article>
+          <article class="card strong">
+            <h3>有选择</h3>
+            <p>每个物件给出三个选择，影响指数、标签和最终结果。</p>
+          </article>
+          <article class="card strong">
+            <h3>能共鸣</h3>
+            <p>DDL、熬夜、社交、未来焦虑，都是大学生日常高频场景。</p>
+          </article>
+          <article class="card strong">
+            <h3>可分享</h3>
+            <p>最终生成专属脑内海报，适合截图、录屏和社交传播。</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="flow" class="section">
+        <div class="section-head">
+          <h2>玩家流程</h2>
+          <p class="section-note">
+            先给玩家明确目标，再通过收集机制驱动完整体验，避免用户只是随便点两下就离开。
+          </p>
+        </div>
+        <div class="flow">
+          <article class="step">
+            <small>01</small>
+            <b>进入展厅</b>
+            <span>选择今日入口状态：被 DDL 追进来、刷手机滑进来、被消息震进来。</span>
+          </article>
+          <article class="step">
+            <small>02</small>
+            <b>脑内大厅</b>
+            <span>看到四个房间入口，以及脑内碎片 0 / 4 的进度。</span>
+          </article>
+          <article class="step">
+            <small>03</small>
+            <b>探索房间</b>
+            <span>每个房间点击 2 到 3 个物件，触发小剧情和选择。</span>
+          </article>
+          <article class="step">
+            <small>04</small>
+            <b>获得碎片</b>
+            <span>完成房间后获得压力、疲惫、电量或未来碎片。</span>
+          </article>
+          <article class="step">
+            <small>05</small>
+            <b>脑内扫描</b>
+            <span>收集满 4 枚碎片后，生成四维指数和个性标签。</span>
+          </article>
+          <article class="step">
+            <small>06</small>
+            <b>生成海报</b>
+            <span>展示主结果、标签、旁白、指数和脑内编号。</span>
+          </article>
+        </div>
+      </section>
+
+      <section id="rooms" class="section">
+        <div class="section-head">
+          <h2>四个房间</h2>
+          <p class="section-note">
+            每个房间都有固定主题、视觉氛围、三个可点击物件和九个选择，保证内容丰富且容易开发。
+          </p>
+        </div>
+
+        <article class="room">
+          <div class="room-cover ddl">
+            <div>
+              <span class="room-kicker">ROOM 01 / PRESSURE</span>
+              <h3>DDL 风暴室</h3>
+              <p>你刚走进房间，三张未命名文档和一个小组群同时看向了你。</p>
+            </div>
+            <div class="pill-list">
+              <span class="pill">压力碎片</span>
+              <span class="pill">纸张风暴</span>
+              <span class="pill">倒计时</span>
+            </div>
+          </div>
+          <div class="object-list">
+            <details open>
+              <summary>倒计时闹钟</summary>
+              <div class="detail-body">
+                <p class="quote">闹钟显示：距离提交还有 03:00:00。但你清楚地记得，三个小时前它也是这么显示的。</p>
+                <div class="choices">
+                  <div class="choice"><span>立刻开始写</span><em>自救型清醒人</em></div>
+                  <div class="choice"><span>先整理一下桌面</span><em>仪式型拖延</em></div>
+                  <div class="choice"><span>再看一眼群消息</span><em>嘴硬但心虚</em></div>
+                </div>
+              </div>
+            </details>
+            <details>
+              <summary>小组群弹窗</summary>
+              <div class="detail-body">
+                <p class="quote">群里有人问：“大家进度怎么样啦？”这句话短得像通知，重得像审判。</p>
+                <div class="choices">
+                  <div class="choice"><span>回“我这边快好了”</span><em>最后五分钟战神</em></div>
+                  <div class="choice"><span>默默打开文档</span><em>临场自救</em></div>
+                  <div class="choice"><span>假装没看到</span><em>已读空气</em></div>
+                </div>
+              </div>
+            </details>
+            <details>
+              <summary>自动变高的作业堆</summary>
+              <div class="detail-body">
+                <p class="quote">你每说一次“明天再做”，它就长高一厘米。</p>
+                <div class="choices">
+                  <div class="choice"><span>从最简单的开始</span><em>缓慢回血</em></div>
+                  <div class="choice"><span>从最难的硬刚</span><em>硬刚型选手</em></div>
+                  <div class="choice"><span>重新排版任务清单</span><em>精致型拖延</em></div>
+                </div>
+              </div>
+            </details>
+          </div>
+        </article>
+
+        <article class="room">
+          <div class="room-cover night">
+            <div>
+              <span class="room-kicker">ROOM 02 / FATIGUE</span>
+              <h3>熬夜漂流室</h3>
+              <p>这里没有地面，只有一点点下沉的困意，和一条刷不到底的信息流。</p>
+            </div>
+            <div class="pill-list">
+              <span class="pill">疲惫碎片</span>
+              <span class="pill">手机冷光</span>
+              <span class="pill">漂浮床</span>
+            </div>
+          </div>
+          <div class="object-list">
+            <details>
+              <summary>发光手机</summary>
+              <div class="detail-body">
+                <p class="quote">你只是想看 5 分钟。手机很体贴地帮你跳过了两个小时。</p>
+                <div class="choices">
+                  <div class="choice"><span>再刷最后一个</span><em>无限下滑体</em></div>
+                  <div class="choice"><span>立刻锁屏</span><em>自救型清醒人</em></div>
+                  <div class="choice"><span>换个平台继续清醒</span><em>深夜漂流员</em></div>
+                </div>
+              </div>
+            </details>
+            <details>
+              <summary>漂浮的床</summary>
+              <div class="detail-body">
+                <p class="quote">床在召唤你。但你的脑子说：等一下，我还有很多没必要但必须想完的事。</p>
+                <div class="choices">
+                  <div class="choice"><span>躺下继续想</span><em>思维过载</em></div>
+                  <div class="choice"><span>放空 10 秒</span><em>短暂回血</em></div>
+                  <div class="choice"><span>开始复盘人生</span><em>午夜哲学家</em></div>
+                </div>
+              </div>
+            </details>
+            <details>
+              <summary>咖啡杯星球</summary>
+              <div class="detail-body">
+                <p class="quote">你不确定自己是在提神，还是在和作息进行一场不平等谈判。</p>
+                <div class="choices">
+                  <div class="choice"><span>明天一定早睡</span><em>循环承诺型</em></div>
+                  <div class="choice"><span>今天情况特殊</span><em>合理化大师</em></div>
+                  <div class="choice"><span>反正年轻</span><em>透支型勇士</em></div>
+                </div>
+              </div>
+            </details>
+          </div>
+        </article>
+
+        <article class="room">
+          <div class="room-cover social">
+            <div>
+              <span class="room-kicker">ROOM 03 / SOCIAL BATTERY</span>
+              <h3>社交电量室</h3>
+              <p>房间里的灯没有坏，它只是正在根据你的社交电量自动调暗。</p>
+            </div>
+            <div class="pill-list">
+              <span class="pill">电量碎片</span>
+              <span class="pill">未读消息</span>
+              <span class="pill">省电模式</span>
+            </div>
+          </div>
+          <div class="object-list">
+            <details>
+              <summary>未读消息气泡</summary>
+              <div class="detail-body">
+                <p class="quote">你看见了消息。消息也看见了你看见它。</p>
+                <div class="choices">
+                  <div class="choice"><span>马上回复</span><em>高电量回应者</em></div>
+                  <div class="choice"><span>想好再回</span><em>谨慎措辞型</em></div>
+                  <div class="choice"><span>等对方发第二条</span><em>省电模式</em></div>
+                </div>
+              </div>
+            </details>
+            <details>
+              <summary>半开的门</summary>
+              <div class="detail-body">
+                <p class="quote">门外有人喊你吃饭。你的电量只有 23%，但饭听起来有 70% 的吸引力。</p>
+                <div class="choices">
+                  <div class="choice"><span>去，边吃边回血</span><em>外部充电型</em></div>
+                  <div class="choice"><span>不去，需要独处</span><em>独处回血型</em></div>
+                  <div class="choice"><span>问问都有谁</span><em>社交计算型</em></div>
+                </div>
+              </div>
+            </details>
+            <details>
+              <summary>两把椅子</summary>
+              <div class="detail-body">
+                <p class="quote">一把在热闹中央，一把在角落边缘。今天的你想坐哪里？</p>
+                <div class="choices">
+                  <div class="choice"><span>坐在人群中间</span><em>参与型人格</em></div>
+                  <div class="choice"><span>坐在边上观察</span><em>边缘观察员</em></div>
+                  <div class="choice"><span>先站着看看局势</span><em>缓冲型社交</em></div>
+                </div>
+              </div>
+            </details>
+          </div>
+        </article>
+
+        <article class="room">
+          <div class="room-cover future">
+            <div>
+              <span class="room-kicker">ROOM 04 / FUTURE</span>
+              <h3>未来想象室</h3>
+              <p>这里收藏着你还没确定的未来。它们有些清楚，有些模糊，但都没有真正关门。</p>
+            </div>
+            <div class="pill-list">
+              <span class="pill">未来碎片</span>
+              <span class="pill">三扇门</span>
+              <span class="pill">加载中</span>
+            </div>
+          </div>
+          <div class="object-list">
+            <details>
+              <summary>漂浮简历</summary>
+              <div class="detail-body">
+                <p class="quote">简历上有很多空白。但它们看起来不像失败，更像还没写完的剧情。</p>
+                <div class="choices">
+                  <div class="choice"><span>开始补技能</span><em>成长型选手</em></div>
+                  <div class="choice"><span>先投再说</span><em>行动先行派</em></div>
+                  <div class="choice"><span>看看别人怎么写</span><em>比较型焦虑</em></div>
+                </div>
+              </div>
+            </details>
+            <details>
+              <summary>三扇门</summary>
+              <div class="detail-body">
+                <p class="quote">考研、就业、还没想好。三扇门都没锁，只是每扇门后面都有另一种焦虑。</p>
+                <div class="choices">
+                  <div class="choice"><span>选一扇先推开</span><em>决策型勇士</em></div>
+                  <div class="choice"><span>在门口站一会</span><em>人生缓冲区</em></div>
+                  <div class="choice"><span>把三扇门都拍照收藏</span><em>多线程焦虑</em></div>
+                </div>
+              </div>
+            </details>
+            <details>
+              <summary>未来自己的留言</summary>
+              <div class="detail-body">
+                <p class="quote">未来的你给现在的你留了一句话，但字迹有点模糊。</p>
+                <div class="choices">
+                  <div class="choice"><span>你比想象中能撑</span><em>韧性型人格</em></div>
+                  <div class="choice"><span>慢一点也没关系</span><em>修复型人格</em></div>
+                  <div class="choice"><span>先把今天过完</span><em>现实型自救</em></div>
+                </div>
+              </div>
+            </details>
+          </div>
+        </article>
+      </section>
+
+      <section id="result" class="section">
+        <div class="section-head">
+          <h2>结果与海报</h2>
+          <p class="section-note">
+            最终结果不是单一固定文案，而是主结果、海报风格、标签、四维指数和今日旁白的组合。
+          </p>
+        </div>
+        <div class="poster-zone">
+          <article class="poster" aria-label="示例海报">
+            <div class="poster-head">
+              <span>今天我的脑子长什么样</span>
+              <span>NO.0426-091</span>
+            </div>
+            <p class="poster-sub">小李的今日脑内形状</p>
+            <h3>深夜漂浮岛</h3>
+            <p class="poster-sub">DDL 预警版</p>
+            <div class="meters">
+              <div>
+                <div class="meter-label"><span>压力指数</span><span>68</span></div>
+                <div class="bar"><div class="fill" style="width: 68%"></div></div>
+              </div>
+              <div>
+                <div class="meter-label"><span>疲惫指数</span><span>91</span></div>
+                <div class="bar"><div class="fill" style="width: 91%"></div></div>
+              </div>
+              <div>
+                <div class="meter-label"><span>社交电量</span><span>32</span></div>
+                <div class="bar"><div class="fill" style="width: 32%"></div></div>
+              </div>
+              <div>
+                <div class="meter-label"><span>未来清晰度</span><span>45</span></div>
+                <div class="bar"><div class="fill" style="width: 45%"></div></div>
+              </div>
+            </div>
+            <div class="pill-list">
+              <span class="pill">午夜哲学家</span>
+              <span class="pill">无限下滑体</span>
+              <span class="pill">现实型自救</span>
+            </div>
+            <p class="poster-quote">我不是不睡，我是在和今天告别得比较慢。</p>
+          </article>
+
+          <div>
+            <div class="result-list">
+              <article class="result">
+                <b>DDL 台风眼</b>
+                <span>压力指数最高时触发。看起来很平静，脑内已经高速旋转。</span>
+              </article>
+              <article class="result">
+                <b>深夜漂浮岛</b>
+                <span>疲惫指数最高时触发。白天在人间上课，晚上在信息流里漂流。</span>
+              </article>
+              <article class="result">
+                <b>社交低电量仓</b>
+                <span>社交电量过低时触发。今日只够礼貌微笑和三个“哈哈哈”。</span>
+              </article>
+              <article class="result">
+                <b>未来加载中</b>
+                <span>未来清晰度偏低时触发。人生地图正在加载，偶尔卡顿。</span>
+              </article>
+              <article class="result">
+                <b>自救型清醒人</b>
+                <span>多次选择行动、自救、放空时触发。没满血，但在保存进度。</span>
+              </article>
+              <article class="result">
+                <b>快乐混乱体</b>
+                <span>指数均衡且选择跳脱时触发。生活有点乱，但还挺会找乐子。</span>
+              </article>
+            </div>
+            <div class="card" style="margin-top: 16px">
+              <h3>多样化策略</h3>
+              <p>
+                6 个主结果 × 4 套海报风格 × 20+ 个标签 × 四维指数，可以组合出大量不同海报，避免玩家结果雷同。
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="mechanics" class="section">
+        <div class="section-head">
+          <h2>乐趣机制</h2>
+          <p class="section-note">用小机制打破重复点击，让玩家愿意探索完四个房间。</p>
+        </div>
+        <div class="grid three">
+          <article class="card strong">
+            <h3>碎片反馈</h3>
+            <p>完成房间后获得碎片：压力碎片正在冒烟、疲惫碎片躺平但没睡着、电量碎片剩余 23%。</p>
+          </article>
+          <article class="card strong">
+            <h3>突发事件</h3>
+            <p>探索两个房间后随机弹出：朋友圈刷到同学拿 offer、手机电量 5%、室友喊夜宵。</p>
+          </article>
+          <article class="card strong">
+            <h3>隐藏标签</h3>
+            <p>连续选择逃避触发“战略性消失”，连续自救触发“系统修复中”，低电量触发“请勿打扰但欢迎投喂”。</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="timeline" class="section">
+        <div class="section-head">
+          <h2>现场执行排期</h2>
+          <p class="section-note">比赛开始后按这个节奏推进，先闭环，再打磨，不在最后阶段大改方向。</p>
+        </div>
+        <div class="timeline">
+          <article class="slot">
+            <time>4月25日 10:00-11:00</time>
+            <p>确定作品名、四个房间、物件数量、结果类型、技术栈和分工，输出流程图与数据结构草稿。</p>
+          </article>
+          <article class="slot">
+            <time>4月25日 11:00-15:00</time>
+            <p>跑通首页、大厅、房间、点击、选择、结果页主流程。哪怕很简陋，也必须能从头走到尾。</p>
+          </article>
+          <article class="slot">
+            <time>4月25日 15:00-21:00</time>
+            <p>填满 4 个房间、至少 8 个物件、24 个选择、6 个结果、标签系统和基础样式。</p>
+          </article>
+          <article class="slot">
+            <time>4月25日 21:00-24:00</time>
+            <p>修明显问题，完成移动端适配，打磨结果页，进行第一次完整彩排。</p>
+          </article>
+          <article class="slot">
+            <time>4月26日 09:00-12:00</time>
+            <p>加入海报保存、突发事件、隐藏标签、基础动效和视觉统一。</p>
+          </article>
+          <article class="slot">
+            <time>4月26日 12:00-16:00</time>
+            <p>答辩彩排三遍，准备在线版本、本地版本、录屏和截图备份。只修稳定性，不加大功能。</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="team" class="section">
+        <div class="section-head">
+          <h2>团队分工</h2>
+          <p class="section-note">推荐 3 到 4 人。你适合担任产品、文案、答辩和测试，把范围稳住。</p>
+        </div>
+        <div class="grid four">
+          <article class="card">
+            <h3>产品/答辩</h3>
+            <p>玩法设计、剧情文案、结果文案、试玩反馈、演示话术、范围控制。</p>
+          </article>
+          <article class="card">
+            <h3>前端主程</h3>
+            <p>页面结构、房间切换、弹窗选择、状态记录、结果计算和部署。</p>
+          </article>
+          <article class="card">
+            <h3>视觉/动效</h3>
+            <p>整体风格、房间背景、物件图标、海报版式、转场和点击反馈。</p>
+          </article>
+          <article class="card">
+            <h3>体验/测试</h3>
+            <p>海报生成、移动端适配、音效、bug 复现、备份材料和现场演示保障。</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="speech" class="section">
+        <div class="section-head">
+          <h2>答辩核心稿</h2>
+          <p class="section-note">正式版本控制在 2 到 3 分钟，先讲问题，再讲体验，最后讲传播价值。</p>
+        </div>
+        <article class="speech">
+          <p>大家好，我们的作品叫《今天我的脑子长什么样》。</p>
+          <p>
+            它是一个面向大学生的轻量级互动空间。我们把大学生一天里很难说清楚的精神状态，做成了一座可以探索的脑内展厅。
+          </p>
+          <p>
+            在这个展厅里，用户会进入四个房间：DDL 风暴室、熬夜漂流室、社交电量室和未来想象室。每个房间都有可以点击的物件，比如倒计时闹钟、发光手机、未读消息和未来之门。点击后会触发小剧情和选择。
+          </p>
+          <p>
+            这些选择不是简单问卷，而是会生成用户的压力指数、疲惫指数、社交电量和未来清晰度，并收集不同的脑内标签。最后系统会生成一张专属的今日脑内海报。
+          </p>
+          <p>
+            我们希望它不是一个严肃的心理测试，而是一个轻松、有共鸣、适合分享的互动体验。用户逛的是房间，其实是在逛自己今天的状态。
+          </p>
+        </article>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="page">赛前使用：方案沟通、组队说明、现场开工参考。正式开发请在比赛开始后进行。</div>
+    </footer>
+  </body>
+</html>
