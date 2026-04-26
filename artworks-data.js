@@ -463,10 +463,10 @@ const coreArtworkLibrary = [
 
 const stableArtworkImages = {
   "starry-night": "https://commons.wikimedia.org/wiki/Special:FilePath/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg?width=960",
-  "great-wave": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/The_Great_Wave_off_Kanagawa.jpg/960px-The_Great_Wave_off_Kanagawa.jpg",
+  "great-wave": "assets/artworks/great-wave.webp",
   "sunflowers": "https://commons.wikimedia.org/wiki/Special:FilePath/Vincent_Willem_van_Gogh_128.jpg?width=960",
   "water-lilies": "https://commons.wikimedia.org/wiki/Special:FilePath/Claude_Monet_-_Water_Lilies_-_1906,_Ryerson.jpg?width=960",
-  "composition-viii": "https://www.guggenheim.org/wp-content/uploads/1923/01/37.262_ph_web-1.jpg",
+  "composition-viii": "assets/artworks/composition-viii.webp",
   "mondrian-red-blue-yellow": "https://commons.wikimedia.org/wiki/Special:FilePath/Piet_Mondriaan,_1930_-_Mondrian_Composition_II_in_Red,_Blue,_and_Yellow.jpg?width=960",
   "girl-with-pearl": "https://commons.wikimedia.org/wiki/Special:FilePath/Meisje_met_de_parel.jpg?width=960",
   "mona-lisa": "https://commons.wikimedia.org/wiki/Special:FilePath/Mona_Lisa.jpg?width=960",
@@ -487,6 +487,62 @@ const stableArtworkImages = {
   "woman-reading": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Vermeer%2C_Johannes_-_Woman_reading_a_letter_-_ca._1662-1663.jpg/960px-Vermeer%2C_Johannes_-_Woman_reading_a_letter_-_ca._1662-1663.jpg"
 };
 
+const remoteArtworkImages = {
+  "china-ni-zan-six-gentlemen": "https://commons.wikimedia.org/wiki/Special:FilePath/Ni%20Zan%20-%20Six%20Gentlemen.jpg?width=960",
+  "china-bada-shanren-flower-bird": "https://commons.wikimedia.org/wiki/Special:FilePath/Bada%20Shanren%20%28Zhu%20Da%29%20-%20Birds%20in%20a%20lotus%20pond%20-%201989.363.135%20-%20Metropolitan%20Museum%20of%20Art.jpg?width=960",
+  "china-zheng-banqiao-orchid-bamboo": "https://commons.wikimedia.org/wiki/Special:FilePath/Zheng%20Xie%20-%20Orchids%20and%20Bamboo%20-%201981.285.7%20-%20Metropolitan%20Museum%20of%20Art.jpg?width=960",
+  "china-qi-baishi-shrimp": "https://commons.wikimedia.org/wiki/Special:FilePath/QiBaishiGarnelen.jpg?width=960",
+  "china-li-tang-wind-pines": "https://commons.wikimedia.org/wiki/Special:FilePath/Li%20Tang%20-%20Wind%20in%20Pines%20Among%20a%20Myriad%20Valleys.jpg?width=960",
+  "china-ma-yuan-mountain-path": "https://commons.wikimedia.org/wiki/Special:FilePath/Ma%20Yuan%20Walking%20on%20Path%20in%20Spring.jpg?width=960",
+  "china-xia-gui-pure-remote": "https://commons.wikimedia.org/wiki/Special:FilePath/Xia%20Gui%20-%20Pure%20and%20Remote%20View%20of%20Streams%20and%20Mountains%20-%20right%20half.jpg?width=1280",
+  "china-zhao-mengfu-autumn-colors": "https://upload.wikimedia.org/wikipedia/commons/9/99/2_Zhao_Mengfu_Autumn_Colors_on_the_Qiao_and_Hua_Mountains_Handscroll%2C_ink_and_colors_on_paper%2C_28.4_x_93.2_cm_National_Palace_Museum%2C_Taipei..jpg",
+  "china-wang-meng-qingbian": "https://commons.wikimedia.org/wiki/Special:FilePath/Wang%20Meng%20Dwelling%20in%20the%20Qingbian%20Mountains.%20ink%20on%20paper.%201366.%20141x42%2C2%20cm.%20Shanghai%20Museum.jpg?width=960",
+  "china-qiu-ying-han-palace": "https://commons.wikimedia.org/wiki/Special:FilePath/Qiu%20Ying%20Spring%20morning%20in%20the%20Han%20palace.jpg?width=1280",
+  "china-gu-kaizhi-admonitions": "https://commons.wikimedia.org/wiki/Special:FilePath/N%C3%BCshi%20zhen%20tu%20%E5%A5%B3%E5%8F%B2%E7%AE%B4%E5%9B%BE%20%28Admonitions%20of%20the%20Instructress%20to%20the%20Court%20Ladies%29%20%28BM%201903%2C0408%2C0.1%29.jpg?width=1280",
+  "china-gu-kaizhi-luo-river": "https://commons.wikimedia.org/wiki/Special:FilePath/Gu%20Kaizhi-Nymph%20of%20the%20Luo%20River%20%28full%29%2C%20Palace%20Museum%2C%20Beijing.jpg?width=1280",
+  "china-han-huang-five-oxen": "https://commons.wikimedia.org/wiki/Special:FilePath/Five%20Oxen.jpg?width=1280",
+  "china-huizong-auspicious-cranes": "https://commons.wikimedia.org/wiki/Special:FilePath/Auspicious%20Cranes.jpg?width=1280",
+  "china-li-di-cotton-rose": "https://commons.wikimedia.org/wiki/Special:FilePath/Li%20Di%20-%20Red%20and%20White%20Cotton%20Roses%20-%20Google%20Art%20Project.jpg?width=960",
+  "china-muqi-six-persimmons": "https://commons.wikimedia.org/wiki/Special:FilePath/Muqi-persimmons.jpg?width=960",
+  "china-liang-kai-li-bai": "https://commons.wikimedia.org/wiki/Special:FilePath/Liang%20Kai%20-%20Li%20Bai%20Strolling.jpg?width=960",
+  "china-xu-wei-ink-grapes": "https://commons.wikimedia.org/wiki/Special:FilePath/Xu%20Wei%20Grapes.jpg?width=960",
+  "world-leonardo-virgin-rocks": "https://commons.wikimedia.org/wiki/Special:FilePath/Leonardo%20Da%20Vinci%20-%20Vergine%20delle%20Rocce%20%28Louvre%29.jpg?width=960",
+  "world-raphael-sistine-madonna": "https://commons.wikimedia.org/wiki/Special:FilePath/Raphael%20-%20The%20Sistine%20Madonna%20-%20Google%20Arts%20%26%20Culture.jpg?width=960",
+  "world-caravaggio-calling-matthew": "https://commons.wikimedia.org/wiki/Special:FilePath/Caravaggio%2C%20Michelangelo%20Merisi%20da%20-%20The%20Calling%20of%20Saint%20Matthew%20-%201599-1600%20%28hi%20res%29.jpg?width=1280",
+  "world-rembrandt-self-portrait": "https://commons.wikimedia.org/wiki/Special:FilePath/Rembrandt%20van%20Rijn%20-%20Self-Portrait%20-%20Google%20Art%20Project.jpg?width=960",
+  "world-vermeer-little-street": "https://commons.wikimedia.org/wiki/Special:FilePath/Johannes%20Vermeer%20-%20Gezicht%20op%20huizen%20in%20Delft%2C%20bekend%20als%20%27Het%20straatje%27%20-%20Google%20Art%20Project.jpg?width=960",
+  "world-turner-slave-ship": "https://commons.wikimedia.org/wiki/Special:FilePath/J.M.W.%20Turner%20Slave%20Ship%20%28%20Slavers%20Throwing%20Overboard%20the%20Dead%20and%20Dying%2C%20Typhoon%20Coming%20On%29.%201840.png?width=1280",
+  "world-friedrich-moonrise-sea": "https://commons.wikimedia.org/wiki/Special:FilePath/Caspar%20David%20Friedrich%20-%20Mondaufgang%20am%20Meer%20-%20Google%20Art%20Project.jpg?width=960",
+  "world-manet-olympia": "https://commons.wikimedia.org/wiki/Special:FilePath/Edouard%20Manet%20-%20Olympia%20-%20Google%20Art%20Project%203.jpg?width=1280",
+  "world-monet-impression-sunrise": "https://commons.wikimedia.org/wiki/Special:FilePath/Monet%20-%20Impression%2C%20Sunrise.jpg?width=960",
+  "world-renoir-moulin-galette": "https://commons.wikimedia.org/wiki/Special:FilePath/Auguste%20Renoir%20-%20Dance%20at%20Le%20Moulin%20de%20la%20Galette%20-%20Google%20Art%20Project.jpg?width=1280",
+  "world-degas-ballet-class": "https://commons.wikimedia.org/wiki/Special:FilePath/Edgar%20Degas%20-%20The%20Ballet%20Class%20-%20Google%20Art%20Project.jpg?width=960",
+  "world-cassatt-child-bath": "https://www.artic.edu/iiif/2/3b885ae0-4d46-5fe4-d70a-00474827f02c/full/1000,/0/default.jpg",
+  "world-morisot-cradle": "https://commons.wikimedia.org/wiki/Special:FilePath/Berthe%20Morisot%20-%20The%20Cradle%20-%20Google%20Art%20Project.jpg?width=960",
+  "world-gauguin-where-from": "https://commons.wikimedia.org/wiki/Special:FilePath/Gauguin%20-%20D%27ou%20venons-nous%20Que%20sommes-nous%20Ou%20allons-nous.jpg?width=1280",
+  "world-cezanne-mont-sainte-victoire": "https://commons.wikimedia.org/wiki/Special:FilePath/1904%2C%20C%C3%A9zanne%2C%20Mont%20Sainte-Victoire.jpg?width=960",
+  "world-seurat-sunday-grande-jatte": "https://www.artic.edu/iiif/2/2d484387-2509-5e8e-2c43-22f9981972eb/full/1000,/0/default.jpg",
+  "world-toulouse-lautrec-moulin-rouge": "https://www.artic.edu/iiif/2/defb4004-b500-218d-3d9b-9a02423f097d/full/1000,/0/default.jpg",
+  "world-munch-madonna": "https://commons.wikimedia.org/wiki/Special:FilePath/Edvard%20Munch%20-%20Madonna%20-%20Google%20Art%20Project.jpg?width=960",
+  "world-klimt-portrait-adele": "https://commons.wikimedia.org/wiki/Special:FilePath/Gustav%20Klimt%2C%201907%2C%20Adele%20Bloch-Bauer%20I%2C%20Neue%20Galerie%20New%20York.jpg?width=960",
+  "world-kandinsky-yellow-red-blue": "https://commons.wikimedia.org/wiki/Special:FilePath/Kandinsky%20-%20Gelb-Rot-Blau%2C%201925.jpg?width=960",
+  "world-mondrian-broadway-boogie": "https://commons.wikimedia.org/wiki/Special:FilePath/Piet%20Mondrian%2C%201942%20-%20Broadway%20Boogie%20Woogie.jpg?width=960",
+  "world-malevich-white-on-white": "https://commons.wikimedia.org/wiki/Special:FilePath/Kazimir%20Malevich%20-%20%27Suprematist%20Composition-%20White%20on%20White%27%2C%20oil%20on%20canvas%2C%201918%2C%20Museum%20of%20Modern%20Art.jpg?width=960",
+  "world-chagall-i-village": "https://commons.wikimedia.org/wiki/Special:FilePath/Marc%20Chagall%2C%20I%20and%20the%20Village%20%2850394064557%29.jpg?width=960",
+  "world-rousseau-dream": "https://commons.wikimedia.org/wiki/Special:FilePath/Henri%20Rousseau%20-%20Le%20R%C3%AAve%20-%20Google%20Art%20Project.jpg?width=1280",
+  "world-hopper-nighthawks": "https://www.artic.edu/iiif/2/831a05de-d3f6-f4fa-a460-23008dd58dda/full/1000,/0/default.jpg",
+  "world-homer-gulf-stream": "https://images.metmuseum.org/CRDImages/ad/web-large/DP-20821-001.jpg",
+  "world-sargent-madame-x": "https://images.metmuseum.org/CRDImages/ad/web-large/DP-29006-001.jpg",
+  "world-whistler-mother": "https://commons.wikimedia.org/wiki/Special:FilePath/Whistlers%20Mother%20high%20res.jpg?width=960",
+  "world-klee-twittering-machine": "https://commons.wikimedia.org/wiki/Special:FilePath/Die%20Zwitscher-Maschine%20%28Twittering%20Machine%29%2C%201922%20-%20Paul%20Klee.jpg?width=960",
+  "world-schiele-self-portrait": "https://commons.wikimedia.org/wiki/Special:FilePath/Egon%20Schiele%20-%20Self-Portrait%20with%20Physalis%20-%20Google%20Art%20Project.jpg?width=960",
+  "world-modigliani-jeanne": "https://commons.wikimedia.org/wiki/Special:FilePath/Amedeo%20Modigliani%2C%201919%2C%20Jeanne%20H%C3%A9buterne%2C%20oil%20on%20canvas%2C%2091.4%20x%2073%20cm%2C%20Metropolitan%20Museum%20of%20Art.jpg?width=960",
+  "world-hilma-svanen": "https://commons.wikimedia.org/wiki/Special:FilePath/Hilma%20af%20Klint%2C%201915%2C%20Svanen%2C%20No.%2017.jpg?width=960",
+  "japan-hiroshige-rain-bridge": "https://images.metmuseum.org/CRDImages/as/web-large/DP130156.jpg",
+  "japan-hiroshige-plum-estate": "https://commons.wikimedia.org/wiki/Special:FilePath/De%20pruimenboomgaard%20te%20Kameido-Rijksmuseum%20RP-P-1956-743.jpeg?width=960",
+  "japan-utamaro-beauty-mirror": "https://commons.wikimedia.org/wiki/Special:FilePath/Ase%20o%20fuku%20onna2.jpg?width=960"
+};
+
 const artworkMetadata = {
   "starry-night": {
     shortIntro: "一幅把夜空画成旋转情绪的后印象派名作。",
@@ -503,6 +559,11 @@ const artworkMetadata = {
     historicalContext: "十九世纪末的后印象派不再满足于记录眼前光线，而开始强调主观感受、结构和象征。梵高的笔触让风景从外部景物转向内心状态，为表现主义和现代绘画打开道路。"
   },
   "great-wave": {
+    imageCandidates: [
+      "assets/artworks/great-wave.webp",
+      "assets/artworks/great-wave.jpg",
+      "https://images.metmuseum.org/CRDImages/as/original/DP130155.jpg"
+    ],
     shortIntro: "一张以巨大浪形和清晰线条表现自然力量的浮世绘。",
     visualTags: ["blue", "white foam", "curved lines", "diagonal motion", "graphic contrast"],
     themeTags: ["ocean", "wave", "mountain", "nature", "sublime"],
@@ -546,8 +607,9 @@ const artworkMetadata = {
   },
   "composition-viii": {
     imageCandidates: [
+      "assets/artworks/composition-viii.webp",
+      "assets/artworks/composition-viii.jpg",
       "https://www.guggenheim.org/wp-content/uploads/1923/01/37.262_ph_web-1.jpg",
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Wassily_Kandinsky_Composition_VIII.jpg/960px-Wassily_Kandinsky_Composition_VIII.jpg"
     ],
     shortIntro: "由圆、线、角和色块组成的抽象节奏图谱。",
     visualTags: ["geometric", "circles", "straight lines", "primary colors", "dynamic balance"],
@@ -1001,10 +1063,12 @@ const expandedArtworkLibrary = [
     dynastyOrEra: "Northern Song dynasty",
     museum: "National Palace Museum, Taipei",
     sourceUrl: "",
+    imageUrl: "https://commons.wikimedia.org/wiki/Special:FilePath/Fan%20Kuan%20-%20Travelers%20Among%20Mountains%20and%20Streams%20-%20Google%20Art%20Project.jpg?width=960",
     localImage: "assets/artworks/china-fan-kuan-travelers.webp",
     imageCandidates: [
       "assets/artworks/china-fan-kuan-travelers.webp",
-      "assets/artworks/china-fan-kuan-travelers.jpg"
+      "assets/artworks/china-fan-kuan-travelers.jpg",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Fan%20Kuan%20-%20Travelers%20Among%20Mountains%20and%20Streams%20-%20Google%20Art%20Project.jpg?width=960"
     ],
     license: "Offline Demo Metadata / Verify before production use",
     region: "China",
@@ -1041,10 +1105,12 @@ const expandedArtworkLibrary = [
     dynastyOrEra: "Northern Song dynasty",
     museum: "National Palace Museum, Taipei",
     sourceUrl: "",
+    imageUrl: "https://commons.wikimedia.org/wiki/Special:FilePath/Guo%20Xi%20-%20Early%20Spring%20%28large%29.jpg?width=960",
     localImage: "assets/artworks/china-guo-xi-early-spring.webp",
     imageCandidates: [
       "assets/artworks/china-guo-xi-early-spring.webp",
-      "assets/artworks/china-guo-xi-early-spring.jpg"
+      "assets/artworks/china-guo-xi-early-spring.jpg",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Guo%20Xi%20-%20Early%20Spring%20%28large%29.jpg?width=960"
     ],
     license: "Offline Demo Metadata / Verify before production use",
     region: "China",
@@ -1081,10 +1147,12 @@ const expandedArtworkLibrary = [
     dynastyOrEra: "Northern Song dynasty",
     museum: "The Palace Museum, Beijing",
     sourceUrl: "",
+    imageUrl: "https://commons.wikimedia.org/wiki/Special:FilePath/Along%20the%20River%20During%20the%20Qingming%20Festival%20%28detail%20of%20original%29.jpg?width=1280",
     localImage: "assets/artworks/china-zhang-zeduan-qingming.webp",
     imageCandidates: [
       "assets/artworks/china-zhang-zeduan-qingming.webp",
-      "assets/artworks/china-zhang-zeduan-qingming.jpg"
+      "assets/artworks/china-zhang-zeduan-qingming.jpg",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Along%20the%20River%20During%20the%20Qingming%20Festival%20%28detail%20of%20original%29.jpg?width=1280"
     ],
     license: "Offline Demo Metadata / Verify before production use",
     region: "China",
@@ -1121,10 +1189,12 @@ const expandedArtworkLibrary = [
     dynastyOrEra: "Northern Song dynasty",
     museum: "The Palace Museum, Beijing",
     sourceUrl: "",
+    imageUrl: "https://commons.wikimedia.org/wiki/Special:FilePath/Wang%20Ximeng.%20A%20Thousand%20Li%20of%20Rivers%20and%20Mountains.%20%28Complete%2C%2051%2C3x1191%2C5%20cm%29.%201113.%20Palace%20museum%2C%20Beijing.jpg?width=1600",
     localImage: "assets/artworks/china-wang-ximeng-thousand-li.webp",
     imageCandidates: [
       "assets/artworks/china-wang-ximeng-thousand-li.webp",
-      "assets/artworks/china-wang-ximeng-thousand-li.jpg"
+      "assets/artworks/china-wang-ximeng-thousand-li.jpg",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Wang%20Ximeng.%20A%20Thousand%20Li%20of%20Rivers%20and%20Mountains.%20%28Complete%2C%2051%2C3x1191%2C5%20cm%29.%201113.%20Palace%20museum%2C%20Beijing.jpg?width=1600"
     ],
     license: "Offline Demo Metadata / Verify before production use",
     region: "China",
@@ -1161,10 +1231,12 @@ const expandedArtworkLibrary = [
     dynastyOrEra: "Yuan dynasty",
     museum: "Zhejiang Provincial Museum / National Palace Museum, Taipei",
     sourceUrl: "",
+    imageUrl: "https://commons.wikimedia.org/wiki/Special:FilePath/Huang%20Gongwang.%20Dwelling%20in%20the%20Fuchun%20Mountains.%20detail.%20National%20Palace%20Museum%2C%20Taipei.jpg?width=1280",
     localImage: "assets/artworks/china-huang-gongwang-fuchun.webp",
     imageCandidates: [
       "assets/artworks/china-huang-gongwang-fuchun.webp",
-      "assets/artworks/china-huang-gongwang-fuchun.jpg"
+      "assets/artworks/china-huang-gongwang-fuchun.jpg",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Huang%20Gongwang.%20Dwelling%20in%20the%20Fuchun%20Mountains.%20detail.%20National%20Palace%20Museum%2C%20Taipei.jpg?width=1280"
     ],
     license: "Offline Demo Metadata / Verify before production use",
     region: "China",
@@ -2541,6 +2613,12 @@ const additionalChineseArtworkLibrary = [
 
 function createWorldArtwork(config) {
   const imageBase = "assets/artworks/" + config.id;
+  const localImage = config.localImage || imageBase + ".webp";
+  const imageCandidates = config.imageCandidates || [
+    localImage,
+    imageBase + ".jpg",
+    config.imageUrl
+  ];
   const tags = Array.from(new Set((config.tags || [
     ...(config.themeTags || []),
     ...(config.visualTags || []),
@@ -2558,11 +2636,9 @@ function createWorldArtwork(config) {
     dynastyOrEra: config.dynastyOrEra,
     museum: config.museum,
     sourceUrl: config.sourceUrl || "",
-    localImage: imageBase + ".webp",
-    imageCandidates: [
-      imageBase + ".webp",
-      imageBase + ".jpg"
-    ],
+    imageUrl: config.imageUrl || "",
+    localImage,
+    imageCandidates: imageCandidates.filter(Boolean),
     license: config.license || "Offline Demo Metadata / Verify before production use",
     region: config.region,
     category: config.category,
@@ -2600,6 +2676,12 @@ const additionalWorldArtworkLibrary = [
     year: "1495-1498",
     dynastyOrEra: "High Renaissance",
     museum: "Santa Maria delle Grazie, Milan",
+    imageUrl: "https://commons.wikimedia.org/wiki/Special:FilePath/Leonardo%20da%20Vinci%20-%20The%20Last%20Supper%20high%20res.jpg?width=1280",
+    imageCandidates: [
+      "assets/artworks/world-leonardo-last-supper.webp",
+      "assets/artworks/world-leonardo-last-supper.jpg",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Leonardo%20da%20Vinci%20-%20The%20Last%20Supper%20high%20res.jpg?width=1280"
+    ],
     region: "Italy",
     category: "Renaissance figure group",
     style: "High Renaissance",
@@ -2654,6 +2736,12 @@ const additionalWorldArtworkLibrary = [
     year: "c. 1482",
     dynastyOrEra: "Early Renaissance",
     museum: "Uffizi Gallery",
+    imageUrl: "https://commons.wikimedia.org/wiki/Special:FilePath/Sandro%20Botticelli%20-%20La%20Primavera%20-%20Google%20Art%20Project.jpg?width=1280",
+    imageCandidates: [
+      "assets/artworks/world-botticelli-primavera.webp",
+      "assets/artworks/world-botticelli-primavera.jpg",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Sandro%20Botticelli%20-%20La%20Primavera%20-%20Google%20Art%20Project.jpg?width=1280"
+    ],
     region: "Italy",
     category: "Renaissance mythological scene",
     style: "Early Renaissance",
@@ -2708,6 +2796,12 @@ const additionalWorldArtworkLibrary = [
     year: "c. 1512",
     dynastyOrEra: "High Renaissance",
     museum: "Sistine Chapel, Vatican",
+    imageUrl: "https://commons.wikimedia.org/wiki/Special:FilePath/Michelangelo%20-%20Creation%20of%20Adam%20%28cropped%29.jpg?width=1280",
+    imageCandidates: [
+      "assets/artworks/world-michelangelo-creation-adam.webp",
+      "assets/artworks/world-michelangelo-creation-adam.jpg",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Michelangelo%20-%20Creation%20of%20Adam%20%28cropped%29.jpg?width=1280"
+    ],
     region: "Italy",
     category: "Renaissance figure scene",
     style: "High Renaissance",
@@ -2762,6 +2856,12 @@ const additionalWorldArtworkLibrary = [
     year: "1642",
     dynastyOrEra: "Dutch Golden Age",
     museum: "Rijksmuseum",
+    imageUrl: "https://commons.wikimedia.org/wiki/Special:FilePath/Rembrandt%20van%20Rijn%20-%20De%20Nachtwacht%20-%20Google%20Art%20Project.jpg?width=1280",
+    imageCandidates: [
+      "assets/artworks/world-rembrandt-night-watch.webp",
+      "assets/artworks/world-rembrandt-night-watch.jpg",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Rembrandt%20van%20Rijn%20-%20De%20Nachtwacht%20-%20Google%20Art%20Project.jpg?width=1280"
+    ],
     region: "Netherlands",
     category: "Baroque group portrait",
     style: "Dutch Golden Age Baroque",
@@ -2843,6 +2943,12 @@ const additionalWorldArtworkLibrary = [
     year: "1839",
     dynastyOrEra: "Romanticism",
     museum: "National Gallery, London",
+    imageUrl: "https://commons.wikimedia.org/wiki/Special:FilePath/The%20Fighting%20Temeraire%2C%20JMW%20Turner%2C%20National%20Gallery.jpg?width=1280",
+    imageCandidates: [
+      "assets/artworks/world-turner-fighting-temeraire.webp",
+      "assets/artworks/world-turner-fighting-temeraire.jpg",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/The%20Fighting%20Temeraire%2C%20JMW%20Turner%2C%20National%20Gallery.jpg?width=1280"
+    ],
     region: "Europe",
     category: "Romantic seascape",
     style: "Romanticism",
@@ -2951,6 +3057,12 @@ const additionalWorldArtworkLibrary = [
     year: "1857",
     dynastyOrEra: "Realism",
     museum: "Musee d'Orsay",
+    imageUrl: "https://commons.wikimedia.org/wiki/Special:FilePath/Jean-Fran%C3%A7ois%20Millet%20-%20Gleaners%20-%20Google%20Art%20Project%202.jpg?width=1280",
+    imageCandidates: [
+      "assets/artworks/world-millet-gleaners.webp",
+      "assets/artworks/world-millet-gleaners.jpg",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Jean-Fran%C3%A7ois%20Millet%20-%20Gleaners%20-%20Google%20Art%20Project%202.jpg?width=1280"
+    ],
     region: "France",
     category: "Realist rural scene",
     style: "Realism",
@@ -3972,6 +4084,299 @@ const additionalWorldArtworkLibrary = [
 
 expandedArtworkLibrary.push(...additionalChineseArtworkLibrary, ...additionalWorldArtworkLibrary);
 
+const curatedCopyOverrides = {
+  "starry-night": {
+    shortIntro: "蓝色夜空、旋转星体和安静村庄共同构成梵高最具情绪力量的风景。",
+    detailedIntro: "《星月夜》把夜空画成可见的心理运动：星星、月亮和云气被卷入旋涡，小镇则安静地停在下方。它不是单纯夜景，而是把孤独、希望和不安压缩进色彩与笔触的名作。",
+    artistLife: "文森特·梵高出生于荷兰，早年做过画商、教师和传教相关工作，二十七岁后才全力投入绘画。他在贫困和精神波动中创作出大量作品，用粗重笔触和强烈色彩改变了现代艺术的方向。",
+    historicalContext: "十九世纪末的后印象派不再满足于记录眼前光线，而强调主观感受、结构和象征。《星月夜》把风景从外部景物转成内心状态，也为表现主义和二十世纪现代绘画提供了重要线索。",
+    funFact: "画中的村庄带有想象成分，真正被画出来的是梵高记忆中的夜色和情绪。"
+  },
+  "sunflowers": {
+    shortIntro: "一束向日葵被梵高画成黄色的生命剧场，盛放与枯萎同时出现。",
+    detailedIntro: "《向日葵》看似只是瓶花，实际是在研究黄色如何承载光、热和生命状态。花盘有的盛开、有的低垂、有的枯萎，整幅画像一组关于时间、友谊和期待的静物肖像。",
+    artistLife: "梵高在阿尔勒时期渴望建立艺术家共同生活的空间，并用向日葵装点为高更准备的房间。他一生销售寥寥，却在短暂创作期内把色彩和笔触推到极具情绪强度的位置。",
+    historicalContext: "后印象派艺术家开始把色彩从自然再现中释放出来，转向个人情绪和结构实验。梵高把普通静物画成精神肖像，使花朵成为现代绘画中最有生命力的图像之一。",
+    funFact: "梵高画过多个向日葵版本，花朵从盛放到枯萎，像同一束花的不同时刻。"
+  },
+  "water-lilies": {
+    shortIntro: "睡莲、倒影和水面在莫奈笔下融成柔软色彩场，几乎没有固定边界。",
+    detailedIntro: "《睡莲》系列把池塘变成可沉入其中的观看空间。花、天空倒影和水面互相渗透，传统透视被弱化，观众看到的不是一处景点，而是一片随光线变化的色彩呼吸。",
+    artistLife: "克洛德·莫奈是法国印象派核心画家，长期研究同一景物在不同时间和天气中的光色变化。晚年他在吉维尼花园反复描绘睡莲，把自然观察推向接近抽象的沉浸空间。",
+    historicalContext: "印象派关注瞬间光感，莫奈晚年的睡莲则进一步削弱物体轮廓和空间深度。这种大面积、环绕式的色彩经验，后来被许多抽象绘画和沉浸式展示重新理解。",
+    funFact: "莫奈的睡莲并非一两张小画，而是一整个晚年持续展开的水上世界。"
+  },
+  "great-wave": {
+    shortIntro: "巨浪、渔船和远处富士山构成强烈对比，是浮世绘最著名的自然图像。",
+    detailedIntro: "《神奈川冲浪里》用锋利浪尖和清晰轮廓表现自然力量。巨浪占据前景，船只被压低，富士山远远缩小，画面让人感到人类行动被卷入更宏大的风和海。",
+    artistLife: "葛饰北斋活跃于江户时代，一生不断改名、换题材和尝试新画法。他把浮世绘的线条、平面色彩和大胆构图推进到高峰，并通过版画影响了欧洲现代艺术。",
+    historicalContext: "江户城市文化使版画成为大众视觉媒介，风景系列也满足了人们对旅行和名所的想象。北斋作品后来传入欧洲，深刻影响印象派、后印象派和平面设计。",
+    funFact: "画面中富士山很小，却正好被浪形框住，安静地稳定住整张图。"
+  },
+  "mona-lisa": {
+    shortIntro: "这幅文艺复兴肖像以微笑、凝视和朦胧风景制造出持久的观看谜题。",
+    detailedIntro: "《蒙娜丽莎》的魅力不只来自微笑，也来自人物、观众和背景之间暧昧的关系。达芬奇用柔和明暗让面部边界不完全固定，远景道路和山水也像心理空间一样延伸。",
+    artistLife: "列奥纳多·达·芬奇是文艺复兴盛期代表人物，兼具画家、工程师、解剖研究者和科学观察者身份。他把人体、光学和自然研究带入绘画，使肖像获得罕见的真实感与神秘感。",
+    historicalContext: "文艺复兴盛期强调人文主义、透视法和对自然的理性观察。达芬奇在肖像中结合科学式观看与诗意处理，让个人形象不再只是身份记录，而成为复杂的精神存在。",
+    funFact: "蒙娜丽莎的嘴角没有硬轮廓，因此视线移动时，微笑也像在轻微变化。"
+  },
+  "girl-with-pearl": {
+    shortIntro: "少女回头、暗背景和珍珠高光共同制造出亲密而神秘的瞬间。",
+    detailedIntro: "《戴珍珠耳环的少女》不是严格意义上的身份肖像，更像一张凝固的回头。黑色背景让人物从暗处浮现，蓝黄头巾和珍珠高光把观众的视线集中在脸部和凝视上。",
+    artistLife: "约翰内斯·维米尔是荷兰黄金时代画家，传世作品数量不多，却以室内光线、安静人物和细腻空间著称。他善于把普通瞬间处理成持久、克制而富有心理深度的画面。",
+    historicalContext: "十七世纪荷兰市民社会兴盛，绘画题材从宏大宗教和历史转向室内、日常与个人观看。维米尔用柔和光线和静默人物，创造了与公共叙事不同的亲密视觉经验。",
+    funFact: "这颗珍珠很可能不是细致画出的饰品，而是几笔高光形成的视觉幻觉。"
+  },
+  "the-scream": {
+    shortIntro: "燃烧天空、扭曲桥面和张口人物让现代焦虑获得了最直接的图像。",
+    detailedIntro: "《呐喊》把风景变成心理震动。天空、桥梁和人物轮廓都被拉成长波，画面不是在描写某个人发声，而是在表现一个人被世界的声音穿透的瞬间。",
+    artistLife: "爱德华·蒙克来自挪威，长期关注疾病、死亡、孤独、欲望和焦虑等现代心理经验。他把内心状态直接转成颜色与线条，是表现主义形成前最重要的先声之一。",
+    historicalContext: "十九世纪末欧洲社会经历都市化、医学和心理学兴起，艺术家开始关注不可见的精神压力。蒙克用变形和强烈色彩，让现代人的不安成为绘画主题。",
+    funFact: "蒙克曾写到自己感到自然发出巨大的尖叫，这段经验成为作品的精神来源。"
+  },
+  "composition-viii": {
+    shortIntro: "圆、线、三角和色块像一张视觉乐谱，构成康定斯基的抽象节奏。",
+    detailedIntro: "《构成 VIII》没有传统人物或故事，却用几何形状建立清晰节奏。圆形、斜线、角度和颜色相互牵引，像不同乐器在同一画面中发声，让抽象形式成为真正的主角。",
+    artistLife: "瓦西里·康定斯基出生于俄罗斯，后来在德国包豪斯任教。他相信颜色和形状能像音乐一样影响情绪，是抽象艺术的重要先驱，也持续思考绘画与精神经验的关系。",
+    historicalContext: "二十世纪早期欧洲艺术正在寻找摆脱再现对象的新语言。包豪斯的设计、建筑和教学环境，使几何、色彩、音乐感与现代生活在康定斯基作品中发生连接。",
+    funFact: "康定斯基常把画面理解为声音组合，所以许多标题像乐曲编号。"
+  },
+  "mondrian-red-blue-yellow": {
+    shortIntro: "黑色网格、白色空间和三原色构成蒙德里安追求的纯粹秩序。",
+    detailedIntro: "《红、蓝、黄构成》把绘画压缩到垂直线、水平线、原色和白色空间。看似简单的格子依靠微妙比例维持平衡，每一块颜色都在影响整张画的张力。",
+    artistLife: "皮特·蒙德里安来自荷兰，早年画风景和树，后来逐渐走向完全抽象。他追求一种超越个人情绪的普遍秩序，其风格派理念深刻影响建筑、家具、平面设计和界面布局。",
+    historicalContext: "风格派兴起于一战后的现代主义语境，强调简化、秩序和普遍形式。蒙德里安的网格不是装饰，而是试图用最少元素重建现代世界的视觉结构。",
+    funFact: "蒙德里安作品里的线条和色块位置极其敏感，稍微移动就会改变整张画。"
+  },
+  "bedroom-arles": {
+    shortIntro: "一间卧室被梵高画成生活愿望和孤独情绪交织的精神自画像。",
+    detailedIntro: "《阿尔勒的卧室》里的床、椅子和墙面都有轻微倾斜，透视并不完全稳定。强烈色彩让房间看起来温暖，却也带着不安，像一张关于安宁愿望的自画像。",
+    artistLife: "梵高在阿尔勒时期希望建立艺术共同体，也希望拥有能够安放自己的生活空间。他在强烈创作热情和孤独之间摇摆，常把普通室内、花朵和风景画成心理状态。",
+    historicalContext: "后印象派艺术家常把日常题材转化为主观表达。梵高不追求室内的准确透视，而用颜色和变形让卧室承载情绪，使生活空间具有了精神意义。",
+    funFact: "梵高画过三个版本的卧室，像是在反复修复同一个关于安宁的愿望。"
+  },
+  "milkmaid": {
+    shortIntro: "倒牛奶的日常动作在维米尔笔下变成安静、专注而庄严的室内场景。",
+    detailedIntro: "《倒牛奶的女仆》描绘的是一个极小的动作，但窗光、面包、陶罐和人物姿态让它拥有仪式感。维米尔把厨房劳动处理得沉稳而专注，让日常生活获得持久的观看价值。",
+    artistLife: "维米尔生活在荷兰代尔夫特，作品数量很少，主要描绘室内人物、窗边光线和日常动作。他不靠夸张叙事取胜，而是在安静空间里安排光、颜色和心理停顿。",
+    historicalContext: "荷兰黄金时代的市民社会让厨房、桌面、窗户和普通劳动成为绘画主题。维米尔用细腻光线提高了日常场景的精神密度，也回应了当时家庭生活和市民审美的兴起。",
+    funFact: "墙上的小钉孔和面包篮都被认真处理，使普通厨房像舞台一样真实。"
+  },
+  "still-life-apples": {
+    shortIntro: "塞尚用苹果、桌面和布料研究体积、视角和现代绘画的结构秩序。",
+    detailedIntro: "《苹果静物》不是为了画出最逼真的水果，而是在研究物体如何在画面里稳定存在。苹果、盘子、桌布和桌面透视有意产生轻微错位，让观众意识到绘画内部的结构关系。",
+    artistLife: "保罗·塞尚是法国后印象派关键人物，被后来的艺术家视为现代绘画的重要起点。他反复描绘苹果、山体和浴者，把自然对象拆解成体积、色块和结构。",
+    historicalContext: "十九世纪末绘画从再现光线转向研究知觉和结构。塞尚的静物证明，普通桌面也能成为现代绘画实验场，并对立体主义和二十世纪艺术产生深远影响。",
+    funFact: "塞尚的桌子常常看起来有点歪，因为他更关心画面关系而非单点透视。"
+  },
+  "wanderer": {
+    shortIntro: "背影人物面对雾海和山峰，呈现浪漫主义关于孤独与崇高的经典画面。",
+    detailedIntro: "《雾海上的旅人》让背影人物成为观众的替身。山峰、雾气和开阔空间把个人放进巨大自然之中，使孤独不再只是低落情绪，而带有精神追问和壮阔感。",
+    artistLife: "卡斯帕·大卫·弗里德里希是德国浪漫主义代表画家，常用雾、海、山、废墟和背影表现人的精神处境。他的风景通常不是地理记录，而是关于信仰、孤独和命运的内心风景。",
+    historicalContext: "浪漫主义强调个体情感和自然的崇高感。面对不可完全掌控的自然，人既感到渺小，也获得精神思考的空间，弗里德里希正是这种观看方式的代表。",
+    funFact: "人物没有露出脸，因为真正重要的不是他是谁，而是他正在面对什么。"
+  },
+  "birth-of-venus": {
+    shortIntro: "海风、贝壳和维纳斯的身体构成文艺复兴早期关于美的诗意图像。",
+    detailedIntro: "《维纳斯的诞生》描绘女神从海中出现的瞬间。波提切利用流动头发、衣褶和柔和轮廓塑造理想化的美，画面不追求强烈真实感，而像一首关于出现与诞生的视觉诗。",
+    artistLife: "桑德罗·波提切利活跃于佛罗伦萨文艺复兴早期，擅长优雅线条、理想化人物和神话题材。他的作品常把古典传说、人文主义审美和诗性装饰结合起来。",
+    historicalContext: "早期文艺复兴重新发现古典神话和人体美学，大型绘画也从宗教叙事扩展到人文主题。《维纳斯的诞生》正体现了佛罗伦萨文化中对古典美的重新想象。",
+    funFact: "在当时的大型作品中，以裸体神话女神作为中心主题非常大胆。"
+  },
+  "irises": {
+    shortIntro: "蓝紫鸢尾和绿色叶片形成充满方向感的植物节奏，是梵高花卉名作。",
+    detailedIntro: "《鸢尾花》把花瓣、叶片和空隙组织成一片有节奏的植物群。梵高没有把花当作静物摆设，而是让每一片叶子都像有方向的笔触，使花园获得近乎图案化的生命力。",
+    artistLife: "梵高在圣雷米疗养院期间创作了这件作品，植物的重复生长对他像一种稳定心绪的方式。他把自然对象画成可见的力量，让花卉也具有强烈心理温度。",
+    historicalContext: "后印象派把自然题材转化为色彩、节奏和主观感受。植物不再只是被描绘的对象，也成为画面结构和情绪组织本身，预示了现代绘画对平面节奏的兴趣。",
+    funFact: "画中有一朵白色鸢尾，像在蓝紫色群体里轻轻偏离的主角。"
+  },
+  "red-fuji": {
+    shortIntro: "红色富士、蓝色天空和少量云纹构成北斋极简而有力的风景版画。",
+    detailedIntro: "《凯风快晴》几乎没有叙事人物，只用红色山体、蓝色天空和简洁云纹表现清晨富士。北斋把一座山处理成稳定而醒目的形状，让风景具有标志般的力量。",
+    artistLife: "葛饰北斋在《富岳三十六景》中不断改变富士山的观看方式，从海浪、桥梁、风雨和人群中重新组织同一座山。他对线条、平面色彩和构图裁切极为敏感。",
+    historicalContext: "江户时期的浮世绘版画适合传播城市生活、名所风景和旅行想象。北斋的风景图像后来影响欧洲艺术家对平面构图、裁切视角和强烈色块的理解。",
+    funFact: "同一座富士山在北斋系列里被反复改变视角，像被不同天气重新发明。"
+  },
+  "the-kiss": {
+    shortIntro: "金色装饰、图案化衣袍和拥吻姿态共同构成克里姆特的象征主义名作。",
+    detailedIntro: "《吻》把两个人几乎包裹进金色图案中。人物身体和装饰纹样彼此融合，情感不再只是动作，而像一场由金色、花纹和姿态共同完成的仪式。",
+    artistLife: "古斯塔夫·克里姆特是维也纳分离派代表人物，擅长把金色装饰、象征图案和人体情感结合。他的作品介于绘画、工艺美术和梦境之间，具有强烈现代装饰性。",
+    historicalContext: "维也纳分离派反对学院传统，强调绘画、设计和现代生活的连接。克里姆特的金色时期让绘画与装饰艺术边界松动，也回应了世纪之交维也纳的审美更新。",
+    funFact: "作品中的金色让人物像圣像、织物和梦境的混合体。"
+  },
+  "blue-horse": {
+    shortIntro: "蓝色马匹、弯曲山坡和明亮色块表现马尔克对动物精神性的想象。",
+    detailedIntro: "《蓝马 I》并不追求动物的真实毛色，而把马转化为精神象征。蓝色身体、柔软曲线和背景色块让画面介于自然形象与抽象情绪之间，显得安静又神秘。",
+    artistLife: "弗朗茨·马尔克是德国表现主义团体“蓝骑士”的重要成员，常以动物表现纯净、精神性和人与自然的关系。他短暂的一生因一战中断，但色彩象征影响深远。",
+    historicalContext: "表现主义艺术家试图超越外在真实，用强烈色彩和变形表达内在精神。动物在马尔克作品中常成为逃离现代异化、重新理解自然的象征。",
+    funFact: "在马尔克的色彩观里，蓝色常和精神性、宁静以及理想化力量有关。"
+  },
+  "black-square": {
+    shortIntro: "黑色方块像绘画史中的重启按钮，宣告绘画可以摆脱对象再现。",
+    detailedIntro: "《黑方块》拒绝描绘人物、风景或故事，只留下一个黑色几何形。它看似极简，却迫使观众意识到绘画可以不再再现世界，而是直接讨论颜色、形状和观看行为本身。",
+    artistLife: "卡济米尔·马列维奇是俄国先锋艺术家，创立至上主义，追求摆脱物体再现的纯粹形式。他把几何形推到接近哲学宣言的位置，影响了现代抽象和极简艺术。",
+    historicalContext: "二十世纪初俄国先锋艺术在革命、机器时代和新视觉语言之间激烈实验。至上主义把绘画从再现对象转向纯粹形式和精神空间，成为现代主义的重要节点。",
+    funFact: "它最早展出时被挂在房间角落高处，位置像俄罗斯家庭里的圣像。"
+  },
+  "school-of-athens": {
+    shortIntro: "哲学家群像、宏大建筑和中心透视共同构成文艺复兴理性精神的殿堂。",
+    detailedIntro: "《雅典学院》把古典哲学家放进一座理想建筑中。透视线汇聚到柏拉图和亚里士多德附近，人物群像以姿态和对话展开，让知识传统获得清晰、宏伟的视觉形态。",
+    artistLife: "拉斐尔是文艺复兴盛期大师，以和谐构图、优雅人物和清晰空间著称。他在短暂一生中完成大量重要作品，与达芬奇、米开朗基罗共同构成盛期文艺复兴的高峰。",
+    historicalContext: "文艺复兴盛期强调古典知识、人文主义和透视法。梵蒂冈壁画把哲学、神学、诗歌和法律组织成宏大的知识空间，体现了当时对理性秩序的信心。",
+    funFact: "画中一些古代哲学家被画成文艺复兴艺术家的面孔，包括达芬奇和米开朗基罗。"
+  },
+  "rain-steam-speed": {
+    shortIntro: "雨雾、蒸汽和疾驰火车被特纳画成工业时代的发光风暴。",
+    detailedIntro: "《雨、蒸汽和速度》让火车几乎从光、雾和空气中冲出来。特纳没有把机器画得十分清楚，而是把速度、天气和工业震动混合成一团发光的现代风景。",
+    artistLife: "约瑟夫·马洛德·威廉·特纳是英国浪漫主义风景画大师，极擅长用光、雾、水汽和色彩表现自然力量。他晚期作品常接近抽象，也持续关注现代技术带来的视觉变化。",
+    historicalContext: "十九世纪铁路改变了时间、空间和旅行经验，也改变了人们观看风景的速度。特纳把工业现代性放入浪漫主义的自然崇高传统中，形成新的现代景观。",
+    funFact: "火车本身并不清晰，却像从雨雾中冲出来的未来。"
+  },
+  "garden-earthly-delights": {
+    shortIntro: "人物、动物、果实和怪异建筑密布成三联画，是北方文艺复兴的视觉奇观。",
+    detailedIntro: "《人间乐园》像一本塞满谜语的视觉百科。三联画中人物、动物、植物和怪异器物不断出现，观看者需要在细节里移动，才能感受到它关于欲望、诱惑和后果的复杂寓言。",
+    artistLife: "希罗尼穆斯·博斯是北方文艺复兴最具想象力的画家之一，作品充满宗教寓言、怪异生物和象征细节。他的图像后来常被视为超现实主义的遥远先声。",
+    historicalContext: "北方文艺复兴比意大利传统更强调细节、道德寓言和象征系统。博斯把宗教警示、民间想象和日常奇观压缩到极复杂的画面中，使观看变成解谜过程。",
+    funFact: "这幅画几乎每个角落都有故事，非常适合被放大一点点细看。"
+  },
+  "woman-reading": {
+    shortIntro: "窗边读信的女人被蓝白光线包围，日常瞬间变成安静的内心空间。",
+    detailedIntro: "《读信的女人》把一个私人动作放进静默室内。观众看不到信的内容，却能通过人物姿态、窗光和房间空旷感，感到外部消息正在改变她的内心。",
+    artistLife: "维米尔经常让窗边光线进入室内，使人物、家具和空气形成安静的戏剧。他的作品数量不多，却擅长用极少动作表现私人时间和心理停顿。",
+    historicalContext: "荷兰黄金时代的室内画关注日常生活、个人空间和市民文化。信件、窗户和光线在维米尔作品中成为连接外部世界与内心活动的媒介，也反映了当时私人阅读和家庭空间的重要性。",
+    funFact: "蓝色衣裙和黄色窗帘形成柔和对比，让视线自然停在读信的瞬间。"
+  },
+  "china-fan-kuan-travelers": {
+    shortIntro: "北宋巨碑式山水以高耸山体和微小行旅，表现人在天地间的尺度。",
+    detailedIntro: "《溪山行旅图》把山体推到画面中央，巨峰像屏障般压住视线，驮队和行旅人物则小到几乎需要靠近才看见。作品不只是风景，也在建立人与自然之间的精神秩序。",
+    artistLife: "范宽是北宋山水画的重要画家，传说长期观察终南、太华一带山势。他的山水强调厚重结构、雨点皴和自然气象，对后世巨碑式山水影响极深。",
+    historicalContext: "北宋山水画常把自然视为可以安放精神秩序的宏大世界。巨碑式构图、层层山体和细密皴法，使山水成为可敬畏、可游观、也可修身的空间。",
+    funFact: "画中行旅队伍非常小，这种尺度差让山峰显得更有压迫感。"
+  },
+  "china-guo-xi-early-spring": {
+    shortIntro: "早春山气、蟹爪树枝和多重视点构成可游可居的北宋山水。",
+    detailedIntro: "《早春图》没有采用单一固定视点，而是让山、树、溪流和云气层层展开。观看者像在画中移动，能感到冬寒初退、山气渐生，空间因此具有可游历的深度。",
+    artistLife: "郭熙是北宋宫廷画家和山水理论家，传世理论《林泉高致》系统总结了山水画的观看、构图和意境经验。他的作品把自然观察与宫廷审美结合起来。",
+    historicalContext: "北宋山水画发展出成熟的空间理论，强调高远、深远、平远等观看方式。郭熙的山水不只是景物排列，而是让观众在画中经历时间和空间的转换。",
+    funFact: "郭熙笔下树枝常被称作“蟹爪枝”，像伸展的爪形线条。"
+  },
+  "china-zhang-zeduan-qingming": {
+    shortIntro: "长卷展开汴京城郊、桥梁、舟车和人群，是宋代城市生活的经典图像。",
+    detailedIntro: "《清明上河图》通过长卷形式让观看变成一次步行式浏览。桥梁、船只、商铺、车马和人物形成连续叙事，细节密度极高，是城市风俗与空间组织的代表作。",
+    artistLife: "张择端为北宋画家，传世资料有限，但《清明上河图》使他成为中国城市风俗画史中最重要的名字之一。他以精细线描和长卷叙事记录复杂市井空间。",
+    historicalContext: "宋代城市经济和市民生活繁荣，绘画题材从山水、宗教和宫廷叙事扩展到市井日常。长卷特别适合呈现时间、空间和人群活动的连续展开。",
+    funFact: "它常被当作宋代城市生活档案，但每段节奏其实都经过高度组织。"
+  },
+  "china-wang-ximeng-thousand-li": {
+    shortIntro: "青绿矿物色铺陈千里山河，宏阔空间与装饰性光彩同时出现。",
+    detailedIntro: "《千里江山图》以长卷方式展开连绵山水，青绿矿物色让山体具有近乎发光的装饰性。它把宏大疆域转化为可缓慢观看的视觉旅程，也展示了宋代宫廷绘画的精致想象。",
+    artistLife: "王希孟是北宋青年画家，据传曾受宋徽宗指导，十八岁左右完成《千里江山图》。他的传世作品极少，因此这件长卷几乎成为理解其才华的核心依据。",
+    historicalContext: "青绿山水继承唐以来重彩传统，在宋代宫廷语境中被赋予精致、理想化和国家山河想象的意义。矿物色、细线和长卷共同制造出宏大而明亮的世界。",
+    funFact: "王希孟完成此卷时非常年轻，因此它常被看作天才少年画家的代表故事。"
+  },
+  "china-huang-gongwang-fuchun": {
+    shortIntro: "元代文人山水以淡墨、干笔和长卷节奏写出富春江的清远意境。",
+    detailedIntro: "《富春山居图》不像北宋巨碑山水那样压倒观众，而以舒缓长卷、淡墨和干笔形成可慢慢游历的文人空间。山、水、坡岸和空白共同呈现清远、从容的精神气息。",
+    artistLife: "黄公望为元四家之一，曾经历仕途波折，晚年寄情山水、道教修养和文人交游。他的绘画强调笔墨修养与内在气息，对明清文人山水产生了深远影响。",
+    historicalContext: "元代文人画强化书法性笔墨和个人心境，山水不再只是宏大自然，也成为隐逸、记忆和精神修养的媒介。《富春山居图》正是这种文人理想的高峰。",
+    funFact: "此卷后来曾遭火焚并分成两段，今天分别收藏于不同机构。"
+  },
+  "china-xu-beihong-galloping-horse": {
+    shortIntro: "水墨奔马以准确结构和强烈动势，融合中国笔墨与现代造型意识。",
+    detailedIntro: "《奔马图》以大块水墨、飞扬鬃尾和展开四蹄表现速度与力量。徐悲鸿让传统水墨具备现代速写般的结构感，奔马也常被理解为昂扬、自由和时代精神的象征。",
+    artistLife: "徐悲鸿接受中西绘画训练，重视素描、写实造型和中国画笔墨结合。他在艺术教育、人物画和动物画领域影响深远，是近现代中国画转型中的关键人物。",
+    historicalContext: "二十世纪中国画面对现代教育、写实观念和民族表达的挑战。徐悲鸿以马、人物和历史题材探索传统笔墨的新造型能力，让水墨获得新的公共象征。",
+    funFact: "他画马常用少量线条撑起强烈速度感，鬃尾和四蹄最能表现动势。"
+  },
+  "china-qi-baishi-shrimp": {
+    shortIntro: "齐白石用透明水墨和简练线条表现虾的灵动，是近现代写意名题材。",
+    detailedIntro: "齐白石画虾以淡墨表现透明身体，以浓墨点出眼、须和关节，既简练又有生命感。画面常保留大量空白，让水的存在由观众补足，体现写意画以少胜多的能力。",
+    artistLife: "齐白石从民间木匠、篆刻和绘画一路发展为现代中国画巨匠。他善于把虾、蟹、花草、瓜果等日常生命转化为高度概括的笔墨形象，兼具民间气息和文人趣味。",
+    historicalContext: "近现代中国画在传统笔墨和现代视觉经验之间调整方向。齐白石以平民题材、金石趣味和大胆概括更新了写意传统，使小生命也具有艺术史分量。",
+    funFact: "齐白石画虾经过长期观察，虾须、虾脚和透明身体都被压缩成极少几笔。"
+  },
+  "world-rembrandt-night-watch": {
+    shortIntro: "伦勃朗把群像肖像变成行动中的戏剧场面，光影和人群动势极强。",
+    detailedIntro: "《夜巡》把民兵队群像从静态排列变成正在出发的瞬间。伦勃朗用深暗背景、金色光线、手势和错落人物制造空间层次，让公共委托肖像像一段戏剧正在展开。",
+    artistLife: "伦勃朗是荷兰黄金时代最重要的画家之一，擅长肖像、历史画、版画和深刻光影。他的作品不只描绘外貌，也常通过光线和表情表现人物的心理重量。",
+    historicalContext: "十七世纪荷兰共和国市民社会推动了群像肖像和公共委托的发展。伦勃朗在传统类型中加入行动、戏剧和复杂光影，使市民群像获得了历史画般的力度。",
+    funFact: "它并非真正画的是夜晚，深色效果很大程度来自后来的变暗和传统称呼。"
+  },
+  "world-leonardo-last-supper": {
+    shortIntro: "达芬奇用透视、手势和群像心理组织宗教叙事，制造紧张的一瞬间。",
+    detailedIntro: "《最后的晚餐》把建筑透视、人物姿态和心理反应压缩在同一时刻。中央消失点把视线引向基督，周围门徒分组回应，理性空间和戏剧情绪形成高度平衡。",
+    artistLife: "列奥纳多·达·芬奇兼具艺术家、工程师、解剖研究者和科学观察者身份。他在绘画中持续研究人体、光学、空间和情绪表达，使宗教题材具有真实而复杂的人性。",
+    historicalContext: "文艺复兴盛期强调透视、解剖和人文主义叙事。宗教题材在这里被转化为高度理性又充满心理张力的视觉结构，体现了艺术与科学观察的结合。",
+    funFact: "它不是传统架上画，而是壁画实验，因此保存状态长期备受挑战。"
+  },
+  "world-botticelli-primavera": {
+    shortIntro: "神话人物、花园和流动线条构成春天寓言，是文艺复兴的诗性名作。",
+    detailedIntro: "《春》把古典神话、植物细节和优雅线条组织成复杂寓言。人物像在花园舞台上排列，细线、花朵和衣褶共同形成装饰节奏，使春天变成可阅读的图像。",
+    artistLife: "桑德罗·波提切利活跃于佛罗伦萨文艺复兴早期，擅长优雅线条、诗性人物和神话题材。他常把古典传说与人文主义审美结合，形成轻盈而富象征意味的画面。",
+    historicalContext: "早期文艺复兴重新发现古典神话，绘画也从宗教叙事拓展到人文寓言和诗性想象。佛罗伦萨的赞助环境为这类神话花园图像提供了文化土壤。",
+    funFact: "画中植物种类非常多，花园不只是背景，也是寓意系统的一部分。"
+  },
+  "world-michelangelo-creation-adam": {
+    shortIntro: "两只即将相触的手让神话叙事变成充满张力的身体与空白关系。",
+    detailedIntro: "《创造亚当》的力量来自两只手之间极小的距离。米开朗基罗用人体、云团和空白组织出电光一瞬般的视觉关系，让神学叙事变得直接、清晰又充满悬念。",
+    artistLife: "米开朗基罗是文艺复兴盛期的雕塑家、画家、建筑师和诗人。他对人体结构、肌肉张力和精神力量的表现极具影响力，西斯廷天顶画是其绘画成就的核心之一。",
+    historicalContext: "文艺复兴人体观念在这里达到高度戏剧化。人体不只是自然形体，也是精神力量、创造秩序和神圣叙事的载体，体现盛期文艺复兴对人的高度重视。",
+    funFact: "画中最紧张的部分不是相触，而是还没有相触的那一点距离。"
+  },
+  "world-turner-fighting-temeraire": {
+    shortIntro: "夕阳、老战舰和蒸汽拖船构成工业时代与旧世界告别的海上挽歌。",
+    detailedIntro: "《战舰无畏号》把退役战舰被拖向拆解场的场景变成关于历史终结的视觉挽歌。特纳用夕阳、雾气和水面反光，让旧式帆船与现代蒸汽动力形成强烈对照。",
+    artistLife: "特纳是英国浪漫主义风景画大师，尤其擅长光、雾、海和现代速度。他一生持续旅行和观察天气，晚期作品用松动色彩把自然、历史和工业变化融合在一起。",
+    historicalContext: "十九世纪工业化改变了英国的海权、交通和视觉经验。浪漫主义艺术把技术与自然崇高放在同一画面中思考，《战舰无畏号》正表达了这种告别与转型。",
+    funFact: "这幅画常被英国观众视为最具情感力量的国民绘画之一。"
+  },
+  "world-monet-impression-sunrise": {
+    shortIntro: "雾气港口、橙色太阳和松动笔触共同命名了印象派。",
+    detailedIntro: "《印象·日出》以快速笔触捕捉勒阿弗尔港的清晨雾气。画面不追求细节完成度，而强调光、空气、倒影和瞬间感，橙色太阳像一个小小的视觉锚点。",
+    artistLife: "克洛德·莫奈是法国印象派核心人物，长期研究光线、天气和水面反射。他反复描绘同一主题在不同时刻的变化，使绘画从固定对象转向流动的视觉经验。",
+    historicalContext: "印象派挑战学院绘画的完成度标准，强调现代生活中的瞬间视觉感受。港口、雾气、工业设施和水面反光共同构成现代城市景观，评论者对标题的嘲讽反而成为“印象派”名称来源。",
+    funFact: "“印象派”这个名字正来自评论者对这幅画标题的揶揄。"
+  },
+  "world-hopper-nighthawks": {
+    shortIntro: "夜晚餐馆、玻璃窗和沉默人物构成现代城市孤独的标志图像。",
+    detailedIntro: "《夜游者》用明亮餐馆和空荡街道制造现代孤独。玻璃窗隔开人物和观众，室内明明近在眼前，却因为沉默、灯光和街角空间显得格外疏离。",
+    artistLife: "爱德华·霍普是美国现代现实主义代表画家，擅长描绘城市、道路、旅馆、剧院和孤独人物。他的画常用简单构图和清冷光线表现现代生活中的距离感。",
+    historicalContext: "二十世纪美国城市化、大众文化和夜间商业空间发展，使普通街角和餐馆成为现代绘画的重要场景。霍普把这些日常空间转化为心理剧场。",
+    funFact: "画中餐馆没有明显出口，增强了人物被困在夜色中的感觉。"
+  },
+  "world-dali-persistence-memory": {
+    shortIntro: "软钟、荒原和冷静梦境让时间在达利笔下变成可融化的形状。",
+    detailedIntro: "《记忆的永恒》把坚硬钟表画成柔软下垂的物体，使时间失去平常的秩序。荒凉海岸、低矮平台和奇异生物让梦境显得冷静而不安，像一条理性之外的逻辑。",
+    artistLife: "萨尔瓦多·达利是西班牙超现实主义最著名的艺术家之一，善于用精细写实技巧描绘荒诞梦境。他的公众形象夸张鲜明，但作品核心常围绕欲望、记忆和潜意识。",
+    historicalContext: "超现实主义受到精神分析、梦的研究和自动书写影响，试图释放理性之外的图像逻辑。达利用近乎写实的技巧让不可能之物显得可信，从而制造强烈冲突。",
+    funFact: "这幅画尺寸并不大，却让软钟成为整个超现实主义最知名的符号之一。"
+  },
+  "world-klimt-portrait-adele": {
+    shortIntro: "金色图案包围人物肖像，真实面容与装饰符号融为一体。",
+    detailedIntro: "《阿黛尔·布洛赫-鲍尔肖像一号》把人物几乎融入金色装饰场中。脸和手保留真实触感，衣饰和背景则变成眼睛、方块和旋纹等符号，是肖像与装饰艺术结合的高峰。",
+    artistLife: "古斯塔夫·克里姆特是维也纳分离派代表人物，擅长金色、图案和象征性人物。他把传统肖像、装饰艺术和现代心理气质结合起来，创造出强烈辨识度的视觉语言。",
+    historicalContext: "维也纳分离派打破学院传统，强调绘画、设计和装饰艺术的统一。世纪之交的维也纳充满现代化、心理学和审美革新，这幅肖像正体现了那种复杂气氛。",
+    funFact: "这幅作品因归属和归还历史，也成为二十世纪艺术法律案例中的重要图像。"
+  },
+  "world-kandinsky-yellow-red-blue": {
+    shortIntro: "黄色、红色、蓝色和几何结构组成康定斯基成熟抽象语言的视觉乐谱。",
+    detailedIntro: "《黄红蓝》把颜色、线条和几何形状组织成类似音乐的抽象结构。画面没有叙事对象，却有明显节奏方向：左侧偏明亮开阔，右侧更密集复杂，像两种声音互相回应。",
+    artistLife: "瓦西里·康定斯基是抽象艺术先驱，曾在德国包豪斯任教，持续思考颜色、形状和精神性的关系。他把绘画从再现对象推向内在节奏和情绪结构。",
+    historicalContext: "二十世纪早期抽象艺术试图摆脱再现对象，建立现代视觉语言。包豪斯时期的康定斯基把艺术、设计、教育和几何分析结合起来，形成更系统的抽象方法。",
+    funFact: "康定斯基常把视觉和音乐联系起来，因此看他的抽象画也像在读一份乐谱。"
+  }
+};
+
+function applyCuratedCopyOverrides(artwork) {
+  const override = curatedCopyOverrides[artwork.id];
+  if (!override) return;
+  Object.assign(artwork, override);
+  artworkMetadata[artwork.id] = Object.assign({}, artworkMetadata[artwork.id], override);
+}
+
+coreArtworkLibrary.forEach(applyCuratedCopyOverrides);
+expandedArtworkLibrary.forEach(applyCuratedCopyOverrides);
+
 expandedArtworkLibrary.forEach((artwork) => {
   artworkMetadata[artwork.id] = Object.assign({}, artworkMetadata[artwork.id], {
     imageCandidates: artwork.imageCandidates,
@@ -3990,6 +4395,30 @@ expandedArtworkLibrary.forEach((artwork) => {
   });
 });
 
+function normalizeArtworkImageFields(artwork) {
+  const imageBase = "assets/artworks/" + artwork.id;
+  const localImage = imageBase + ".webp";
+  const localJpg = imageBase + ".jpg";
+  const remoteImage = artwork.imageUrl || remoteArtworkImages[artwork.id] || "";
+  const existingCandidates = Array.isArray(artwork.imageCandidates) ? artwork.imageCandidates : [];
+
+  artwork.localImage = localImage;
+  if (remoteImage) artwork.imageUrl = remoteImage;
+  artwork.imageCandidates = uniqueCoreValues([
+    localImage,
+    localJpg,
+    ...existingCandidates.filter((candidate) => candidate !== localImage && candidate !== localJpg && candidate !== remoteImage),
+    remoteImage
+  ]);
+
+  artworkMetadata[artwork.id] = Object.assign({}, artworkMetadata[artwork.id], {
+    imageCandidates: artwork.imageCandidates
+  });
+}
+
+const allArtworkLibrary = coreArtworkLibrary.concat(expandedArtworkLibrary);
+allArtworkLibrary.forEach(normalizeArtworkImageFields);
+
 function getAllArtworks() {
-  return coreArtworkLibrary.concat(expandedArtworkLibrary);
+  return allArtworkLibrary;
 }

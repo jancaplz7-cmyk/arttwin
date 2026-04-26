@@ -863,8 +863,7 @@
       min-height: 260px;
     }
 
-    .image-tile > img,
-    .compare-pane > img {
+    .image-tile > img {
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -1043,126 +1042,6 @@
 
     .reason-list li + li {
       margin-top: 8px;
-    }
-
-    .comparison-card {
-      position: relative;
-      overflow: hidden;
-    }
-
-    .comparison-wrap,
-    .comparison-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-top: 12px;
-    }
-
-    .compare-pane {
-      position: relative;
-      min-height: 230px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 16px;
-      overflow: hidden;
-      background: rgba(0, 0, 0, 0.25);
-    }
-
-    .user-art-panel {
-      border-color: rgba(120, 231, 255, 0.2);
-    }
-
-    .masterpiece-panel {
-      border-color: rgba(246, 201, 106, 0.3);
-      box-shadow:
-        inset 0 0 36px rgba(246, 201, 106, 0.06),
-        0 0 28px rgba(120, 231, 255, 0.08);
-    }
-
-    .morph-overlay {
-      position: absolute;
-      inset: 0;
-      z-index: 3;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.42s ease;
-      mix-blend-mode: screen;
-    }
-
-    .user-outline {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      opacity: 0;
-      filter: saturate(1.7) contrast(1.25) drop-shadow(0 0 12px rgba(120, 231, 255, 0.82));
-      mix-blend-mode: screen;
-      transform: scale(1.08) rotate(-2deg);
-      transition: opacity 0.45s ease, transform 0.9s ease;
-    }
-
-    .glow-line {
-      position: absolute;
-      height: 2px;
-      width: 46%;
-      left: var(--left);
-      top: var(--top);
-      background: linear-gradient(90deg, transparent, rgba(120,231,255,0.95), rgba(246,201,106,0.9), transparent);
-      box-shadow: 0 0 14px rgba(120, 231, 255, 0.86);
-      transform: rotate(var(--rot)) scaleX(0);
-      transform-origin: left center;
-      opacity: 0;
-    }
-
-    .callout {
-      position: absolute;
-      left: var(--left);
-      top: var(--top);
-      max-width: 190px;
-      padding: 7px 9px;
-      border: 1px solid rgba(246, 201, 106, 0.4);
-      border-radius: 12px;
-      background: rgba(4, 6, 16, 0.78);
-      color: #fff2c2;
-      font-size: 12px;
-      line-height: 1.42;
-      opacity: 0;
-      transform: translateY(8px);
-      box-shadow: 0 0 18px rgba(246, 201, 106, 0.16);
-      backdrop-filter: blur(12px);
-    }
-
-    .comparison-card.overlay-active .morph-overlay {
-      opacity: 1;
-    }
-
-    .comparison-card.overlay-active .morph-overlay .user-outline {
-      opacity: 0.64;
-      transform: scale(1) rotate(0deg);
-      animation: outlinePulse 1.7s ease-in-out infinite alternate;
-    }
-
-    .comparison-card.overlay-active .morph-overlay .glow-line {
-      animation: lineTrace 0.8s ease forwards;
-      animation-delay: var(--delay);
-    }
-
-    .comparison-card.overlay-active .morph-overlay .callout {
-      animation: calloutIn 0.58s ease forwards;
-      animation-delay: var(--delay);
-    }
-
-    @keyframes outlinePulse {
-      from { filter: saturate(1.3) contrast(1.1) drop-shadow(0 0 8px rgba(120, 231, 255, 0.58)); }
-      to { filter: saturate(1.9) contrast(1.32) drop-shadow(0 0 18px rgba(246, 201, 106, 0.62)); }
-    }
-
-    @keyframes lineTrace {
-      to { transform: rotate(var(--rot)) scaleX(1); opacity: 1; }
-    }
-
-    @keyframes calloutIn {
-      to { opacity: 1; transform: translateY(0); }
     }
 
     .top3-section {
@@ -1590,8 +1469,7 @@
       color: #6f646d;
     }
 
-    .image-tile,
-    .compare-pane {
+    .image-tile {
       background: #fff5f7;
       border-color: rgba(31, 23, 32, 0.08);
       box-shadow: 0 12px 30px rgba(31, 23, 32, 0.08);
@@ -1619,18 +1497,6 @@
     .source-link {
       color: #ff2f56;
       border-bottom-color: rgba(255, 47, 86, 0.22);
-    }
-
-    .callout {
-      border-color: rgba(255, 47, 86, 0.2);
-      background: rgba(255, 255, 255, 0.86);
-      color: #1f1720;
-      box-shadow: 0 10px 22px rgba(255, 47, 86, 0.12);
-    }
-
-    .glow-line {
-      background: linear-gradient(90deg, transparent, rgba(255,47,86,0.95), rgba(255,178,63,0.9), transparent);
-      box-shadow: 0 0 14px rgba(255, 47, 86, 0.5);
     }
 
     .curator-avatar {
@@ -1744,6 +1610,401 @@
       color: #fff2bf;
       font-size: 14px;
       line-height: 1.7;
+    }
+
+    .resonance-compare {
+      margin-top: 18px;
+      padding: clamp(16px, 2.5vw, 24px);
+      border: 1px solid rgba(185, 146, 82, 0.18);
+      border-radius: 24px;
+      background:
+        radial-gradient(circle at 12% 0, rgba(185, 146, 82, 0.1), transparent 34%),
+        radial-gradient(circle at 90% 16%, rgba(140, 153, 199, 0.12), transparent 34%),
+        rgba(255, 253, 248, 0.92);
+      box-shadow: 0 18px 48px rgba(84, 67, 49, 0.1);
+    }
+
+    .resonance-compare h3,
+    .poster-page h2,
+    .badge-page h2 {
+      margin: 0;
+      color: var(--museum-ink);
+      font-family: Georgia, "Songti SC", serif;
+      font-size: clamp(24px, 3vw, 38px);
+      letter-spacing: 0;
+    }
+
+    .resonance-compare > p,
+    .poster-page > p,
+    .badge-page > p {
+      margin: 8px 0 0;
+      color: var(--museum-muted);
+      line-height: 1.7;
+    }
+
+    .resonance-frames {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .resonance-frame {
+      position: relative;
+      min-height: 280px;
+      aspect-ratio: 4 / 3;
+      overflow: hidden;
+      border: 1px solid rgba(83, 67, 49, 0.14);
+      border-radius: 20px;
+      background: #f7efe4;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.6), 0 14px 32px rgba(84, 67, 49, 0.1);
+    }
+
+    .resonance-frame img,
+    .resonance-frame .masterpiece-image {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .resonance-marker {
+      position: absolute;
+      left: calc(var(--x) * 1%);
+      top: calc(var(--y) * 1%);
+      z-index: 5;
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border: 2px solid rgba(255, 255, 255, 0.78);
+      border-radius: 999px;
+      background: linear-gradient(135deg, #b99252, #8c99c7 58%, #2b2118);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 900;
+      box-shadow: 0 8px 18px rgba(43, 33, 24, 0.26);
+      transform: translate(-50%, -50%);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .resonance-marker:hover,
+    .resonance-marker:focus-visible {
+      transform: translate(-50%, -50%) scale(1.12);
+      box-shadow: 0 10px 24px rgba(140, 153, 199, 0.38);
+    }
+
+    .resonance-notes {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .resonance-note {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 10px;
+      padding: 13px;
+      border: 1px solid rgba(185, 146, 82, 0.14);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.72);
+    }
+
+    .note-number {
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #b99252, #8c99c7);
+      color: #fff;
+      font-weight: 900;
+    }
+
+    .resonance-note b {
+      display: block;
+      margin-bottom: 6px;
+      color: #8b6b36;
+    }
+
+    .resonance-note p {
+      margin: 4px 0 0;
+      color: var(--museum-muted);
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .top-match-detail {
+      margin: 14px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(185, 146, 82, 0.16);
+    }
+
+    .top-match-detail .details-content {
+      display: none;
+      padding: 0;
+    }
+
+    .top-match-detail.open .details-content {
+      display: block;
+    }
+
+    .match-detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .match-detail-block {
+      padding: 13px;
+      border: 1px solid rgba(185, 146, 82, 0.13);
+      border-radius: 14px;
+      background: rgba(255, 253, 248, 0.72);
+    }
+
+    .match-detail-block b {
+      display: block;
+      margin-bottom: 6px;
+      color: #8b6b36;
+    }
+
+    .match-detail-block p,
+    .match-detail-block li {
+      margin: 0;
+      color: var(--museum-muted);
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .poster-section,
+    .badge-section {
+      margin-top: 28px;
+    }
+
+    .poster-page,
+    .badge-page {
+      border: 1px solid rgba(185, 146, 82, 0.18);
+      border-radius: 28px;
+      padding: clamp(18px, 3vw, 30px);
+      background: rgba(255, 253, 248, 0.92);
+      box-shadow: 0 24px 70px rgba(84, 67, 49, 0.13);
+    }
+
+    .poster-shell {
+      position: relative;
+      max-width: 760px;
+      margin: 18px auto 0;
+      padding: clamp(18px, 4vw, 32px);
+      overflow: hidden;
+      border-radius: 34px;
+      background:
+        radial-gradient(circle at 18% 8%, rgba(255,255,255,0.72), transparent 20%),
+        radial-gradient(circle at 84% 20%, rgba(255,255,255,0.48), transparent 18%),
+        linear-gradient(135deg, #ffdbe7 0%, #dfe8ff 45%, #fff0c8 100%);
+      box-shadow: 0 28px 80px rgba(140, 112, 150, 0.24);
+    }
+
+    .poster-shell::before {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.56);
+      border-radius: 26px;
+      pointer-events: none;
+    }
+
+    .poster-content {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 16px;
+    }
+
+    .poster-kicker {
+      width: fit-content;
+      padding: 7px 11px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.66);
+      color: #7a5a9c;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+    }
+
+    .poster-brand {
+      color: #2b2118;
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .poster-persona {
+      margin: 0;
+      color: #2b2118;
+      font-family: Georgia, "Songti SC", serif;
+      font-size: clamp(36px, 8vw, 74px);
+      line-height: 1.02;
+    }
+
+    .poster-copy {
+      margin: 0;
+      max-width: 620px;
+      color: rgba(43, 33, 24, 0.72);
+      font-size: 16px;
+      line-height: 1.75;
+    }
+
+    .poster-images {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .poster-image {
+      position: relative;
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.7);
+      border-radius: 22px;
+      background: rgba(255,255,255,0.56);
+      box-shadow: 0 14px 34px rgba(43, 33, 24, 0.1);
+    }
+
+    .poster-image img,
+    .poster-image .masterpiece-image {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .poster-score-row {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 16px;
+      align-items: center;
+      padding: 14px;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.58);
+    }
+
+    .poster-score {
+      font-family: Georgia, serif;
+      font-size: clamp(48px, 12vw, 92px);
+      line-height: 0.9;
+      color: #ff4d7d;
+      font-weight: 900;
+    }
+
+    .poster-artwork-title {
+      margin: 0 0 4px;
+      color: #2b2118;
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .poster-tags,
+    .badge-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .poster-tags span,
+    .badge-tags span {
+      padding: 5px 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.62);
+      color: #755d88;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .poster-footer {
+      color: rgba(43, 33, 24, 0.66);
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .badge-unlock-card,
+    .badge-progress {
+      margin-top: 16px;
+      padding: 16px;
+      border: 1px solid rgba(185, 146, 82, 0.16);
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.72);
+    }
+
+    .progress-bar {
+      height: 10px;
+      margin-top: 10px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(83, 67, 49, 0.1);
+    }
+
+    .progress-fill {
+      width: var(--progress);
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #b99252, #8c99c7, #ff7aa2);
+    }
+
+    .badge-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .badge-card {
+      min-height: 220px;
+      padding: 16px;
+      border: 1px solid rgba(83, 67, 49, 0.12);
+      border-radius: 22px;
+      background: #f1ede6;
+      color: #8c8378;
+    }
+
+    .badge-card.unlocked {
+      border-color: rgba(185, 146, 82, 0.38);
+      background:
+        radial-gradient(circle at 16% 0, rgba(255,255,255,0.5), transparent 30%),
+        linear-gradient(135deg, rgba(255, 245, 211, 0.95), rgba(224, 232, 255, 0.94), rgba(255, 226, 239, 0.9));
+      color: var(--museum-ink);
+      box-shadow: 0 16px 38px rgba(185, 146, 82, 0.16);
+    }
+
+    .badge-card.current {
+      box-shadow: 0 0 0 2px rgba(255, 122, 162, 0.36), 0 16px 44px rgba(255, 122, 162, 0.16);
+    }
+
+    .badge-icon {
+      font-size: 36px;
+      line-height: 1;
+    }
+
+    .badge-card h3 {
+      margin: 12px 0 4px;
+      color: inherit;
+      font-size: 19px;
+    }
+
+    .badge-card p {
+      margin: 8px 0 0;
+      line-height: 1.6;
+      font-size: 13px;
+    }
+
+    .badge-status {
+      display: inline-flex;
+      margin-top: 12px;
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.64);
+      color: #8b6b36;
+      font-size: 12px;
+      font-weight: 900;
     }
 
     .mini-gallery {
@@ -2304,7 +2565,6 @@
     }
 
     .image-tile,
-    .compare-pane,
     .top-match-image {
       border-color: rgba(83, 67, 49, 0.14);
       background: #f7efe4;
@@ -2645,7 +2905,8 @@
       }
 
       .top3-grid,
-      .deep-dive-grid {
+      .deep-dive-grid,
+      .match-detail-grid {
         grid-template-columns: 1fr;
       }
 
@@ -2695,17 +2956,32 @@
 
       .action-grid,
       .artwork-showcase,
-      .comparison-wrap,
-      .comparison-grid,
+      .resonance-frames,
       .top3-grid,
-      .deep-dive-grid {
+      .deep-dive-grid,
+      .match-detail-grid {
         grid-template-columns: 1fr;
       }
 
       .image-tile,
       .image-tile.small,
-      .compare-pane {
+      .resonance-frame {
         min-height: 230px;
+      }
+
+      .poster-images,
+      .poster-score-row {
+        grid-template-columns: 1fr;
+      }
+
+      .badge-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .badge-card {
+        min-height: 240px;
+        padding: 12px;
       }
 
       .curator-panel {
@@ -2824,6 +3100,14 @@
       <article class="result-card" id="resultCard" aria-live="polite"></article>
     </section>
 
+    <section class="poster-section" id="sharePosterSection" hidden>
+      <article class="poster-page" id="sharePosterPage" aria-live="polite"></article>
+    </section>
+
+    <section class="badge-section" id="badgeGallerySection" hidden>
+      <article class="badge-page" id="badgeGalleryPage" aria-live="polite"></article>
+    </section>
+
     <section class="mini-gallery" id="miniGallery">
       <div class="gallery-head">
         <div>
@@ -2926,6 +3210,19 @@
       brown: "棕色",
       indigo: "靛蓝色"
     };
+
+    const personaBadges = [
+      { persona: "夜色幻想家", title: "星夜共鸣勋章", icon: "🌌", tags: ["夜晚", "星空", "梦境"], description: "你用颜色和线条，把情绪画成了一片夜空。", unlockHint: "使用蓝紫色、黄色光点或流动线条，更容易解锁。", keywords: ["night", "star", "stars", "dream", "dreamlike", "blue", "星夜", "夜色", "夜晚"] },
+      { persona: "水墨留白者", title: "水墨留白勋章", icon: "🖤", tags: ["水墨", "留白", "克制"], description: "你用很少的笔触，留下了很多想象空间。", unlockHint: "使用黑色线条、大量留白或水墨感构图，更容易解锁。", keywords: ["ink", "shanshui", "empty", "minimal", "black", "水墨", "留白"] },
+      { persona: "几何秩序师", title: "几何秩序勋章", icon: "▦", tags: ["几何", "色块", "平衡"], description: "你在直线、色块和留白里找到了自己的秩序。", unlockHint: "使用矩形、直线、红黄蓝色块或网格结构，更容易解锁。", keywords: ["geometric", "grid", "rectangle", "mondrian", "geometry", "几何", "秩序"] },
+      { persona: "情绪涂鸦者", title: "情绪风暴勋章", icon: "🌀", tags: ["情绪", "混乱", "表现"], description: "你的线条像情绪风暴，画面正在释放能量。", unlockHint: "使用高密度线条、强烈对比和不稳定构图，更容易解锁。", keywords: ["chaotic", "dramatic", "anxiety", "expressionism", "high energy", "storm", "情绪", "混乱"] },
+      { persona: "花园观察者", title: "花园光影勋章", icon: "🌸", tags: ["自然", "花朵", "光影"], description: "你像在花园里观察光，把温柔藏进颜色里。", unlockHint: "画出花朵、植物、绿色、柔和光影，更容易解锁。", keywords: ["flower", "garden", "nature", "soft light", "monet", "flower-bird", "花", "植物"] },
+      { persona: "肖像捕捉者", title: "灵魂轮廓勋章", icon: "👤", tags: ["人物", "脸部", "肖像"], description: "你捕捉到的不只是形状，还有一个人的存在感。", unlockHint: "画出居中人物、脸部轮廓、头肩结构，更容易解锁。", keywords: ["portrait", "face", "figure", "centered subject", "mona lisa", "human", "人物", "肖像"] },
+      { persona: "山水漫游者", title: "山水行旅勋章", icon: "⛰️", tags: ["山水", "河流", "空间"], description: "你的画面像一次小小的远行，线条里藏着山和水。", unlockHint: "画出山形、河流、长横向空间或层叠风景，更容易解锁。", keywords: ["mountain", "river", "landscape", "handscroll", "shanshui", "山水", "河流"] },
+      { persona: "抽象节奏家", title: "抽象音符勋章", icon: "🎵", tags: ["抽象", "节奏", "符号"], description: "你的线条像旋律，颜色像鼓点，画面正在演奏。", unlockHint: "使用抽象线条、圆形、漂浮形状和多色节奏，更容易解锁。", keywords: ["abstract", "rhythm", "kandinsky", "miro", "floating", "swirl", "抽象", "节奏"] },
+      { persona: "光影导演", title: "明暗剧场勋章", icon: "🎭", tags: ["光影", "戏剧", "明暗"], description: "你像导演一样安排光线，让画面出现戏剧感。", unlockHint: "使用深色背景、强光暗对比和人物结构，更容易解锁。", keywords: ["chiaroscuro", "dark", "warm light", "rembrandt", "caravaggio", "dramatic", "光影", "明暗"] },
+      { persona: "色彩玩家", title: "热情色块勋章", icon: "💃", tags: ["色彩", "热烈", "舞动"], description: "你用大胆颜色和自由形状，把画面变成一场舞。", unlockHint: "使用红色、橙色、黄色和高饱和色块，更容易解锁。", keywords: ["red", "orange", "high saturation", "matisse", "fauvism", "passion", "色彩", "热烈"] }
+    ];
 
     let canvas;
     let ctx;
@@ -4541,7 +4838,7 @@
                 <img
                   class="masterpiece-image"
                   src="${escapeHtml(imageUrl)}"
-                  alt="${escapeHtml(label + "：" + artwork.title + "，" + artwork.artist)}"
+	                  alt="${escapeHtml(label + "：《" + getArtworkTitle(artwork) + "》，" + getArtistName(artwork))}"
                   loading="${escapeHtml(loading)}"
                   referrerpolicy="no-referrer"
                   data-artwork-id="${escapeHtml(artwork.id)}"
@@ -4610,15 +4907,286 @@
       return `
                 <div class="art-fallback" ${visible ? 'style="display:grid;"' : ""}>
                   <div>
-                    <strong>${escapeHtml(artwork.title)}</strong>
-                    <span>${escapeHtml(artwork.artist)} · ${escapeHtml(artwork.year)}</span>
+	                    <strong>《${escapeHtml(getArtworkTitle(artwork))}》</strong>
+	                    <span>${escapeHtml(getArtistName(artwork))} · ${escapeHtml(artwork.year)}</span>
                     <span class="fallback-museum">${escapeHtml(artwork.museum)}</span>
                     <span class="fallback-license">${escapeHtml(artwork.license)}</span>
                   </div>
                 </div>`;
     }
 
-    function renderTop3Matches(match, userFeatures) {
+    const fallbackSimilarityPoints = [
+      {
+        label: "色彩情绪",
+        userPoint: "你的画面中有明显的色彩倾向，形成了独特的情绪氛围。",
+        artworkPoint: "这幅名画也通过色彩关系传达出相似的情绪感。",
+        x: 35,
+        y: 28
+      },
+      {
+        label: "线条节奏",
+        userPoint: "你的线条和形状带有一定的运动感。",
+        artworkPoint: "名画中的笔触和结构也呈现出相似的视觉节奏。",
+        x: 60,
+        y: 45
+      },
+      {
+        label: "构图关系",
+        userPoint: "你的画面元素分布形成了某种视觉重心。",
+        artworkPoint: "这幅名画也在构图上呈现出类似的画面组织方式。",
+        x: 48,
+        y: 70
+      }
+    ];
+
+    function getArtworkSearchText(artwork, userFeatures) {
+      const pools = [
+        artwork.title,
+        artwork.titleZh,
+        artwork.artist,
+        artwork.artistZh,
+        artwork.style,
+        artwork.category,
+        artwork.dynastyOrEra,
+        ...(artwork.tags || []),
+        ...(artwork.visualTags || []),
+        ...(artwork.themeTags || []),
+        ...(artwork.compositionTags || []),
+        ...(artwork.emotionTags || []),
+        ...(artwork.styleTags || []),
+        ...(artwork.colorMood || []),
+        ...(artwork.composition || []),
+        ...(userFeatures?.symbolicTags || []),
+        ...(userFeatures?.emotionalMood || []),
+        ...(userFeatures?.dominantColors || []),
+        userFeatures?.themeHint,
+        userFeatures?.strokeDirection,
+        userFeatures?.compositionZone
+      ];
+      return pools.filter(Boolean).join(" ").toLowerCase();
+    }
+
+    function hasAnyText(text, words) {
+      return words.some((word) => text.includes(word.toLowerCase()));
+    }
+
+    function buildPoint(label, userPoint, artworkPoint, x, y) {
+      return {
+        label,
+        userPoint,
+        artworkPoint,
+        x: clamp(Number(x) || 50, 5, 95),
+        y: clamp(Number(y) || 50, 5, 95)
+      };
+    }
+
+    function generateCategorySimilarityPoints(artwork, userFeatures) {
+      const text = getArtworkSearchText(artwork, userFeatures);
+      if (hasAnyText(text, ["portrait", "figure", "face", "human", "mona lisa", "classical portrait", "肖像", "人物", "脸"])) {
+        return [
+          buildPoint("主体结构", "你的画面重心更像是在围绕一个主体展开。", "名画中的人物也通过清晰主体建立第一视觉焦点。", 48, 34),
+          buildPoint("面部轮廓", "你的圆形、弧线或中心形状让系统读到脸部轮廓的可能。", "这幅作品的面部或头肩结构让观看集中在人物存在感上。", 54, 45),
+          buildPoint("人物构图", "你的元素分布带有居中或直立的构图倾向。", "名画同样用人物位置组织画面空间。", 50, 68)
+        ];
+      }
+      if (hasAnyText(text, ["shanshui", "ink painting", "ink", "handscroll", "mountain", "山水", "水墨", "留白", "黑线"])) {
+        return [
+          buildPoint("水墨留白", "你的空白区域让少量线条更像水墨里的呼吸。", "名画也用留白承接山水之间的空气与距离。", 36, 26),
+          buildPoint("山水结构", "你的横向或层叠痕迹形成了远近空间。", "这幅作品通过山体、河流或坡岸建立游观结构。", 58, 47),
+          buildPoint("笔触节奏", "你的笔迹有干湿、轻重或连续节奏感。", "名画中的笔触也靠节奏把景物组织起来。", 46, 72)
+        ];
+      }
+      if (hasAnyText(text, ["ocean", "wave", "river", "water", "sea", "海", "浪", "河", "水"])) {
+        return [
+          buildPoint("色彩情绪", "你的冷色或蓝色倾向带出水面般的情绪。", "名画中的蓝、白或深色关系也制造了水与空气的气候。", 35, 28),
+          buildPoint("流动线条", "你的横向、弧形或连续线条让画面开始流动。", "作品里的水浪、河道或边缘线也在推动视线移动。", 62, 46),
+          buildPoint("横向构图", "你的画面有铺展开的水平空间感。", "名画也通过横向结构建立海面、河岸或地平线。", 50, 72)
+        ];
+      }
+      if (hasAnyText(text, ["flower", "flower-bird", "still life", "garden", "nature", "plant", "花", "植物", "静物"])) {
+        return [
+          buildPoint("色彩生命力", "你的暖色、绿色或明亮色块让画面更有生命感。", "名画也用颜色表现花叶、果实或自然的生长气息。", 38, 30),
+          buildPoint("植物轮廓", "你的圆形、放射线或枝状痕迹接近植物形态。", "作品中的花、叶或器物轮廓也在形成柔软边界。", 58, 48),
+          buildPoint("画面重心", "你的主体分布让视线停在某个色彩中心。", "名画也用花枝、瓶器或物件安排稳定重心。", 48, 70)
+        ];
+      }
+      if (hasAnyText(text, ["abstract", "geometric", "cubism", "modernism", "grid", "rectangle", "抽象", "几何", "立体主义", "现代"])) {
+        return [
+          buildPoint("块面结构", "你的色块或直线让画面更像被分割成结构。", "名画也通过块面、网格或形状关系建立秩序。", 36, 32),
+          buildPoint("色彩秩序", "你的颜色不是随机散落，而是在形成一组视觉关系。", "作品中的颜色同样承担节奏、平衡和强调的作用。", 62, 44),
+          buildPoint("抽象节奏", "你的线条与形状带有不依赖具象物体的节奏。", "名画也用抽象形式让画面像音乐一样推进。", 48, 72)
+        ];
+      }
+      if (hasAnyText(text, ["interior", "room", "city", "architecture", "window", "daily life", "室内", "房间", "城市", "建筑"])) {
+        return [
+          buildPoint("空间结构", "你的矩形、角落或直线让系统读到空间感。", "名画也用墙面、窗、街道或建筑组织空间。", 35, 30),
+          buildPoint("光影氛围", "你的明暗分布让画面像有一束光经过。", "作品中的光影关系也在定义房间或街景的情绪。", 58, 46),
+          buildPoint("日常场景感", "你的构图有一种安静的生活片段感。", "名画也把日常空间处理成可以停留观看的场景。", 50, 70)
+        ];
+      }
+      return null;
+    }
+
+    function generateDynamicSimilarityPoints(artwork, matchData, userFeatures) {
+      const categoryPoints = generateCategorySimilarityPoints(artwork, userFeatures);
+      if (categoryPoints) return categoryPoints;
+      const reasons = unique([...(matchData?.matchReasons || []), ...(matchData?.matchedEvidence || []), ...(matchData?.reasons || [])]);
+      if (!reasons.length && !userFeatures) return null;
+      const colorText = (userFeatures?.dominantColors || []).map(labelColor).slice(0, 3).join("、") || "你的主色";
+      const compositionText = describeComposition(userFeatures?.compositionZone || "balanced");
+      return [
+        buildPoint("色彩情绪", "你的画面主色接近" + colorText + "，形成了可以被识别的情绪气候。", reasons[0] || "名画也通过相近色彩关系传达情绪。", 35, 28),
+        buildPoint("线条节奏", "你的线条方向偏" + describeLineDirection(userFeatures?.strokeDirection || "mixed") + "，带出画面动势。", reasons[1] || "名画中的笔触和结构也呈现出相似的视觉节奏。", 60, 45),
+        buildPoint("构图关系", "你的画面重心呈现为" + compositionText + "，影响系统对主体位置的判断。", reasons[2] || "这幅名画也在构图上呈现出类似的画面组织方式。", 48, 70)
+      ];
+    }
+
+    function getSimilarityPoints(artwork, matchData, userFeatures) {
+      if (Array.isArray(artwork.similarityPoints) && artwork.similarityPoints.length >= 3) {
+        return artwork.similarityPoints.slice(0, 3).map((point) => buildPoint(point.label, point.userPoint, point.artworkPoint, point.x, point.y));
+      }
+      return generateDynamicSimilarityPoints(artwork, matchData, userFeatures) || fallbackSimilarityPoints.map((point) => buildPoint(point.label, point.userPoint, point.artworkPoint, point.x, point.y));
+    }
+
+    function renderSimilarityMarkers(points) {
+      return points.map((point, index) => `<button class="resonance-marker" type="button" aria-label="${escapeHtml((index + 1) + " " + point.label)}" style="--x:${point.x};--y:${point.y};">${index + 1}</button>`).join("");
+    }
+
+    function renderSimilarityCompare(userImage, artwork, matchData, userFeatures) {
+      const title = getArtworkTitle(artwork);
+      const subtitle = title ? "AI 在你的画和《" + title + "》之间找到了这些视觉线索。" : "AI 找到了这些视觉线索。";
+      const points = getSimilarityPoints(artwork, matchData, userFeatures);
+      const markerHtml = renderSimilarityMarkers(points);
+      const artworkFrame = safeArtworkImageRenderer(artwork, {
+        className: "resonance-frame resonance-masterpiece",
+        label: "匹配名画",
+        loading: "lazy",
+        overlayHtml: markerHtml
+      });
+      return `
+        <section class="resonance-compare">
+          <h3>视觉共鸣对照</h3>
+          <p>${escapeHtml(subtitle)}</p>
+          <div class="resonance-frames">
+            <div class="resonance-frame">
+              <img src="${escapeHtml(userImage)}" alt="你的画作" />
+              ${markerHtml}
+              <span class="image-label">你的画</span>
+            </div>
+            ${artworkFrame}
+          </div>
+          <div class="resonance-notes">
+            ${points.map((point, index) => `
+              <article class="resonance-note">
+                <span class="note-number">${index + 1}</span>
+                <div>
+                  <b>${escapeHtml(point.label)}</b>
+                  <p><strong>你的画：</strong>${escapeHtml(point.userPoint)}</p>
+                  <p><strong>名画：</strong>${escapeHtml(point.artworkPoint)}</p>
+                </div>
+              </article>
+            `).join("")}
+          </div>
+        </section>`;
+    }
+
+    function getArtworkInfoFallback() {
+      return "这幅作品的信息正在整理中，但它的视觉特征已被纳入本次匹配。";
+    }
+
+    function getArtworkStyleLine(artwork) {
+      return [artwork.dynastyOrEra, artwork.style].filter(Boolean).join(" / ") || "艺术史风格信息整理中";
+    }
+
+    function getCompactArtistIntro(artwork, limit = 72) {
+      return briefText(artwork.artistLife || artwork.artistBio || getExpandedArtistBio(artwork) || getArtworkInfoFallback(), limit);
+    }
+
+    function renderTop1ArtworkDetail(item, userImage, userFeatures) {
+      const artwork = item.artwork;
+      const reasons = (item.matchReasons || []).slice(0, 3);
+      return `
+        <div class="match-detail-grid">
+          <section class="match-detail-block">
+            <b>为什么 AI 觉得你们像</b>
+            <ol class="reason-list">${(reasons.length ? reasons : ["你的画和这幅名画在色彩、线条或构图上形成了可解释的视觉共鸣。"]).map((reason) => `<li>${escapeHtml(reason)}</li>`).join("")}</ol>
+          </section>
+        </div>
+        ${renderSimilarityCompare(userImage, artwork, item, userFeatures)}
+        <div class="match-detail-grid">
+          <section class="match-detail-block">
+            <b>这幅名画在讲什么</b>
+            <p>${escapeHtml(artwork.detailedIntro || artwork.story || artwork.shortIntro || getArtworkInfoFallback())}</p>
+          </section>
+          <section class="match-detail-block">
+            <b>关于艺术家</b>
+            <p>${escapeHtml(artwork.artistLife || getExpandedArtistBio(artwork) || artwork.artistBio || getArtworkInfoFallback())}</p>
+          </section>
+          <section class="match-detail-block">
+            <b>时代与风格</b>
+            <p>${escapeHtml((artwork.historicalContext || getEraBackground(artwork) || getArtworkInfoFallback()) + " 风格 / 时代：" + getArtworkStyleLine(artwork))}</p>
+          </section>
+          <section class="match-detail-block">
+            <b>一个小故事</b>
+            <p>${escapeHtml(artwork.funFact || getArtworkInfoFallback())}</p>
+          </section>
+        </div>`;
+    }
+
+    function renderCompactMatchSummary(item, index, userFeatures) {
+      const artwork = item.artwork;
+      const parts = generateSimilarityParts(userFeatures, artwork, item.matchReasons).slice(0, 3);
+      const reason = item.matchReasons?.[0] || "这幅作品与你的画在色彩情绪、线条节奏或构图重心上有相似之处。";
+      const rankText = index === 1
+        ? "它主要补充情绪与色彩方向，但主体结构不如第一名接近，因此排在第二。"
+        : "它更像是构图或风格上的补充共鸣，与第一名相比整体相似度略弱。";
+      return `
+        <div class="match-detail-grid compact-detail-grid">
+          <section class="match-detail-block">
+            <b>简短相似理由</b>
+            <p>${escapeHtml(briefText(reason, 110))}</p>
+            <p>${escapeHtml(rankText)}</p>
+          </section>
+          <section class="match-detail-block">
+            <b>这幅名画一句话介绍</b>
+            <p>${escapeHtml(artwork.shortIntro || briefText(artwork.story, 90) || getArtworkInfoFallback())}</p>
+          </section>
+          <section class="match-detail-block">
+            <b>作者一句话简介</b>
+            <p>${escapeHtml(getArtistName(artwork) + "：" + getCompactArtistIntro(artwork))}</p>
+          </section>
+          <section class="match-detail-block">
+            <b>标签 / 风格</b>
+            <div class="similar-parts">${parts.map((part) => `<span class="similar-pill">${escapeHtml(part)}</span>`).join("")}</div>
+            <p>${escapeHtml(getArtworkStyleLine(artwork))}</p>
+          </section>
+        </div>`;
+    }
+
+    function renderArtworkDetailBlocks(item, userFeatures) {
+      const artwork = item.artwork;
+      return `
+        <div class="match-detail-grid">
+          <section class="match-detail-block">
+            <b>为什么 AI 觉得你们像</b>
+            <ol class="reason-list">${(item.matchReasons || []).slice(0, 3).map((reason) => `<li>${escapeHtml(reason)}</li>`).join("")}</ol>
+          </section>
+          <section class="match-detail-block">
+            <b>这幅名画在讲什么</b>
+            <p>${escapeHtml(artwork.detailedIntro || artwork.story || artwork.shortIntro || getArtworkInfoFallback())}</p>
+          </section>
+          <section class="match-detail-block">
+            <b>关于艺术家</b>
+            <p>${escapeHtml(artwork.artistLife || getExpandedArtistBio(artwork) || artwork.artistBio || getArtworkInfoFallback())}</p>
+          </section>
+          <section class="match-detail-block">
+            <b>艺术风格 / 时代背景</b>
+            <p>${escapeHtml(artwork.historicalContext || getEraBackground(artwork))}</p>
+          </section>
+        </div>`;
+    }
+
+    function renderTop3Matches(match, userFeatures, userImage) {
       const topThree = match.displayMatches || match.ranked.slice(0, 3);
       return `
         <section class="top3-section">
@@ -4644,15 +5212,23 @@
                   <div class="top-match-body">
                     <span class="top-match-score">${item.score}% 共鸣</span>
                     <span class="match-type">${item.matchRole || matchTypes[index]}</span>
-                    <h4>${item.artwork.title}</h4>
-                    <p class="meta">${item.artwork.artist} · ${item.artwork.year} · ${item.artwork.style}</p>
+                    <h4>《${escapeHtml(getArtworkTitle(item.artwork))}》</h4>
+                    <p class="meta">${escapeHtml(getArtistName(item.artwork))} · ${escapeHtml(item.artwork.year)} · ${escapeHtml(getArtworkStyleLine(item.artwork))}</p>
                     <div class="similar-parts">
-                      ${parts.map((part) => `<span class="similar-pill">${part}</span>`).join("")}
+                      ${parts.map((part) => `<span class="similar-pill">${escapeHtml(part)}</span>`).join("")}
                     </div>
                     <ul class="mini-reasons">
-                      ${item.matchReasons.slice(0, 3).map((reason) => `<li>${briefText(reason, 72)}</li>`).join("")}
+                      ${(item.matchReasons || []).slice(0, 3).map((reason) => `<li>${escapeHtml(briefText(reason, 72))}</li>`).join("")}
                     </ul>
-                    <p>${briefText(item.artwork.shortIntro || item.artwork.story, 86)}</p>
+                    <p>${escapeHtml(briefText(item.artwork.shortIntro || item.artwork.story || getArtworkInfoFallback(), 86))}</p>
+                  </div>
+                  <div class="top-match-detail ${index === 0 ? "open" : ""}" id="topMatchDetail${index}">
+                    <button class="btn small ghost top-match-detail-toggle" type="button" data-match-index="${index}">
+                      ${index === 0 ? "收起详细分析" : "查看详细分析"}
+                    </button>
+                    <div class="details-content">
+                      ${index === 0 ? renderTop1ArtworkDetail(item, userImage, userFeatures) : renderCompactMatchSummary(item, index, userFeatures)}
+                    </div>
                   </div>
                 </article>`;
             }).join("")}
@@ -4668,27 +5244,27 @@
           <div class="deep-dive-grid">
             <div class="deep-dive-block">
               <b>作品档案</b>
-              <p>《${artwork.title}》创作于 ${artwork.year}，风格归属为 ${artwork.style}。馆藏 / 来源：${artwork.museum}。版权标记：${artwork.license}。</p>
+              <p>《${escapeHtml(getArtworkTitle(artwork))}》创作于 ${escapeHtml(artwork.year)}，风格 / 时代为 ${escapeHtml(getArtworkStyleLine(artwork))}。馆藏 / 来源：${escapeHtml(artwork.museum)}。版权标记：${escapeHtml(artwork.license)}。</p>
             </div>
             <div class="deep-dive-block">
               <b>画作背景</b>
-              <p>${artwork.detailedIntro || artwork.story}</p>
+              <p>${escapeHtml(artwork.detailedIntro || artwork.story || getArtworkInfoFallback())}</p>
             </div>
             <div class="deep-dive-block">
               <b>时代背景</b>
-              <p>${artwork.historicalContext || getEraBackground(artwork)}</p>
+              <p>${escapeHtml(artwork.historicalContext || getEraBackground(artwork) || getArtworkInfoFallback())}</p>
             </div>
             <div class="deep-dive-block">
               <b>作者生平</b>
-              <p>${artwork.artistLife || getExpandedArtistBio(artwork)}</p>
+              <p>${escapeHtml(artwork.artistLife || getExpandedArtistBio(artwork) || artwork.artistBio || getArtworkInfoFallback())}</p>
             </div>
             <div class="deep-dive-block">
               <b>作品小故事</b>
-              <p>${artwork.funFact}</p>
+              <p>${escapeHtml(artwork.funFact || getArtworkInfoFallback())}</p>
             </div>
             <div class="deep-dive-block">
               <b>为什么与你的画相似</b>
-              <p>${reasons.slice(0, 3).join(" ")}</p>
+              <p>${escapeHtml((reasons.length ? reasons.slice(0, 3).join(" ") : "你的画和这幅名画在视觉线索上形成了综合接近。"))}</p>
             </div>
           </div>
         </section>`;
@@ -4759,7 +5335,7 @@
       } else {
         notes.push("Style Resonance：你没有额外选择意象，因此结果更依赖实际画面里的颜色、笔迹和留白。");
       }
-      notes.push("Top1 匹配为《" + match.topMatch.title + "》，共鸣来自视觉、情绪、构图与风格通道的综合接近。");
+      notes.push("Top1 匹配为《" + getArtworkTitle(match.topMatch) + "》，共鸣来自视觉、情绪、构图与风格通道的综合接近。");
       return notes.slice(0, 4);
     }
 
@@ -4799,17 +5375,111 @@
       return { high: "高", medium: "中", low: "低" }[energy] || energy;
     }
 
+    function getArtworkTitle(artwork) {
+      return artwork?.titleZh || artwork?.title || "未知作品";
+    }
+
+    function getArtistName(artwork) {
+      return artwork?.artistZh || artwork?.artist || "未知艺术家";
+    }
+
+    function getDisplayTitle(artwork) {
+      return getArtworkTitle(artwork);
+    }
+
+    function getDisplayArtist(artwork) {
+      return getArtistName(artwork);
+    }
+
+    function getPosterPersonaLine(persona) {
+      const lines = {
+        "夜色幻想家": "我的涂鸦里，居然藏着一片星空。",
+        "水墨留白者": "我没画满，是留给想象的空间。",
+        "几何秩序师": "我的精神状态，看起来还挺有秩序。",
+        "情绪涂鸦者": "不是乱画，是情绪在走线。",
+        "花园观察者": "几笔颜色，也能长出一座花园。",
+        "肖像捕捉者": "AI 说我画出了一个灵魂轮廓。",
+        "山水漫游者": "几条线，也能走进一幅山水。",
+        "抽象节奏家": "不是我画得乱，是节奏太自由。",
+        "光影导演": "我画的不是形状，是一束光。",
+        "色彩玩家": "今天的我，是一块高饱和色彩。"
+      };
+      return lines[persona] || "不是你画得乱，是你的艺术灵魂太自由。";
+    }
+
+    function generatePosterShareText(score, artwork, persona) {
+      const title = getDisplayTitle(artwork);
+      return "我随手画了一张，AI 说它和《" + title + "》有 " + score + "% 的艺术共鸣。我的艺术人格是：" + persona + "。" + getPosterPersonaLine(persona);
+    }
+
+    function normalizeBadgePersona(persona, artwork, userFeatures) {
+      const text = [persona, getArtworkSearchText(artwork || {}, userFeatures || {})].join(" ").toLowerCase();
+      if (hasAnyText(text, ["夜色幻想家", "night", "star", "dream", "blue", "星夜", "夜色"])) return "夜色幻想家";
+      if (hasAnyText(text, ["水墨留白者", "梦境策展人", "ink", "shanshui", "empty", "minimal", "black", "水墨", "留白"])) return "水墨留白者";
+      if (hasAnyText(text, ["几何秩序", "geometric", "grid", "rectangle", "mondrian", "geometry", "几何"])) return "几何秩序师";
+      if (hasAnyText(text, ["混乱", "情绪", "chaotic", "dramatic", "anxiety", "expressionism", "high energy"])) return "情绪涂鸦者";
+      if (hasAnyText(text, ["太阳花", "flower", "garden", "nature", "soft light", "monet", "flower-bird", "花"])) return "花园观察者";
+      if (hasAnyText(text, ["portrait", "face", "figure", "centered subject", "mona lisa", "human", "肖像", "人物"])) return "肖像捕捉者";
+      if (hasAnyText(text, ["山水", "海浪倾听者", "风暴观察者", "mountain", "river", "landscape", "handscroll", "shanshui", "wave", "ocean"])) return "山水漫游者";
+      if (hasAnyText(text, ["抽象", "abstract", "rhythm", "kandinsky", "miro", "floating", "swirl"])) return "抽象节奏家";
+      if (hasAnyText(text, ["光影", "房间", "chiaroscuro", "dark", "warm light", "rembrandt", "caravaggio", "interior"])) return "光影导演";
+      if (hasAnyText(text, ["色彩玩家", "情绪色块", "red", "orange", "high saturation", "matisse", "fauvism", "passion"])) return "色彩玩家";
+      return "抽象节奏家";
+    }
+
+    function findBadgeForPersona(persona, artwork, userFeatures) {
+      const normalized = normalizeBadgePersona(persona, artwork, userFeatures);
+      return personaBadges.find((badge) => badge.persona === normalized) || personaBadges[7];
+    }
+
+    function getUnlockedPersonas() {
+      try {
+        if (!window.localStorage) return [];
+        const raw = window.localStorage.getItem("arttwin-unlocked-personas");
+        if (!raw) return [];
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? unique(parsed.map(String)) : [];
+      } catch (error) {
+        return [];
+      }
+    }
+
+    function saveUnlockedPersonas(personas) {
+      try {
+        if (!window.localStorage) return;
+        window.localStorage.setItem("arttwin-unlocked-personas", JSON.stringify(unique(personas || [])));
+      } catch (error) {
+        // localStorage may be unavailable in private browsing; badge UI still renders.
+      }
+    }
+
+    function addUnlockedPersona(persona) {
+      const list = getUnlockedPersonas();
+      if (persona && !list.includes(persona)) list.push(persona);
+      saveUnlockedPersonas(list);
+      return list;
+    }
+
+    function unlockCurrentPersona() {
+      if (!currentResult) return null;
+      const badge = findBadgeForPersona(currentResult.persona?.name, currentResult.artwork, currentResult.userFeatures);
+      addUnlockedPersona(badge.persona);
+      currentResult.currentBadge = badge;
+      return badge;
+    }
+
     function showResultCard(match, userFeatures, thumbnail) {
       const artwork = match.topMatch;
+      const artworkTitle = getArtworkTitle(artwork);
+      const artistName = getArtistName(artwork);
       const persona = generatePersona(userFeatures, artwork);
       const statusLabel = match.score >= 80 ? "名画强共鸣卡" : match.score >= 60 ? "相近风格原创卡" : "原创艺术人格卡";
-      const shareText = "我随手画了一幅画，AI 策展人说它和一幅世界名画产生了 " + match.score + "% 的共鸣。我的艺术人格是：" + persona.name + "。";
+      const shareText = generatePosterShareText(match.score, artwork, persona.name);
       const resultSection = document.getElementById("resultSection");
       const card = document.getElementById("resultCard");
       const tags = unique([...userFeatures.symbolicTags.slice(0, 6), ...(artwork.themeTags || []), ...(artwork.visualTags || [])]).slice(0, 12);
-      const overlayLabels = buildOverlayLabels(userFeatures, artwork);
       const scoreCaption = getScoreCaption(match.score, artwork);
-      const top3Section = renderTop3Matches(match, userFeatures);
+      const top3Section = renderTop3Matches(match, userFeatures, thumbnail);
       const deepDive = renderTopMatchDeepDive(artwork, match.matchReasons);
       const observationNotes = generateObservationNotes(userFeatures, match);
       const topSimilarityParts = generateSimilarityParts(userFeatures, artwork, match.matchReasons).slice(0, 3);
@@ -4817,16 +5487,6 @@
         className: "image-tile masterpiece-tile",
         label: "匹配名画",
         loading: "eager"
-      });
-      const comparisonArtworkImage = safeArtworkImageRenderer(artwork, {
-        className: "compare-pane masterpiece-panel",
-        label: "匹配名画",
-        overlayHtml: `
-                  <div class="morph-overlay" aria-hidden="true">
-                    <img class="user-outline" src="${thumbnail}" alt="" />
-                    ${overlayLabels.lines}
-                    ${overlayLabels.callouts}
-                  </div>`
       });
 
       currentResult = {
@@ -4838,9 +5498,12 @@
         thumbnail,
         persona,
         shareText,
+        match,
         topMatches: (match.displayMatches || match.ranked).slice(0, 3),
         createdAt: new Date()
       };
+      unlockCurrentPersona();
+      currentResult.shareText = generatePosterShareText(match.score, artwork, currentResult.currentBadge.persona);
 
       card.innerHTML = `
         <section class="curator-summary">
@@ -4869,21 +5532,22 @@
           </div>
           <div class="top1-meta">
             <span class="score-badge">Top1 最佳共鸣名画 / Overall Match</span>
-            <h2>${artwork.title}</h2>
-            <p>${artwork.artist} · ${artwork.year} · ${artwork.style}</p>
+            <h2>《${escapeHtml(artworkTitle)}》</h2>
+            <p>${escapeHtml(artistName)} · ${escapeHtml(artwork.year)} · ${escapeHtml(getArtworkStyleLine(artwork))}</p>
             <div class="top1-score-line"><strong>${match.score}% 共鸣指数</strong><span>${persona.name}</span></div>
-            <p class="top1-intro">${artwork.shortIntro || briefText(artwork.story, 80)}</p>
-            <p>${artwork.museum}</p>
-            <span class="open-access">${artwork.license}</span>
+            <p class="top1-intro">${escapeHtml(artwork.shortIntro || briefText(artwork.story, 80) || getArtworkInfoFallback())}</p>
+            <p>${escapeHtml(artwork.museum || "馆藏来源整理中")}</p>
+            <span class="open-access">${escapeHtml(artwork.license || "来源信息整理中")}</span>
             <div class="similar-parts top1-parts">
-              ${topSimilarityParts.map((part) => `<span class="similar-pill">${part}</span>`).join("")}
+              ${topSimilarityParts.map((part) => `<span class="similar-pill">${escapeHtml(part)}</span>`).join("")}
             </div>
-            <div class="tag-row">${tags.map((tag) => `<span class="tag">#${tag}</span>`).join("")}</div>
+            <div class="tag-row">${tags.map((tag) => `<span class="tag">#${escapeHtml(tag)}</span>`).join("")}</div>
             <div class="share-row">
-              <button class="btn small primary" type="button" id="topOverlayJumpBtn">查看相似区域</button>
               <button class="btn small ghost" type="button" id="topSaveGalleryBtn">收藏到我的迷你美术馆</button>
+              <button class="btn small primary" type="button" id="topSharePosterBtn">生成我的名画共鸣卡</button>
+              <button class="btn small ghost" type="button" id="topBadgeGalleryBtn">查看艺术人格勋章册</button>
               <button class="btn small ghost" type="button" id="topCopyShareBtn">复制分享文案</button>
-              <a class="btn primary" href="${artwork.sourceUrl}" target="_blank" rel="noreferrer">查看馆藏来源</a>
+              <a class="btn primary" href="${escapeHtml(artwork.sourceUrl)}" target="_blank" rel="noreferrer">查看馆藏来源</a>
             </div>
           </div>
         </section>
@@ -4899,32 +5563,17 @@
             <div class="content-grid">
               <section class="info-panel">
                 <h3>为什么相似</h3>
-                <ol class="reason-list">${match.matchReasons.map((reason) => `<li>${reason}</li>`).join("")}</ol>
+                <ol class="reason-list">${match.matchReasons.map((reason) => `<li>${escapeHtml(reason)}</li>`).join("")}</ol>
               </section>
 
               <section class="info-panel">
                 <h3>名画背景</h3>
-                <p>${artwork.detailedIntro || artwork.story}</p>
-                <p style="margin-top:12px;">${artwork.artistLife || artwork.artistBio}</p>
-                <p style="margin-top:12px;color:#8b6b36;">作品小故事：${artwork.funFact}</p>
+                <p>${escapeHtml(artwork.detailedIntro || artwork.story || getArtworkInfoFallback())}</p>
+                <p style="margin-top:12px;">${escapeHtml(artwork.artistLife || artwork.artistBio || getExpandedArtistBio(artwork) || getArtworkInfoFallback())}</p>
+                <p style="margin-top:12px;color:#8b6b36;">作品小故事：${escapeHtml(artwork.funFact || getArtworkInfoFallback())}</p>
               </section>
             </div>
             ${deepDive}
-          </div>
-        </section>
-
-        <section class="info-panel comparison-card" id="comparisonCard" style="margin-top:18px;">
-          <h3>用户画作 × 名画 Morphing Overlay</h3>
-          <p>点击后，用户画作轮廓会覆盖到匹配名画上，系统用发光线条标出相似区域。</p>
-          <div class="comparison-grid">
-            <div class="compare-pane user-art-panel">
-              <img src="${thumbnail}" alt="用户画作对照" />
-              <span class="image-label">你的画作</span>
-            </div>
-            ${comparisonArtworkImage}
-          </div>
-          <div class="share-row">
-            <button class="btn small primary" type="button" id="overlayBtn">查看相似区域</button>
           </div>
         </section>
 
@@ -4939,12 +5588,14 @@
           </div>
         </section>
 
-        <section class="share-card" id="shareCard">${shareText}</section>
+        <section class="share-card" id="shareCard">${currentResult.shareText}</section>
         <div class="share-row">
           <button class="btn primary" type="button" id="saveGalleryBtn">收藏到我的迷你美术馆</button>
+          <button class="btn primary" type="button" id="showPosterBtn">生成我的名画共鸣卡</button>
+          <button class="btn ghost" type="button" id="showBadgeGalleryBtn">查看艺术人格勋章册</button>
           <button class="btn ghost" type="button" id="copyShareBtn">复制分享文案</button>
           <button class="btn ghost" type="button" id="drawAgainBtn">再画一次</button>
-          <a class="btn ghost" href="${artwork.sourceUrl}" target="_blank" rel="noreferrer">查看馆藏来源</a>
+          <a class="btn ghost" href="${escapeHtml(artwork.sourceUrl)}" target="_blank" rel="noreferrer">查看馆藏来源</a>
         </div>
       `;
 
@@ -4953,21 +5604,23 @@
       requestAnimationFrame(() => card.classList.add("revealed"));
       resultSection.scrollIntoView({ behavior: "smooth", block: "start" });
 
-      document.getElementById("overlayBtn").addEventListener("click", toggleMorphingOverlay);
-      document.getElementById("topOverlayJumpBtn").addEventListener("click", () => {
-        document.getElementById("comparisonCard").scrollIntoView({ behavior: "smooth", block: "center" });
-        if (!document.getElementById("comparisonCard").classList.contains("overlay-active")) toggleMorphingOverlay();
-      });
       document.getElementById("topSaveGalleryBtn").addEventListener("click", saveToMiniGallery);
+      document.getElementById("topSharePosterBtn").addEventListener("click", showSharePoster);
+      document.getElementById("topBadgeGalleryBtn").addEventListener("click", showBadgeGallery);
       document.getElementById("topCopyShareBtn").addEventListener("click", copyShareText);
       document.getElementById("toggleReportBtn").addEventListener("click", toggleReportDetails);
       document.getElementById("skipTypingBtn").addEventListener("click", skipCuratorTyping);
       document.getElementById("saveGalleryBtn").addEventListener("click", saveToMiniGallery);
+      document.getElementById("showPosterBtn").addEventListener("click", showSharePoster);
+      document.getElementById("showBadgeGalleryBtn").addEventListener("click", showBadgeGallery);
       document.getElementById("copyShareBtn").addEventListener("click", copyShareText);
       document.getElementById("drawAgainBtn").addEventListener("click", () => {
         clearCanvas();
         resultSection.hidden = true;
         window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+      document.querySelectorAll(".top-match-detail-toggle").forEach((button) => {
+        button.addEventListener("click", () => toggleTopMatchDetail(Number(button.dataset.matchIndex)));
       });
 
       startCuratorTyping(match, userFeatures, persona);
@@ -4975,66 +5628,12 @@
 
     function getScoreCaption(score, artwork) {
       if (score >= 80) {
-        return "Classic Resonance Index 已达到强共鸣。AI 策展人认为你的作品与《" + artwork.title + "》共享了明显的色彩、线条、构图和情绪骨架。";
+        return "Classic Resonance Index 已达到强共鸣。AI 策展人认为你的作品与《" + getArtworkTitle(artwork) + "》共享了明显的色彩、线条、构图和情绪骨架。";
       }
       if (score >= 60) {
         return "这不是复制某幅名画，而是一张相近风格原创卡。它借用了艺术史里的气候，但保留了你自己的偶然性。";
       }
       return "系统没有强行把你塞进某幅名画，而是生成了原创艺术人格，并推荐最靠近的一条艺术史线索。";
-    }
-
-    function buildOverlayLabels(userFeatures, artwork) {
-      const labels = [];
-      const colorHits = intersection(userFeatures.dominantColors, artwork.colorMood);
-      const tagHits = intersection(userFeatures.symbolicTags, unique([...(artwork.themeTags || []), ...(artwork.visualTags || []), ...(artwork.compositionTags || [])]));
-      if (userFeatures.upperColorRatio > 0.48 && userFeatures.colorTemperature === "cool") {
-        labels.push("你的上半部分冷色区域触发了夜空 / 海面共鸣。");
-      }
-      if (userFeatures.averageCurvature > 0.32 || userFeatures.strokeDirection === "swirling" || (artwork.visualTags || []).join(" ").includes("curved")) {
-        labels.push("你的弧形线条与作品中的流动感相似。");
-      }
-      if (colorHits.length) {
-        labels.push("你的" + colorHits.map(labelColor).join("、") + "区域与名画色彩气候相互靠近。");
-      }
-      if (userFeatures.compositionZone === "center-heavy" || (artwork.compositionTags || []).join(" ").includes("center")) {
-        labels.push("你的画面重心接近这幅作品的主体构图。");
-      }
-      if (userFeatures.visualEnergy === "high" || userFeatures.strokeSummary.totalStrokes > 8) {
-        labels.push("你的高密度线条让系统识别到表现主义式能量。");
-      }
-      if (tagHits.length && labels.length < 3) {
-        labels.push("主题提示与画后意象只作为辅助，帮助解释 " + tagHits.slice(0, 2).join(" / ") + " 视觉线索。");
-      }
-      if (labels.length < 3) labels.push("色块、留白和方向之间形成了可解释的视觉回声。");
-      while (labels.length < 3) labels.push("这个区域不是精准识别，而是 AI 策展人的相似线索标注。");
-
-      const linePositions = [
-        { left: "18%", top: "28%", rot: "-18deg", delay: "0.08s" },
-        { left: "34%", top: "58%", rot: "14deg", delay: "0.24s" },
-        { left: "52%", top: "40%", rot: "-34deg", delay: "0.38s" }
-      ];
-      const calloutPositions = [
-        { left: "7%", top: "12%", delay: "0.42s" },
-        { left: "42%", top: "62%", delay: "0.58s" },
-        { left: "48%", top: "18%", delay: "0.74s" }
-      ];
-
-      return {
-        lines: linePositions.map((item) => `<i class="glow-line" style="--left:${item.left};--top:${item.top};--rot:${item.rot};--delay:${item.delay};"></i>`).join(""),
-        callouts: labels.slice(0, 3).map((label, index) => {
-          const pos = calloutPositions[index];
-          return `<span class="callout" style="--left:${pos.left};--top:${pos.top};--delay:${pos.delay};">${label}</span>`;
-        }).join("")
-      };
-    }
-
-    function toggleMorphingOverlay() {
-      const card = document.getElementById("comparisonCard");
-      const button = document.getElementById("overlayBtn");
-      const active = !card.classList.contains("overlay-active");
-      card.classList.toggle("overlay-active", active);
-      button.textContent = active ? "隐藏相似区域" : "查看相似区域";
-      if (active) showToast("相似区域已点亮：用户轮廓正在覆盖到名画上。");
     }
 
     function toggleReportDetails() {
@@ -5046,9 +5645,223 @@
       button.querySelector("span:last-child").textContent = active ? "－" : "＋";
     }
 
+    function toggleTopMatchDetail(index) {
+      const shell = document.getElementById("topMatchDetail" + index);
+      if (!shell) return;
+      const active = !shell.classList.contains("open");
+      shell.classList.toggle("open", active);
+      const button = shell.querySelector(".top-match-detail-toggle");
+      if (button) button.textContent = active ? "收起详细分析" : "查看详细分析";
+    }
+
+    function hideAuxiliaryPages() {
+      document.getElementById("sharePosterSection").hidden = true;
+      document.getElementById("badgeGallerySection").hidden = true;
+    }
+
+    function returnToResultPage() {
+      hideAuxiliaryPages();
+      if (currentResult) {
+        document.getElementById("resultSection").hidden = false;
+        document.getElementById("resultSection").scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+
+    function restartDrawing() {
+      hideAuxiliaryPages();
+      clearCanvas();
+      document.getElementById("resultSection").hidden = true;
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      showToast("画布已重置，可以开始下一次共鸣测试。");
+    }
+
+    function goHome() {
+      hideAuxiliaryPages();
+      document.getElementById("resultSection").hidden = !!currentResult;
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function switchToThemeChallenge() {
+      hideAuxiliaryPages();
+      setMode("theme");
+      pickTheme(true);
+      document.getElementById("resultSection").hidden = true;
+      document.getElementById("themeCard").scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+
+    function getPosterTags(artwork) {
+      return unique([
+        ...(artwork.styleTags || []),
+        ...(artwork.themeTags || []),
+        ...(artwork.emotionTags || []),
+        ...(artwork.visualTags || []),
+        artwork.category,
+        artwork.style
+      ]).map((tag) => String(tag).replace(/\s+/g, " ").trim()).filter((tag) => tag.length <= 12).slice(0, 3);
+    }
+
+    function renderSharePosterPage() {
+      if (!currentResult) return "";
+      const badge = unlockCurrentPersona() || currentResult.currentBadge || findBadgeForPersona(currentResult.persona?.name, currentResult.artwork, currentResult.userFeatures);
+      const artwork = currentResult.artwork;
+      const topItem = currentResult.topMatches?.[0] || { artwork, score: currentResult.score, matchReasons: currentResult.reasons };
+      const points = getSimilarityPoints(artwork, topItem, currentResult.userFeatures).map((point) => point.label).slice(0, 3);
+      const tags = getPosterTags(artwork);
+      const posterText = currentResult.shareText || generatePosterShareText(currentResult.score, artwork, badge.persona);
+      const artworkImage = safeArtworkImageRenderer(artwork, {
+        className: "poster-image",
+        label: "Top1 名画",
+        loading: "eager"
+      });
+      return `
+        <div class="share-row">
+          <button class="btn ghost" type="button" id="posterBackBtn">返回结果页</button>
+          <button class="btn ghost" type="button" id="posterBadgeBtn">查看艺术人格勋章册</button>
+          <button class="btn ghost" type="button" id="posterDrawAgainBtn">再画一次</button>
+        </div>
+        <div class="poster-shell" id="posterShell">
+          <div class="poster-content">
+            <span class="poster-kicker">AI 名画共鸣报告</span>
+            <div class="poster-brand">ArtTwin</div>
+            <h2 class="poster-persona">${escapeHtml(badge.persona)}</h2>
+            <p class="poster-copy">${escapeHtml(posterText)}</p>
+            <div class="poster-images">
+              <div class="poster-image">
+                <img src="${escapeHtml(currentResult.thumbnail)}" alt="我的画" />
+                <span class="image-label">我的画</span>
+              </div>
+              ${artworkImage}
+            </div>
+            <div class="poster-score-row">
+              <div class="poster-score">${currentResult.score}%</div>
+              <div>
+                <p class="poster-artwork-title">《${escapeHtml(getDisplayTitle(artwork))}》</p>
+                <p class="poster-copy">${escapeHtml(getDisplayArtist(artwork))}</p>
+                <div class="poster-tags">${tags.map((tag) => `<span>${escapeHtml(tag)}</span>`).join("")}</div>
+              </div>
+            </div>
+            <div class="poster-tags">${points.map((point) => `<span>${escapeHtml(point)}</span>`).join("")}</div>
+            <div class="poster-footer">不是你画得乱，是你的艺术灵魂太自由。</div>
+          </div>
+        </div>
+        <div class="share-row">
+          <button class="btn primary" type="button" id="posterCopyBtn">复制分享文案</button>
+          <button class="btn ghost" type="button" id="posterNativeShareBtn">系统分享</button>
+          <button class="btn ghost" type="button" id="posterBackBtnBottom">返回结果页</button>
+        </div>`;
+    }
+
+    function showSharePoster() {
+      if (!currentResult) return;
+      hideAuxiliaryPages();
+      document.getElementById("resultSection").hidden = true;
+      const section = document.getElementById("sharePosterSection");
+      const page = document.getElementById("sharePosterPage");
+      page.innerHTML = `
+        <h2>生成我的名画共鸣卡</h2>
+        <p>这张卡片适合直接截图分享；也可以复制文案，或在支持的浏览器里调用系统分享。</p>
+        ${renderSharePosterPage()}
+      `;
+      section.hidden = false;
+      section.scrollIntoView({ behavior: "smooth", block: "start" });
+      document.getElementById("posterBackBtn").addEventListener("click", returnToResultPage);
+      document.getElementById("posterBackBtnBottom").addEventListener("click", returnToResultPage);
+      document.getElementById("posterBadgeBtn").addEventListener("click", showBadgeGallery);
+      document.getElementById("posterDrawAgainBtn").addEventListener("click", restartDrawing);
+      document.getElementById("posterCopyBtn").addEventListener("click", copyPosterShareText);
+      document.getElementById("posterNativeShareBtn").addEventListener("click", tryNativeShare);
+    }
+
+    async function copyPosterShareText() {
+      await copyShareText();
+    }
+
+    async function tryNativeShare() {
+      if (!currentResult) return;
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: "ArtTwin 名画共鸣卡",
+            text: currentResult.shareText
+          });
+          showToast("已打开系统分享。");
+          return;
+        } catch (error) {
+          showToast("系统分享已取消，可以继续截图或复制文案。");
+          return;
+        }
+      }
+      await copyPosterShareText();
+      showToast("当前浏览器不支持系统分享，已帮你复制文案。");
+    }
+
+    function renderBadgeGalleryPage() {
+      const beforeUnlock = getUnlockedPersonas();
+      const badge = currentResult ? unlockCurrentPersona() : null;
+      const unlocked = getUnlockedPersonas();
+      const wasUnlocked = badge ? beforeUnlock.includes(badge.persona) : false;
+      const unlockedCount = unlocked.filter((persona) => personaBadges.some((badgeItem) => badgeItem.persona === persona)).length;
+      const progress = Math.round((unlockedCount / personaBadges.length) * 100);
+      return `
+        <div class="share-row">
+          <button class="btn ghost" type="button" id="badgeBackBtn">返回结果页</button>
+          <button class="btn ghost" type="button" id="badgeHomeBtn">返回首页</button>
+        </div>
+        <h2>艺术人格勋章册</h2>
+        <p>每一次创作，都会解锁一种隐藏的艺术灵魂。</p>
+        <section class="badge-unlock-card">
+          <b>${badge ? (wasUnlocked ? "你已经拥有这个艺术人格勋章啦" : "本次解锁：" + badge.title) : "完成一次 AI 名画共鸣检测后，会自动点亮本次勋章。"}</b>
+          <p>${badge ? escapeHtml(badge.description) : "先画一张作品，让 ArtTwin 帮你找到第一枚艺术人格勋章。"}</p>
+        </section>
+        <section class="badge-progress">
+          <b>已解锁 ${unlockedCount} / ${personaBadges.length}</b>
+          <div class="progress-bar"><div class="progress-fill" style="--progress:${progress}%"></div></div>
+          <p>继续创作，解锁更多艺术灵魂。</p>
+        </section>
+        <div class="badge-grid">
+          ${personaBadges.map((item) => {
+            const isUnlocked = unlocked.includes(item.persona);
+            const isCurrent = badge && badge.persona === item.persona;
+            return `
+              <article class="badge-card ${isUnlocked ? "unlocked" : ""} ${isCurrent ? "current" : ""}">
+                <div class="badge-icon">${isUnlocked ? item.icon : "🔒"}</div>
+                <h3>${escapeHtml(item.title)}</h3>
+                <b>${escapeHtml(item.persona)}</b>
+                <div class="badge-tags">${item.tags.map((tag) => `<span>${escapeHtml(tag)}</span>`).join("")}</div>
+                <p>${escapeHtml(isUnlocked ? item.description : item.unlockHint)}</p>
+                <span class="badge-status">${isCurrent && !wasUnlocked ? "本次解锁" : isUnlocked ? "已解锁" : "待解锁"}</span>
+              </article>`;
+          }).join("")}
+        </div>
+        <div class="share-row">
+          <button class="btn primary" type="button" id="badgeDrawAgainBtn">再画一次</button>
+          <button class="btn ghost" type="button" id="badgeThemeBtn">换个主题挑战</button>
+          <button class="btn ghost" type="button" id="badgeReturnBtn">返回结果页</button>
+          <button class="btn ghost" type="button" id="badgeHomeBtnBottom">返回首页</button>
+        </div>`;
+    }
+
+    function showBadgeGallery() {
+      hideAuxiliaryPages();
+      document.getElementById("resultSection").hidden = true;
+      const section = document.getElementById("badgeGallerySection");
+      const page = document.getElementById("badgeGalleryPage");
+      page.innerHTML = renderBadgeGalleryPage();
+      section.hidden = false;
+      section.scrollIntoView({ behavior: "smooth", block: "start" });
+      document.getElementById("badgeBackBtn").addEventListener("click", returnToResultPage);
+      document.getElementById("badgeReturnBtn").addEventListener("click", returnToResultPage);
+      document.getElementById("badgeHomeBtn").addEventListener("click", goHome);
+      document.getElementById("badgeHomeBtnBottom").addEventListener("click", goHome);
+      document.getElementById("badgeDrawAgainBtn").addEventListener("click", restartDrawing);
+      document.getElementById("badgeThemeBtn").addEventListener("click", switchToThemeChallenge);
+    }
+
     function startCuratorTyping(match, userFeatures, persona) {
       clearTimeout(typingTimer);
       const artwork = match.topMatch;
+      const title = getArtworkTitle(artwork);
+      const artist = getArtistName(artwork);
       const colorText = userFeatures.dominantColors.map(labelColor).join("、");
       const choiceText = userFeatures.symbolicChoices.length ? userFeatures.symbolicChoices.join("、") : "未额外选择意象";
       const reasonText = match.matchReasons[0] || "它们在色彩和构图上形成了接近的视觉回声。";
@@ -5056,8 +5869,8 @@
 
       const paragraphs = [
         "我看到了什么：你的画面里出现了 " + colorText + "，线条方向偏 " + describeLineDirection(userFeatures.strokeDirection) + "，平均曲率约 " + Math.round(userFeatures.averageCurvature * 100) + "%，构图倾向为" + compositionText + "。这些是视觉线索，不是对具体物体的绝对识别。画后意象：" + choiceText + "。",
-        "它为什么像这幅名画：" + reasonText + " 你的颜色、线条能量、留白和主题语境共同指向《" + artwork.title + "》。其中视觉通道仍然是主要依据，意象确认只提供辅助语境。",
-        "这幅名画背后的故事：" + (artwork.detailedIntro || artwork.story) + " " + (artwork.historicalContext || getEraBackground(artwork)) + " 小故事：" + artwork.funFact + " 所以，我给你的艺术人格命名为「" + persona.name + "」。"
+        "它为什么像《" + title + "》：" + reasonText + " 你的颜色、线条能量和构图重心都在靠近这件作品的观看方式。" + artist + "并不是简单复制现实，而是把观察到的世界转化成有节奏的视觉语言。",
+        "这幅名画背后的故事：" + (artwork.detailedIntro || artwork.story || getArtworkInfoFallback()) + " " + (artwork.historicalContext || getEraBackground(artwork) || "") + " 小故事：" + (artwork.funFact || getArtworkInfoFallback()) + " 所以，我给你的艺术人格命名为「" + persona.name + "」。"
       ];
 
       fullCuratorText = paragraphs.join("\n\n");
@@ -5091,7 +5904,7 @@
       galleryItems.unshift({
         serial: resultSerial,
         thumbnail: currentResult.thumbnail,
-        artworkTitle: currentResult.artwork.title,
+        artworkTitle: getArtworkTitle(currentResult.artwork),
         score: currentResult.score,
         persona: currentResult.persona.name,
         time: formatTime(currentResult.createdAt)
@@ -5110,10 +5923,10 @@
       }
       grid.innerHTML = galleryItems.map((item) => `
         <article class="gallery-item">
-          <img src="${item.thumbnail}" alt="收藏的用户画作 ${item.serial}" />
+          <img src="${escapeHtml(item.thumbnail)}" alt="收藏的用户画作 ${escapeHtml(item.serial)}" />
           <div>
-            <b>#${item.serial} · ${item.score}% · ${item.persona}</b>
-            <p>匹配：${item.artworkTitle}<br />收藏时间：${item.time}</p>
+            <b>#${escapeHtml(item.serial)} · ${escapeHtml(item.score)}% · ${escapeHtml(item.persona)}</b>
+            <p>匹配：《${escapeHtml(item.artworkTitle)}》<br />收藏时间：${escapeHtml(item.time)}</p>
           </div>
         </article>
       `).join("");
@@ -5172,18 +5985,31 @@
 
     function tryNextArtworkImage(image) {
       let candidates = [];
+      let failedCandidates = [];
       try {
         candidates = JSON.parse(image.dataset.candidates || "[]");
       } catch (error) {
         candidates = [];
       }
-      const currentIndex = Number(image.dataset.candidateIndex || 0);
-      const nextIndex = currentIndex + 1;
-      if (candidates[nextIndex]) {
-        image.dataset.candidateIndex = String(nextIndex);
-        image.src = candidates[nextIndex];
-        return;
+      try {
+        failedCandidates = JSON.parse(image.dataset.failedCandidates || "[]");
+      } catch (error) {
+        failedCandidates = [];
       }
+      const failedSet = new Set(failedCandidates);
+      if (image.currentSrc) failedSet.add(image.currentSrc);
+      if (image.src) failedSet.add(image.src);
+      const currentIndex = Number(image.dataset.candidateIndex || 0);
+      for (let nextIndex = currentIndex + 1; nextIndex < candidates.length; nextIndex += 1) {
+        const candidateUrl = new URL(candidates[nextIndex], window.location.href).href;
+        if (!failedSet.has(candidateUrl) && !failedSet.has(candidates[nextIndex])) {
+          image.dataset.candidateIndex = String(nextIndex);
+          image.dataset.failedCandidates = JSON.stringify(Array.from(failedSet));
+          image.src = candidates[nextIndex];
+          return;
+        }
+      }
+      image.dataset.failedCandidates = JSON.stringify(Array.from(failedSet));
       handleArtworkImageError(image);
     }
 
@@ -5332,7 +6158,7 @@
     }
 
     function clamp(value, min, max) {
-      return Math.min(max, Math.max(min, value));
+      return Math.max(min, Math.min(max, value));
     }
 
     function rand(min, max) {
