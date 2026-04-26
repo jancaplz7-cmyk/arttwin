@@ -329,6 +329,10 @@
       touch-action: none;
     }
 
+    .canvas-frame.eraser-mode #artCanvas {
+      cursor: cell;
+    }
+
     .canvas-hint {
       position: absolute;
       z-index: 2;
@@ -598,6 +602,23 @@
       z-index: 2;
     }
 
+    .tool-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .tool-grid .btn {
+      justify-content: center;
+    }
+
+    .tool-grid .btn.active {
+      border-color: rgba(246, 201, 106, 0.72);
+      background: linear-gradient(135deg, rgba(246,201,106,0.24), rgba(120,231,255,0.12));
+      color: #fff5d7;
+      box-shadow: 0 0 0 4px rgba(246, 201, 106, 0.12);
+    }
+
     .brush-row {
       display: grid;
       grid-template-columns: 1fr auto;
@@ -630,6 +651,13 @@
       border-radius: 999px;
       background: var(--current-color, #78e7ff);
       box-shadow: 0 0 18px var(--current-color, #78e7ff);
+    }
+
+    .brush-dot.no-color {
+      background:
+        linear-gradient(135deg, transparent 42%, rgba(255,255,255,0.62) 43%, rgba(255,255,255,0.62) 57%, transparent 58%),
+        rgba(255, 255, 255, 0.12);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
     }
 
     .brush-value {
@@ -2365,6 +2393,13 @@
       box-shadow: 0 0 0 4px rgba(185, 146, 82, 0.12), 0 12px 28px rgba(84, 67, 49, 0.14);
     }
 
+    .tool-grid .btn.active {
+      border-color: rgba(185, 146, 82, 0.5);
+      background: #fffaf0;
+      color: var(--museum-ink);
+      box-shadow: 0 10px 24px rgba(84, 67, 49, 0.12);
+    }
+
     .brush-preview,
     .tag,
     .open-access,
@@ -3047,13 +3082,13 @@
     <main class="studio-shell" aria-label="AI 互动画室">
       <section class="canvas-stage">
         <div class="curator-note">
-          <div id="creativeGuide">画得像不像不重要，AI 只看你的颜色、线条和构图。</div>
+          <div id="creativeGuide">先选择一个画笔颜色，再用线条和构图开始创作。</div>
           <span><i class="status-dot"></i> Your Canvas / 临时展品 001</span>
         </div>
 
         <div class="canvas-frame" id="canvasFrame">
           <canvas id="artCanvas" aria-label="创作画布"></canvas>
-          <div class="canvas-hint" id="canvasHint">点击「开始 AI 策展」前，先随手画几笔。三条线、几个色块，也可以被 AI 策展人阅读。</div>
+          <div class="canvas-hint" id="canvasHint">先选择一个画笔颜色，再开始画。也可以切换橡皮擦擦掉不想保留的部分。</div>
           <div class="scan-beam" aria-hidden="true"></div>
           <div class="portal-layer" id="portalLayer" aria-hidden="true">
             <div class="portal-backdrop"></div>
@@ -3071,7 +3106,15 @@
 
       <aside class="control-panel" aria-label="创作工具栏">
         <section class="panel-section">
-          <h2 class="panel-title">画笔颜色 <span id="currentColorName">天蓝</span></h2>
+          <h2 class="panel-title">绘画工具 <span id="currentToolName">画笔</span></h2>
+          <div class="tool-grid" role="group" aria-label="选择绘画工具">
+            <button class="btn small ghost active" id="brushToolBtn" type="button" aria-pressed="true">画笔</button>
+            <button class="btn small ghost" id="eraserToolBtn" type="button" aria-pressed="false">橡皮擦</button>
+          </div>
+        </section>
+
+        <section class="panel-section">
+          <h2 class="panel-title">画笔颜色 <span id="currentColorName">先选颜色</span></h2>
           <div class="palette" id="colorPalette"></div>
         </section>
 
@@ -3227,8 +3270,9 @@
     let canvas;
     let ctx;
     let canvasFrame;
-    let selectedColor = "#72d8ff";
-    let selectedColorName = "天蓝";
+    let selectedColor = null;
+    let selectedColorName = "先选颜色";
+    let activeTool = "brush";
     let brushSize = 10;
     let isDrawing = false;
     let currentStroke = null;
@@ -3284,10 +3328,12 @@
           { boxShadow: "0 0 84px rgba(246,201,106,0.35)" },
           { boxShadow: "0 0 38px rgba(120,231,255,0.18)" }
         ], { duration: 800, easing: "ease-out" });
-        showToast("画框已点亮。直接用线条、色块和留白开始创作。");
+        showToast(selectedColor ? "画框已点亮。可以开始创作。" : "画框已点亮。请先选择一个画笔颜色。");
       });
 
       document.getElementById("analyzeBtn").addEventListener("click", startAnalysisSequence);
+      document.getElementById("brushToolBtn").addEventListener("click", () => setActiveTool("brush"));
+      document.getElementById("eraserToolBtn").addEventListener("click", () => setActiveTool("eraser"));
       document.getElementById("randomBtn").addEventListener("click", () => addRandomInspiration());
       document.getElementById("randomBtnTop").addEventListener("click", () => addRandomInspiration());
       document.getElementById("clearBtn").addEventListener("click", clearCanvas);
@@ -3351,19 +3397,20 @@
       paletteColors.forEach((color, index) => {
         const button = document.createElement("button");
         button.type = "button";
-        button.className = "color-swatch" + (color.value === selectedColor ? " active" : "");
+        button.className = "color-swatch";
         button.style.setProperty("--swatch", color.value);
         button.title = color.name;
         button.setAttribute("aria-label", "选择颜色：" + color.name);
         button.addEventListener("click", () => {
           selectedColor = color.value;
           selectedColorName = color.name;
+          setActiveTool("brush", { silent: true });
           document.querySelectorAll(".color-swatch").forEach((item) => item.classList.remove("active"));
           button.classList.add("active");
           document.getElementById("currentColorName").textContent = color.name;
           updateBrushPreview();
+          showToast("已选择" + color.name + "，现在可以开始绘画。");
         });
-        if (index === 1) button.classList.add("active");
         palette.appendChild(button);
       });
     }
@@ -3376,9 +3423,9 @@
       if (mode === "theme" && !currentThemeHint) pickTheme(false);
       if (mode === "free") {
         currentThemeHint = null;
-        document.getElementById("creativeGuide").textContent = "画得像不像不重要，AI 只看你的颜色、线条和构图。";
+        document.getElementById("creativeGuide").textContent = selectedColor ? "画得像不像不重要，AI 只看你的颜色、线条和构图。" : "先选择一个画笔颜色，再用线条和构图开始创作。";
       }
-      showToast(mode === "theme" ? "已进入主题挑战。你可以换一个主题，也可以直接开始画。" : "已进入自由创作。随便画几笔就可以鉴定。");
+      showToast(mode === "theme" ? "已进入主题挑战。选好画笔颜色后就可以开始画。" : "已进入自由创作。先选颜色，再随手画几笔。");
     }
 
     function pickTheme(announce = true) {
@@ -3423,27 +3470,52 @@
     }
 
     function updateBrushPreview() {
-      document.documentElement.style.setProperty("--current-color", selectedColor);
-      document.getElementById("brushDot").style.setProperty("--brush", brushSize + "px");
-      document.getElementById("brushValue").textContent = brushSize + " px";
+      const previewColor = activeTool === "eraser" ? "#ffffff" : (selectedColor || "rgba(255,255,255,0.28)");
+      const brushDot = document.getElementById("brushDot");
+      document.documentElement.style.setProperty("--current-color", previewColor);
+      brushDot.style.setProperty("--brush", brushSize + "px");
+      brushDot.classList.toggle("no-color", activeTool === "brush" && !selectedColor);
+      document.getElementById("brushValue").textContent = (activeTool === "eraser" ? "橡皮擦 " : "") + brushSize + " px";
       document.getElementById("currentColorName").textContent = selectedColorName;
+      document.getElementById("currentToolName").textContent = activeTool === "eraser" ? "橡皮擦" : "画笔";
+    }
+
+    function setActiveTool(tool, options = {}) {
+      activeTool = tool === "eraser" ? "eraser" : "brush";
+      const brushButton = document.getElementById("brushToolBtn");
+      const eraserButton = document.getElementById("eraserToolBtn");
+      brushButton.classList.toggle("active", activeTool === "brush");
+      eraserButton.classList.toggle("active", activeTool === "eraser");
+      brushButton.setAttribute("aria-pressed", String(activeTool === "brush"));
+      eraserButton.setAttribute("aria-pressed", String(activeTool === "eraser"));
+      canvasFrame.classList.toggle("eraser-mode", activeTool === "eraser");
+      updateBrushPreview();
+      if (!options.silent) {
+        showToast(activeTool === "eraser" ? "橡皮擦已启用。拖动画布即可擦除。" : (selectedColor ? "画笔已启用。" : "画笔已启用，请先选择颜色。"));
+      }
     }
 
     function handleCanvasPointerDown(event) {
       if (analysisRunning) return;
       event.preventDefault();
+      if (activeTool === "brush" && !selectedColor) {
+        showToast("请先选择一个画笔颜色，再开始绘画。");
+        return;
+      }
       canvasFrame.setPointerCapture?.(event.pointerId);
       startDrawing(event);
     }
 
     function startDrawing(event) {
       const point = getCanvasPoint(event);
+      const isEraser = activeTool === "eraser";
       isDrawing = true;
       currentStroke = {
-        type: "stroke",
-        color: selectedColor,
+        type: isEraser ? "eraser" : "stroke",
+        color: isEraser ? "eraser" : selectedColor,
         width: brushSize,
         size: brushSize,
+        tool: activeTool,
         points: [point],
         startTime: Date.now(),
         endTime: null,
@@ -3452,7 +3524,8 @@
         random: false,
         timestamp: Date.now()
       };
-      ctx.strokeStyle = selectedColor;
+      ctx.globalCompositeOperation = isEraser ? "destination-out" : "source-over";
+      ctx.strokeStyle = isEraser ? "rgba(0,0,0,1)" : selectedColor;
       ctx.lineWidth = brushSize;
       ctx.beginPath();
       ctx.moveTo(point.x, point.y);
@@ -3467,7 +3540,8 @@
       currentStroke.points.push(point);
       currentStroke.pointCount = currentStroke.points.length;
       currentStroke.boundingBox = computeBoundingBox(currentStroke.points);
-      ctx.strokeStyle = currentStroke.color;
+      ctx.globalCompositeOperation = currentStroke.type === "eraser" ? "destination-out" : "source-over";
+      ctx.strokeStyle = currentStroke.type === "eraser" ? "rgba(0,0,0,1)" : currentStroke.color;
       ctx.lineWidth = currentStroke.width;
       ctx.beginPath();
       ctx.moveTo(previous.x, previous.y);
@@ -3480,9 +3554,14 @@
       if (event) event.preventDefault();
       isDrawing = false;
       if (currentStroke && currentStroke.points.length > 1) {
-        strokeRecords.push(finalizeVisualMark(currentStroke));
+        if (currentStroke.type === "eraser") {
+          applyEraserToStrokeRecords(currentStroke);
+        } else {
+          strokeRecords.push(finalizeVisualMark(currentStroke));
+        }
         saveHistoryState();
       }
+      ctx.globalCompositeOperation = "source-over";
       currentStroke = null;
       updateHintVisibility();
     }
@@ -3679,6 +3758,57 @@
         x: clamp(event.clientX - rect.left, 0, rect.width),
         y: clamp(event.clientY - rect.top, 0, rect.height)
       };
+    }
+
+    function applyEraserToStrokeRecords(eraserStroke) {
+      const eraser = finalizeVisualMark(eraserStroke);
+      const radius = Math.max(8, eraser.width / 2 + 4);
+      strokeRecords = strokeRecords.filter((record) => !recordIntersectsEraser(record, eraser, radius));
+    }
+
+    function recordIntersectsEraser(record, eraser, radius) {
+      const normalized = finalizeVisualMark(record);
+      const eraserBox = expandBox(eraser.boundingBox, radius);
+      if (!boxesOverlap(normalized.boundingBox, eraserBox)) return false;
+      const recordPoints = normalized.points || [];
+      const eraserPoints = eraser.points || [];
+      if (!recordPoints.length || !eraserPoints.length) return false;
+      return recordPoints.some((point) => isPointNearPolyline(point, eraserPoints, radius));
+    }
+
+    function expandBox(box, amount) {
+      return {
+        x: box.x - amount,
+        y: box.y - amount,
+        width: box.width + amount * 2,
+        height: box.height + amount * 2,
+        minX: box.minX - amount,
+        minY: box.minY - amount,
+        maxX: box.maxX + amount,
+        maxY: box.maxY + amount
+      };
+    }
+
+    function boxesOverlap(a, b) {
+      return a.minX <= b.maxX && a.maxX >= b.minX && a.minY <= b.maxY && a.maxY >= b.minY;
+    }
+
+    function isPointNearPolyline(point, polyline, radius) {
+      if (polyline.length === 1) return Math.hypot(point.x - polyline[0].x, point.y - polyline[0].y) <= radius;
+      for (let i = 1; i < polyline.length; i += 1) {
+        if (distanceToSegment(point, polyline[i - 1], polyline[i]) <= radius) return true;
+      }
+      return false;
+    }
+
+    function distanceToSegment(point, start, end) {
+      const dx = end.x - start.x;
+      const dy = end.y - start.y;
+      const lengthSquared = dx * dx + dy * dy;
+      if (!lengthSquared) return Math.hypot(point.x - start.x, point.y - start.y);
+      const t = clamp(((point.x - start.x) * dx + (point.y - start.y) * dy) / lengthSquared, 0, 1);
+      const projection = { x: start.x + t * dx, y: start.y + t * dy };
+      return Math.hypot(point.x - projection.x, point.y - projection.y);
     }
 
     function finalizeVisualMark(record) {
