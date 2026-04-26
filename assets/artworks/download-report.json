@@ -1,0 +1,322 @@
+{
+  "summary": {
+    "checkedClearRemoteImageUrls": 23,
+    "ready": 2,
+    "newlySaved": 0,
+    "existing": 2,
+    "skipped": 0,
+    "failed": 21,
+    "notReady": [
+      {
+        "id": "starry-night",
+        "title": "星月夜",
+        "status": "failed",
+        "reason": "TypeError: fetch failed",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg"
+      },
+      {
+        "id": "sunflowers",
+        "title": "向日葵",
+        "status": "failed",
+        "reason": "TypeError: fetch failed",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/b/b4/Vincent_Willem_van_Gogh_128.jpg"
+      },
+      {
+        "id": "water-lilies",
+        "title": "睡莲",
+        "status": "failed",
+        "reason": "TypeError: fetch failed",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/a/aa/Claude_Monet_-_Water_Lilies_-_1906%2C_Ryerson.jpg"
+      },
+      {
+        "id": "mondrian-red-blue-yellow",
+        "title": "红、蓝、黄构成",
+        "status": "failed",
+        "reason": "TypeError: fetch failed",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/a/a4/Piet_Mondriaan%2C_1930_-_Mondrian_Composition_II_in_Red%2C_Blue%2C_and_Yellow.jpg"
+      },
+      {
+        "id": "girl-with-pearl",
+        "title": "戴珍珠耳环的少女",
+        "status": "failed",
+        "reason": "TypeError: fetch failed",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/d/d7/Meisje_met_de_parel.jpg"
+      },
+      {
+        "id": "mona-lisa",
+        "title": "蒙娜丽莎",
+        "status": "failed",
+        "reason": "TypeError: fetch failed",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/6/6a/Mona_Lisa.jpg"
+      },
+      {
+        "id": "the-scream",
+        "title": "呐喊",
+        "status": "failed",
+        "reason": "TypeError: fetch failed",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/f/f4/The_Scream.jpg"
+      },
+      {
+        "id": "bedroom-arles",
+        "title": "阿尔勒的卧室",
+        "status": "failed",
+        "reason": "TypeError: fetch failed",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/5/52/Van_Gogh_-_Schlafzimmer_in_Arles.jpeg"
+      },
+      {
+        "id": "milkmaid",
+        "title": "倒牛奶的女仆",
+        "status": "failed",
+        "reason": "TypeError: fetch failed",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/2/20/Johannes_Vermeer_-_Het_melkmeisje_-_Google_Art_Project.jpg"
+      },
+      {
+        "id": "still-life-apples",
+        "title": "苹果静物",
+        "status": "failed",
+        "reason": "TypeError: fetch failed",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/2/25/Paul_C%C3%A9zanne%2C_Still_Life_with_Apples.jpg"
+      },
+      {
+        "id": "wanderer",
+        "title": "雾海上的旅人",
+        "status": "failed",
+        "reason": "TypeError: fetch failed",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/a/af/Caspar_David_Friedrich_-_Wanderer_above_the_Sea_of_Fog.jpeg"
+      },
+      {
+        "id": "birth-of-venus",
+        "title": "维纳斯的诞生",
+        "status": "failed",
+        "reason": "TypeError: fetch failed",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/9/9c/Sandro_Botticelli_-_La_nascita_di_Venere_-_Google_Art_Project_-_edited.jpg"
+      },
+      {
+        "id": "irises",
+        "title": "鸢尾花",
+        "status": "failed",
+        "reason": "TypeError: fetch failed",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/3/30/Vincent_van_Gogh_-_Irises_%281889%29.jpg"
+      },
+      {
+        "id": "red-fuji",
+        "title": "凯风快晴",
+        "status": "failed",
+        "reason": "TypeError: fetch failed",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/5/5b/Red_Fuji_southern_wind_clear_morning.jpg"
+      },
+      {
+        "id": "the-kiss",
+        "title": "吻",
+        "status": "failed",
+        "reason": "TypeError: fetch failed",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/4/40/The_Kiss_-_Gustav_Klimt_-_Google_Cultural_Institute.jpg"
+      },
+      {
+        "id": "blue-horse",
+        "title": "蓝马 I",
+        "status": "failed",
+        "reason": "TypeError: fetch failed",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/8/8f/Franz_Marc_005.jpg"
+      },
+      {
+        "id": "black-square",
+        "title": "黑方块",
+        "status": "failed",
+        "reason": "TypeError: fetch failed",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/d/dc/Kazimir_Malevich%2C_1915%2C_Black_Suprematic_Square%2C_oil_on_linen_canvas%2C_79.5_x_79.5_cm%2C_Tretyakov_Gallery%2C_Moscow.jpg"
+      },
+      {
+        "id": "school-of-athens",
+        "title": "雅典学院",
+        "status": "failed",
+        "reason": "TypeError: fetch failed",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/9/94/Sanzio_01.jpg"
+      },
+      {
+        "id": "rain-steam-speed",
+        "title": "雨、蒸汽和速度",
+        "status": "failed",
+        "reason": "TypeError: fetch failed",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/7/7e/Turner_-_Rain%2C_Steam_and_Speed_-_National_Gallery_file.jpg"
+      },
+      {
+        "id": "garden-earthly-delights",
+        "title": "人间乐园",
+        "status": "failed",
+        "reason": "TypeError: fetch failed",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/a/ae/El_jard%C3%ADn_de_las_Delicias%2C_de_El_Bosco.jpg"
+      },
+      {
+        "id": "woman-reading",
+        "title": "读信的女人",
+        "status": "failed",
+        "reason": "TypeError: fetch failed",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/7/7f/Johannes_Vermeer_-_Woman_Reading_a_Letter_-_Google_Art_Project.jpg"
+      }
+    ]
+  },
+  "results": [
+    {
+      "id": "starry-night",
+      "title": "星月夜",
+      "status": "failed",
+      "reason": "TypeError: fetch failed",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg"
+    },
+    {
+      "id": "great-wave",
+      "title": "神奈川冲浪里",
+      "status": "existing",
+      "jpg": "assets/artworks/great-wave.jpg",
+      "webp": "assets/artworks/great-wave.webp"
+    },
+    {
+      "id": "sunflowers",
+      "title": "向日葵",
+      "status": "failed",
+      "reason": "TypeError: fetch failed",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/b/b4/Vincent_Willem_van_Gogh_128.jpg"
+    },
+    {
+      "id": "water-lilies",
+      "title": "睡莲",
+      "status": "failed",
+      "reason": "TypeError: fetch failed",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/a/aa/Claude_Monet_-_Water_Lilies_-_1906%2C_Ryerson.jpg"
+    },
+    {
+      "id": "composition-viii",
+      "title": "构成 VIII",
+      "status": "existing",
+      "jpg": "assets/artworks/composition-viii.jpg",
+      "webp": "assets/artworks/composition-viii.webp"
+    },
+    {
+      "id": "mondrian-red-blue-yellow",
+      "title": "红、蓝、黄构成",
+      "status": "failed",
+      "reason": "TypeError: fetch failed",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/a/a4/Piet_Mondriaan%2C_1930_-_Mondrian_Composition_II_in_Red%2C_Blue%2C_and_Yellow.jpg"
+    },
+    {
+      "id": "girl-with-pearl",
+      "title": "戴珍珠耳环的少女",
+      "status": "failed",
+      "reason": "TypeError: fetch failed",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/d/d7/Meisje_met_de_parel.jpg"
+    },
+    {
+      "id": "mona-lisa",
+      "title": "蒙娜丽莎",
+      "status": "failed",
+      "reason": "TypeError: fetch failed",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/6/6a/Mona_Lisa.jpg"
+    },
+    {
+      "id": "the-scream",
+      "title": "呐喊",
+      "status": "failed",
+      "reason": "TypeError: fetch failed",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/f/f4/The_Scream.jpg"
+    },
+    {
+      "id": "bedroom-arles",
+      "title": "阿尔勒的卧室",
+      "status": "failed",
+      "reason": "TypeError: fetch failed",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/5/52/Van_Gogh_-_Schlafzimmer_in_Arles.jpeg"
+    },
+    {
+      "id": "milkmaid",
+      "title": "倒牛奶的女仆",
+      "status": "failed",
+      "reason": "TypeError: fetch failed",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/2/20/Johannes_Vermeer_-_Het_melkmeisje_-_Google_Art_Project.jpg"
+    },
+    {
+      "id": "still-life-apples",
+      "title": "苹果静物",
+      "status": "failed",
+      "reason": "TypeError: fetch failed",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/2/25/Paul_C%C3%A9zanne%2C_Still_Life_with_Apples.jpg"
+    },
+    {
+      "id": "wanderer",
+      "title": "雾海上的旅人",
+      "status": "failed",
+      "reason": "TypeError: fetch failed",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/a/af/Caspar_David_Friedrich_-_Wanderer_above_the_Sea_of_Fog.jpeg"
+    },
+    {
+      "id": "birth-of-venus",
+      "title": "维纳斯的诞生",
+      "status": "failed",
+      "reason": "TypeError: fetch failed",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/9/9c/Sandro_Botticelli_-_La_nascita_di_Venere_-_Google_Art_Project_-_edited.jpg"
+    },
+    {
+      "id": "irises",
+      "title": "鸢尾花",
+      "status": "failed",
+      "reason": "TypeError: fetch failed",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/3/30/Vincent_van_Gogh_-_Irises_%281889%29.jpg"
+    },
+    {
+      "id": "red-fuji",
+      "title": "凯风快晴",
+      "status": "failed",
+      "reason": "TypeError: fetch failed",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/5/5b/Red_Fuji_southern_wind_clear_morning.jpg"
+    },
+    {
+      "id": "the-kiss",
+      "title": "吻",
+      "status": "failed",
+      "reason": "TypeError: fetch failed",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/4/40/The_Kiss_-_Gustav_Klimt_-_Google_Cultural_Institute.jpg"
+    },
+    {
+      "id": "blue-horse",
+      "title": "蓝马 I",
+      "status": "failed",
+      "reason": "TypeError: fetch failed",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/8/8f/Franz_Marc_005.jpg"
+    },
+    {
+      "id": "black-square",
+      "title": "黑方块",
+      "status": "failed",
+      "reason": "TypeError: fetch failed",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/d/dc/Kazimir_Malevich%2C_1915%2C_Black_Suprematic_Square%2C_oil_on_linen_canvas%2C_79.5_x_79.5_cm%2C_Tretyakov_Gallery%2C_Moscow.jpg"
+    },
+    {
+      "id": "school-of-athens",
+      "title": "雅典学院",
+      "status": "failed",
+      "reason": "TypeError: fetch failed",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/9/94/Sanzio_01.jpg"
+    },
+    {
+      "id": "rain-steam-speed",
+      "title": "雨、蒸汽和速度",
+      "status": "failed",
+      "reason": "TypeError: fetch failed",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/7/7e/Turner_-_Rain%2C_Steam_and_Speed_-_National_Gallery_file.jpg"
+    },
+    {
+      "id": "garden-earthly-delights",
+      "title": "人间乐园",
+      "status": "failed",
+      "reason": "TypeError: fetch failed",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/a/ae/El_jard%C3%ADn_de_las_Delicias%2C_de_El_Bosco.jpg"
+    },
+    {
+      "id": "woman-reading",
+      "title": "读信的女人",
+      "status": "failed",
+      "reason": "TypeError: fetch failed",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/7/7f/Johannes_Vermeer_-_Woman_Reading_a_Letter_-_Google_Art_Project.jpg"
+    }
+  ]
+}
